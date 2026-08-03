@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>모든 프레임을 소중히 하는 삶 · 박종혁 Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system.css?v=20260718">
+<style>
+  /* ============================================================
+     PAGE 10 — CLOSING : 모든 프레임을 소중히 하는 삶
+     포트폴리오를 끝까지 본 사람만 도달하는 페이지.
+     다른 페이지보다 여백을 넓게, 온도를 높게.
+     ============================================================ */
+
+  /* ===== 상단/하단 바 (전 페이지 공통) ===== */
+  .site-head { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 13px 32px; border-bottom: 1px solid var(--line); background: var(--bg-base); }
+  .site-nav { display: flex; gap: 30px; align-items: center; }
+  .site-nav .nav-top { display: inline-flex; align-items: center; gap: 5px; line-height: 1; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; cursor: pointer; white-space: nowrap; }
+  .site-nav .nav-top:hover, .site-nav .nav-item:hover .nav-top { color: var(--accent); }
+  .site-nav .nav-top.is-current { color: #fff; font-weight: 700; }
+  .site-nav .nav-top.is-current:hover { color: var(--accent); }
+  .site-nav .caret { font-size: 9px; }
+  .site-nav .nav-item { position: relative; display: inline-flex; align-items: center; }
+  .site-nav .nav-item::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 18px; }
+  .site-nav .dropdown { position: absolute; top: calc(100% + 12px); right: 0; min-width: 190px; background: var(--bg-card); border: 1px solid var(--line-hi); padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity .15s, transform .15s; z-index: 60; }
+  .site-nav .nav-item:hover .dropdown, .site-nav .nav-item:focus-within .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .site-nav .dropdown a { display: block; padding: 11px 20px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em; text-align: right; color: var(--text-mid); text-decoration: none; white-space: nowrap; }
+  .site-nav .dropdown a:hover { background: var(--bg-card-hi); color: var(--accent); }
+  .site-foot { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 24px 32px; border-top: 1px solid var(--line); margin-top: 0; }
+  .site-foot .sf-copy { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--text-dim); }
+  @media (max-width: 720px) { .site-head { flex-direction: column; gap: 16px; padding: 18px 20px; } .site-nav { gap: 20px; } .site-foot { flex-direction: column; align-items: center; gap: 12px; padding: 20px; } }
+
+  /* ===== HERO ===== */
+  .cl-hero { position: relative; padding: 128px 0 104px; border-bottom: 1px solid var(--line); overflow: hidden; }
+  /* ===== 배경 삽화 공통 — 출처는 호버 팝업으로 =====
+     팝업은 삽화 바깥(형제)에 둔다. 삽화 래퍼는 z-index 0이라 그 안에 넣으면
+     본문(container, z-index 1)에 가려진다. 형제로 빼고 z-index 5를 줘야 글자 위로 뜬다. */
+  .cl-hero .bg-art { position: absolute; z-index: 0; pointer-events: auto; }
+  .cl-hero .bg-art img { display: block; user-select: none; }
+  .cl-hero .art-tip { position: absolute; z-index: 5; padding: 8px 12px; white-space: nowrap;
+    background: rgba(10,10,10,.94); border: 1px solid var(--line-hi);
+    font-family: var(--mono); font-size: 9.5px; line-height: 1.6; letter-spacing: .08em; color: var(--text-mid);
+    opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease, visibility .22s; }
+  .cl-hero .art-tip em { font-style: italic; color: var(--text); }
+  .cl-hero .don-wrap:hover ~ .tip-don { opacity: 1; visibility: visible; transform: translateY(0); }
+  .cl-hero .tip-don { right: 56px; bottom: 34px; }
+
+  /* 배경 2: 돈키호테와 산초 — 하단. 절반쯤 문단 영역에 걸치되,
+     겹치는 왼쪽 절반은 마스크로 흐려져서 글을 방해하지 않는다 */
+  .cl-hero .don-wrap { right: 150px; bottom: 0; width: 700px; }
+  .cl-hero .don-wrap img { width: 100%; height: auto; opacity: .4;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%), linear-gradient(to top, transparent 0%, #000 22%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 24%), linear-gradient(to top, transparent 0%, #000 22%);
+    -webkit-mask-composite: source-in; mask-composite: intersect; }
+  @media (max-width: 1100px) { .cl-hero .don-wrap, .cl-hero .tip-don { display: none; } }
+
+  /* 빈 여백은 호버가 배경까지 통과하고, 글자는 그대로 선택된다 */
+  .cl-hero .container { position: relative; z-index: 1; pointer-events: none; }
+  .cl-hero .container > * { pointer-events: auto; }
+  .cl-hero .kicker { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .3em; color: var(--accent); margin-bottom: 26px; }
+  .cl-hero h1 { font-family: var(--serif); font-size: 52px; font-weight: 700; color: var(--text); line-height: 1.28; letter-spacing: -0.02em; margin: 0; }
+  .cl-hero h1 .hl { color: var(--accent); }
+  .cl-hero .en { margin-top: 22px; font-family: var(--mono); font-size: 12.5px; letter-spacing: .26em; color: var(--text-dim); text-transform: uppercase; }
+  .cl-hero .rule { width: 64px; height: 2px; background: var(--accent); margin: 40px 0 32px; }
+  .cl-hero .lede { font-family: var(--sans); font-size: 16px; line-height: 2.05; color: var(--text-mid); max-width: 760px; margin: 0 0 22px; }
+  .cl-hero .lede:last-child { margin-bottom: 0; }
+  .cl-hero .lede em { font-style: normal; color: var(--text); }
+  .cl-hero .lede strong { color: var(--text); font-weight: 600; }
+  .cl-hero .lede .ac { color: var(--accent); font-weight: 600; }
+  /* 명언 — 리드 사이에 끼어드는 제사(題詞) */
+  .epigraph { margin: 34px 0; padding-left: 26px; border-left: 1px solid var(--accent); max-width: 700px; }
+  .epigraph blockquote { margin: 0; font-family: var(--serif); font-size: 19px; font-weight: 500; font-style: italic; color: var(--text); line-height: 1.7; letter-spacing: -0.01em; }
+  .epigraph figcaption { margin-top: 12px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; color: var(--text-dim); text-transform: uppercase; }
+  .epigraph figcaption::before { content: "— "; }
+  @media (max-width: 800px) { .cl-hero { padding: 76px 0 72px; } .cl-hero h1 { font-size: 32px; } .epigraph { margin: 26px 0; padding-left: 18px; } .epigraph blockquote { font-size: 16px; } }
+
+  /* The Impossible Dream — 저작권 보호 가사라 짧은 인용만 사용 */
+  #backTab { display: none; } /* 클로징 페이지: BACK TO TOP 버튼 숨김 */
+
+  /* ===== 섹션 공통 ===== */
+  .cl-sec { padding: 104px 0; border-bottom: 1px solid var(--line); }
+  .cl-sec.staff-roll { padding-top: 76px; }
+  .cl-sec .sec-h { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; margin: 0 0 8px; }
+  .cl-sec .sec-en { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--text-dim); margin-bottom: 46px; text-transform: uppercase; }
+  .cl-sec .sec-en.is-kicker { color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+  .cl-sec .sec-h.is-staff { margin-bottom: 46px; }
+  .cl-sec p { font-family: var(--sans); font-size: 15.5px; line-height: 2.1; color: var(--text-mid); max-width: 760px; margin: 0 0 22px; }
+  .cl-sec p:last-child { margin-bottom: 0; }
+  .cl-sec p strong { color: var(--text); font-weight: 600; }
+  .cl-sec p .ac { color: var(--accent); font-weight: 600; }
+  /* 마지막 섹션 — 바로 아래 페이저에 border-top이 있어 선이 겹치지 않게 */
+  .cl-sec:last-of-type { border-bottom: 0; padding-bottom: 112px; }
+  @media (max-width: 800px) { .cl-sec { padding: 64px 0; } .cl-sec:last-of-type { padding-bottom: 72px; } }
+
+  /* ===== 대표 인용구 ===== */
+
+  /* ===== 몽타주 트랙 — 언리얼 애님 몽타주 에디터 어법 =====
+     45 : 15 : 4 를 실제 폭으로 그린다. 타격은 전체의 6%짜리 조각이 되고,
+     그 얇음 자체가 '한 프레임의 싸움'이라는 논지를 증명한다. */
+  .montage { max-width: 760px; margin: 56px 0 16px; border: 1px solid var(--line); background: var(--bg-card); padding-bottom: 12px; }
+  .montage .mt-slot { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; color: var(--text-dim); padding: 10px 12px 9px; }
+  .montage .mt-body { padding: 0 12px; }
+  /* 눈금자 — 1프레임 잔눈금 + 5프레임 큰눈금을 그라디언트로 */
+  .montage .mt-ruler { position: relative; height: 23px; border-bottom: 1px solid var(--line); margin-bottom: 10px; }
+  .montage .mt-ruler::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background-image: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px calc(100% / 64)); }
+  .montage .mt-ruler::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+    background-image: repeating-linear-gradient(to right, var(--line-hi) 0 1px, transparent 1px calc(100% * 5 / 64)); }
+  .montage .mt-ruler .rn { position: absolute; top: 10px; transform: translateX(-50%); font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
+  /* 섹션 바 */
+  .montage .mt-bars { position: relative; height: 30px; margin-bottom: 9px; }
+  .montage .mt-bars .bar { position: absolute; top: 0; height: 30px; display: flex; align-items: center; padding: 0 9px; overflow: hidden;
+    border: 1px solid var(--line); }
+  .montage .mt-bars .bar span { font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--text-mid); white-space: nowrap; }
+  .montage .mt-bars .bar.is-hit { justify-content: center; padding: 0 2px; }
+  .montage .mt-bars .bar.is-hit span { color: var(--text-mid); }
+  .montage .mt-bars .playhead { position: absolute; top: -10px; bottom: -9px; width: 1px; background: #d9534f; z-index: 3; }
+  /* 노티파이 */
+  .montage .mt-nfy { position: relative; height: 17px; }
+  .montage .mt-nfy .nf { position: absolute; top: 0; display: flex; align-items: center; gap: 5px; transform: translateX(-4px); }
+  .montage .mt-nfy .nf i { width: 8px; height: 8px; background: var(--accent-hi); transform: rotate(45deg); flex: 0 0 auto; }
+  .montage .mt-nfy .nf em { font-family: var(--mono); font-size: 8.5px; letter-spacing: .05em; color: var(--text-mid); font-style: normal; white-space: nowrap; }
+  .montage .mt-nfy .nf.to-left { flex-direction: row-reverse; transform: translateX(-100%); }
+  @media (max-width: 800px) { .montage { display: none; } }
+
+  /* 카드 폭은 본문 문단 폭(760px)에 맞춘다 */
+  .fstrip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 0 0 60px; max-width: 760px; }
+  .fstrip .fcell { position: relative; padding: 24px 20px 26px; border: 1px solid var(--line); }
+  /* 카드 머리 — 구간 라벨 + 지속 프레임을 한 줄에 */
+  .fstrip .fcell .f-head { display: flex; align-items: baseline; gap: 7px; margin-bottom: 14px; }
+  .fstrip .fcell .f-no { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .12em; color: var(--text-dim); white-space: nowrap; }
+  .fstrip .fcell .f-tc { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--text-mid); white-space: nowrap; }
+  /* 도식의 글씨에는 코퍼를 쓰지 않는다. 색은 도형(테두리·채움)만 담당한다 */
+  .fstrip .fcell .f-t { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: .01em; }
+  .fstrip .fcell .f-b { font-family: var(--sans); font-size: 13px; line-height: 1.85; color: var(--text-dim); }
+  /* 마지막 칸 = 타격. 여기만 색이 들어온다 */
+  .fstrip .fcell.is-hit .f-no { color: var(--text-mid); }
+  /* 구간 농도 램프 — 같은 코퍼 한 색, 타격에 가까워질수록 진해진다.
+     몽타주 바와 프레임 카드가 같은 3단계를 공유한다. */
+  .fstrip .fcell:nth-child(1), .montage .mt-bars .bar:nth-child(1) { border-color: rgba(168,107,72,.30); background-color: rgba(168,107,72,.035); }
+  .fstrip .fcell:nth-child(2), .montage .mt-bars .bar:nth-child(2) { border-color: rgba(168,107,72,.58); background-color: rgba(168,107,72,.085); }
+  .fstrip .fcell:nth-child(3), .montage .mt-bars .bar:nth-child(3) { border-color: var(--accent);        background-color: rgba(168,107,72,.18); }
+  .fstrip .fcell.is-hit .f-b { color: var(--text-mid); }
+  @media (max-width: 800px) { .fstrip { grid-template-columns: 1fr; gap: 30px; } }
+
+  /* 도입부를 닫는 한 줄 */
+  .sec-final { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--line); max-width: 760px;
+    font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--text); line-height: 1.72; letter-spacing: -0.01em; }
+  .sec-final .hl { color: var(--accent); }
+  @media (max-width: 800px) { .sec-final { margin-top: 34px; padding-top: 30px; font-size: 17px; } }
+
+  /* ===== 이유 — 가족 (필름 스틸 · 좌우 배치) ===== */
+  /* 사진 프레임과 본문 블록의 높이를 맞춰 한 컷처럼 정렬한다 */
+  .reason { display: grid; grid-template-columns: 380px 1fr; gap: 60px; align-items: start; }
+
+  /* 한 컷의 필름 스틸. 톤은 고정 — 호버로 밝아지거나 색이 돌아오지 않는다. */
+  .filmstill { position: relative; padding: 13px 0; background: #080808;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  /* 35mm 퍼포레이션 — 스트립 위·아래를 따라 달린다 */
+  .filmstill .perf { position: absolute; left: 0; right: 0; height: 9px; pointer-events: none; opacity: .5;
+    background-image: repeating-linear-gradient(to right, transparent 0 9px, var(--line-hi) 9px 20px, transparent 20px 29px); }
+  .filmstill .perf.top { top: 2px; }
+  .filmstill .perf.bot { bottom: 2px; }
+  .filmstill .ph-shot { position: relative; overflow: hidden; }
+  /* 필름 룩: 채도를 눌러 색은 남기되 페이지에 앉힌다. 흑백이 아니라 '바랜 컬러'. */
+  .filmstill img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 25%;
+    filter: saturate(.6) sepia(.16) contrast(1.08) brightness(.8); }
+  /* 비네트 — 렌즈 주변부 감광 */
+  .filmstill .ph-vig { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: radial-gradient(76% 86% at 50% 44%, transparent 40%, rgba(8,8,8,.6) 100%); }
+  /* 필름 그레인 */
+  .filmstill .ph-grain { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .16; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  /* 프레임 정보 — 필름 가장자리 각인처럼 */
+  .filmstill .edge { position: absolute; z-index: 3; font-family: var(--mono); font-size: 9px; letter-spacing: .18em; color: rgba(168,107,72,.72); }
+  .filmstill .edge.r { right: 12px; bottom: 12px; }
+
+  .reason .r-body { min-height: 313px; display: flex; flex-direction: column; justify-content: center; }
+  .reason .r-body p { font-family: var(--sans); font-size: 15px; line-height: 2.05; color: var(--text-mid); margin: 0 0 18px; max-width: 560px; }
+  .reason .r-body p:last-child { margin-bottom: 0; }
+  .reason .r-body p strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 900px) { .reason { grid-template-columns: 1fr; gap: 46px; } .filmstill { max-width: 380px; } .filmstill .edge { display: none; } }
+
+  /* ===== 마무리 — 사진 아래에서 끝난다 ===== */
+  /* 이제 섹션 하나를 통째로 쓰므로 자체 구분선·여백은 불필요 — 섹션 패딩이 대신한다 */
+  .cl-sec.closing-final { position: relative; overflow: hidden; }
+  .cl-sec.closing-final::before { content: ""; position: absolute; z-index: 0; top: 52%; right: 5vw; width: clamp(560px, 46vw, 620px); height: 94.4%;
+    background: url("media/solar_cutout.png") right center / auto 82% no-repeat; opacity: .24; filter: grayscale(1) sepia(.24) contrast(1.14) brightness(.48);
+    transform: translateY(-50%); pointer-events: none;
+    -webkit-mask-image: linear-gradient(to left, #000 0%, #000 74%, rgba(0,0,0,.4) 90%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 0%, #000 74%, rgba(0,0,0,.4) 90%, transparent 100%); }
+  .cl-sec.closing-final::after { content: ""; position: absolute; z-index: 0; top: -40%; right: -40%; width: max(1040px, 76vw); height: max(900px, 150%);
+    background: radial-gradient(circle at 100% 0%, rgba(255,220,150,.30) 0%, rgba(207,155,110,.14) 24%, rgba(207,155,110,.045) 50%, transparent 70%);
+    mix-blend-mode: screen; opacity: .72; pointer-events: none; }
+  .cl-sec.closing-final .solar-credit-hit { position: absolute; top: 50%; right: 5vw; width: clamp(420px, 40vw, 480px); height: 72%;
+    transform: translateY(-50%); z-index: 2; pointer-events: auto; }
+  .cl-sec.closing-final .solar-tip { position: absolute; z-index: 5; right: 56px; bottom: 34px; padding: 8px 12px; white-space: nowrap;
+    background: rgba(10,10,10,.94); border: 1px solid var(--line-hi);
+    font-family: var(--mono); font-size: 9.5px; line-height: 1.6; letter-spacing: .08em; color: var(--text-mid);
+    opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease, visibility .22s; }
+  .cl-sec.closing-final .solar-tip em { font-style: italic; color: var(--text); }
+  .cl-sec.closing-final .solar-credit-hit:hover ~ .solar-tip { opacity: 1; visibility: visible; transform: translateY(0); }
+  .cl-sec.closing-final .container { position: relative; z-index: 1; }
+  .outro { margin-top: 0; padding-top: 0; }
+  .outro .o-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--accent); margin-bottom: 10px; }
+  .outro .o-title { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; margin: 0 0 46px; }
+  .closing-final .closing-copy { border-left: 0; padding-left: 0; }
+  /* 마지막으로 건네는 인사 — 우측, 서명 바로 위 */
+  .outro .o-thanks { margin-top: 56px; text-align: right; font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  @media (max-width: 800px) { .cl-sec.closing-final::before { opacity: .08; width: 57.6vw; } .cl-sec.closing-final .solar-credit-hit, .cl-sec.closing-final .solar-tip { display: none; } .outro .o-thanks { font-size: 16px; } }
+
+  /* 서명 — 우측 정렬. 좌측에서 뻗어온 선이 서명 앞에서 멈춘다.
+     활자 이름·직함은 두지 않는다 — 바로 아래 푸터가 이미 밝힌다. */
+  .sign { display: flex; align-items: center; gap: 36px; margin-top: 38px; }
+  .sign .s-bar { flex: 1; height: 1px; background: var(--line); }
+  /* 자필 서명 — 배경 제거한 투명 PNG, 코퍼 잉크 */
+  .sign .s-mark { display: block; width: 260px; height: auto; opacity: .92; }
+  @media (max-width: 800px) { .sign { margin-top: 28px; gap: 20px; } .sign .s-mark { width: 178px; } }
+</style>
+</head>
+<body>
+
+<header class="site-head" id="top">
+  <a class="nav-home" href="index.html" aria-label="홈 (커버)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg></a>
+  <nav class="site-nav" aria-label="주요 메뉴">
+    <a class="nav-top" href="01_intro.html">ABOUT</a>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">PROJECTS <span class="caret">▾</span></span>
+      <div class="dropdown">
+        <a href="02_chrono_odyssey.html">CHRONO ODYSSEY</a>
+        <a href="03_traha_infinity.html">TRAHA INFINITY</a>
+        <a href="04_traha.html">TRAHA</a>
+        <a href="05_echo_of_soul.html">ECHO OF SOUL</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">WORK <span class="caret">▾</span></span>
+      <div class="dropdown">
+        <a href="06_work_simplification.html">SIMPLIFICATION</a>
+        <a href="07_planning_direction.html">STANDARDIZATION</a>
+        <a href="08_work_automation.html">AUTOMATION</a>
+      </div>
+    </div>
+    <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="cl-hero">
+  <div class="bg-art don-wrap">
+    <img src="media/don_ink_copper.png" alt="">
+  </div>
+  <div class="art-tip tip-don">Honoré Daumier, <em>Don Quixote and Sancho Panza</em> · 19세기 · 20 × 29.8cm · 메트로폴리탄미술관 소장</div>
+  <div class="container">
+    <div class="kicker">EPILOGUE</div>
+    <h1>모든 <span class="hl">프레임</span>을<br>소중히 하는 삶</h1>
+    <div class="en">Every Frame Matters</div>
+    <div class="rule"></div>
+    <p class="lede">
+      플레이어는 게임을 하면서 “방금 대검으로 타격할 때 역경직이 정확히 4프레임 들어갔군” 하고
+      숫자로 인지하지 못합니다. 하지만 그 4프레임 중 1프레임만 빠져도 플레이어는 형언할 수 없는 위화감을 느낍니다.
+      즉, <em>숫자로 인지하진 못하지만, 감각으로 체감하는 영역</em>이 바로 이 1프레임의 싸움입니다.
+    </p>
+
+    <figure class="epigraph">
+      <blockquote>“사소한 것들이 완벽함을 만들고, 완벽함은 결코 사소하지 않다.”</blockquote>
+      <figcaption>Michelangelo Buonarroti</figcaption>
+    </figure>
+    <p class="lede">
+      인생 역시 마찬가지입니다. 하루 중 흘려보내는 5분, 10분은 눈에 보이지 않는 1프레임처럼 무가치해 보입니다.
+      우리는 대부분 그 사소한을 인지하지 못하고 살아갑니다. 하지만 그 사소한 프레임들이 매일매일 어떻게 쌓이느냐에 따라
+      <em>인생의 임팩트</em>가 묵직하고 단단해질지, 혹은 한없이 얄팍하고 가벼워질지가 결정됩니다.
+    </p>
+
+    <div class="montage">
+      <div class="mt-slot">MONTAGE · DefaultGroup.UpperBody</div>
+      <div class="mt-body">
+        <div class="mt-ruler">
+          <span class="rn" style="left: 0.0000%;">0</span>
+          <span class="rn" style="left: 7.8125%;">5</span>
+          <span class="rn" style="left: 15.6250%;">10</span>
+          <span class="rn" style="left: 23.4375%;">15</span>
+          <span class="rn" style="left: 31.2500%;">20</span>
+          <span class="rn" style="left: 39.0625%;">25</span>
+          <span class="rn" style="left: 46.8750%;">30</span>
+          <span class="rn" style="left: 54.6875%;">35</span>
+          <span class="rn" style="left: 62.5000%;">40</span>
+          <span class="rn" style="left: 70.3125%;">45</span>
+          <span class="rn" style="left: 78.1250%;">50</span>
+          <span class="rn" style="left: 85.9375%;">55</span>
+          <span class="rn" style="left: 93.7500%;">60</span>
+          <span class="rn" style="left: 100.0000%;">64</span>
+        </div>
+        <div class="mt-bars">
+          <div class="bar" style="left: 0.0000%; width: 70.3125%;"><span>01 · STARTUP [ 45f ]</span></div>
+          <div class="bar" style="left: 70.3125%; width: 23.4375%;"><span>02 · CANCEL WINDOW [ 15f ]</span></div>
+          <div class="bar is-hit" style="left: 93.7500%; width: 6.2500%;"><span>03</span></div>
+          <div class="playhead" style="left: 93.7500%;"></div>
+        </div>
+        <div class="mt-nfy">
+          <div class="nf" style="left: 70.3125%;"><i></i><em>AN_CancelWindow_Open</em></div>
+          <div class="nf to-left" style="left: 93.7500%;"><i></i><em>AN_Hit</em></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fstrip">
+      <div class="fcell">
+        <div class="f-head"><span class="f-no">01 · STARTUP</span><span class="f-tc">[ 45f ]</span></div>
+        <div class="f-t">선딜레이</div>
+        <div class="f-b">보이지 않는 준비 구간. 지루하고, 아무도 알아주지 않고, 건너뛰고 싶어지는 시간. 이 길이가 뒤에 올 모든 것의 무게를 결정합니다.</div>
+      </div>
+      <div class="fcell">
+        <div class="f-head"><span class="f-no">02 · CANCEL WINDOW</span><span class="f-tc">[ 15f ]</span></div>
+        <div class="f-t">캔슬 윈도우</div>
+        <div class="f-b">방향을 바꿀 수 있다는 건 실패가 아니라 설계입니다. 삶의 궤적을 수정하는 매 순간, 저 역시 더 나은 다음 프레임을 위한 입력을 준비해 왔습니다.</div>
+      </div>
+      <div class="fcell is-hit">
+        <div class="f-head"><span class="f-no">03 · IMPACT</span><span class="f-tc">[ 4f ]</span></div>
+        <div class="f-t">타격</div>
+        <div class="f-b">앞의 두 구간이 정직했을 때만 묵직해집니다. 짧고, 확실하고, 되돌릴 수 없습니다. 그 한 순간을 위해 앞의 전부를 설계합니다.</div>
+      </div>
+    </div>
+
+    <p class="lede">
+      사소한 기획 한 줄에도 플레이어가 납득할 수 있는 인과관계가 필요하듯, 선딜 없이 터지는 타격은 아무도 납득시키지 못합니다.
+      묵직하게 쌓인 시간이 있어야만 마침내 결과에 무게가 실립니다.
+      <strong>긴 선딜레이는 그만큼 강력한 임팩트를 만들어 냅니다.</strong>
+      단 한 프레임이라도 덜어내면 타격은 가벼워집니다.
+      실패한 프로젝트도, 세상에 나오지 못한 기획서도, 전부 지금의 저라는 값을 만든 소중한 프레임들입니다.
+    </p>
+    <p class="lede">
+      <strong>지금 이 순간을 아름답게 연출할 책임</strong>이 제게 있다는 것을 알기에 정직하고 밀도 있게 한 프레임 한 프레임을 쌓아왔습니다.
+      프로젝트에 바친 모든 고민의 시간과 인내의 과정은 반드시 필요한 선딜레이였으며,
+      이 포트폴리오는 <strong>제 스스로 열어둔 정교한 캔슬 윈도우</strong>라고 믿습니다.
+      이는 단순히 동작을 멈추기 위함이 아니라, 더 나은 방향으로 궤적을 틀어 다음 액션을 연계하기 위한 기회입니다.
+    </p>
+    <p class="lede">
+      1977년 9월 5일에 발사된 보이저 1호는 2026년 현재 인류 역사상 가장 먼 거리를 항해하고 있습니다.
+      사실 보이저호의 속도로는 우리 은하를 영원히 벗어날 수 없다고 합니다.
+      그럼에도 불구하고 이 여행자의 미지를 향한 <strong>멈추지 않는 전진</strong>을 비웃을 수 있는 자는 감히 없을 것입니다.
+      우리는 언젠가, 결국 모두 멈추기 때문입니다.
+    </p>
+    <p class="lede">
+      나아가는 모든 것에는 형언할 수 없는 감동이 있습니다.
+      풍차를 향해 돌진한 세르반테스의 소설 속 기사가 사람들에게 오래도록 사랑받는 이유도 그가 옳았기 때문이 아니라, <strong>결코 멈추지 않았기 때문입니다.</strong>
+      저 역시 누군가의 감동이 되기 위해 별을 향해 달려왔습니다.
+      그 별은 저를 피해 갔고, 매일 더 멀리 달아나겠지만, 괜찮습니다.
+      <strong>내일 저는 더 빨리 달릴 것이고, 더 멀리 팔을 뻗을 테니까요. 1프레임이라도 더.</strong>
+    </p>
+
+    <figure class="epigraph">
+      <blockquote>“그리하여 우리는 조류를 거스르는 배처럼 끊임없이 과거로 떠밀려 가면서도 앞으로, 앞으로 계속 나아가는 것이다.”</blockquote>
+      <figcaption>F. Scott Fitzgerald, The Great Gatsby</figcaption>
+    </figure>
+
+    <div class="sec-final">
+      <span class="hl">기꺼이 나아가는 것.</span> 제가 일과 삶을 대하는 태도입니다.
+    </div>
+    
+  </div>
+</section>
+
+<!-- ===== STAFF ROLL (가족 필름 스틸) ===== -->
+<section class="cl-sec staff-roll">
+  <div class="container">
+    <div class="sec-en is-kicker">Staff Roll</div>
+    <h2 class="sec-h is-staff">로시난테와 산초 판자</h2>
+
+    <div class="reason">
+      <div class="filmstill">
+        <div class="perf top" aria-hidden="true"></div>
+        <div class="ph-shot">
+          <img src="media/family.jpeg" alt="가족 사진">
+          <div class="ph-vig" aria-hidden="true"></div>
+          <div class="ph-grain" aria-hidden="true"></div>
+          <div class="edge r">4 : 3</div>
+        </div>
+        <div class="perf bot" aria-hidden="true"></div>
+      </div>
+
+      <div class="r-body">
+        <p>
+          퇴근길 현관문을 여는 순간, 소리 지르며 달려와 품에 안기는 아이의 무게, 그리고 아내의 따스한 미소.
+          그것이 제 하루에서 가장 확실하고 묵직한 타격감입니다.
+        </p>
+        <p>
+          이 한 프레임의 존재 덕분에 저는 내일의 프레임을 다시 정교하게 설계할 힘을 얻습니다.
+        </p>
+        <p>
+          가장 소중한 사람들에게 결코 부끄럽지 않을 단단하고 가치 있는 결과물을 만들고 싶습니다.
+          타협하지 않고, 1프레임의 디테일에 끝까지 매달릴 수 있는 이유입니다.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CLOSING ===== -->
+<section class="cl-sec closing-final">
+  <div class="solar-credit-hit" aria-hidden="true"></div>
+  <div class="solar-tip"><em>'Solaire of Astora'</em> from DARK SOULS™ © Bandai Namco Entertainment Inc.</div>
+  <div class="container">
+    <div class="outro">
+      <div class="o-label">CLOSING</div>
+      <h2 class="o-title">마치며</h2>
+
+      <p class="closing-copy">
+        다크 소울 시리즈의 ‘태양의 전사 솔라’는 암울하고 절망적인 게임 세계에서 플레이어에게 맹목적인 호의와
+        ‘유쾌한 협력(jolly co-operation)’을 통해 따뜻한 희망을 주는 유일한 NPC입니다.
+        그의 상징인 ‘태양 만세’ 포즈는 어둠 속에서 빛을 갈망하는 그의 순수한 열망과 플레이어 간의 긍정적인 연대를
+        완벽하게 상징하기 때문에 큰 감동과 열광을 이끌어냅니다.
+      </p>
+
+      <p class="closing-copy">
+        불사자들마저 마음이 꺾이는 짙은 어둠 속에서도 꺼져가는 불을 키우던 장작처럼,
+        어떤 험한 전장에서라도 <strong>늘 기꺼이 곁에서 함께 싸우는 동료</strong>가 되겠습니다.
+        함께 전설적인 게임을 만드는 기회를 얻을 수 있기를 기대하겠습니다. <span class="ac">태양 <s>야호</s> 만세!</span>
+      </p>
+
+      <div class="o-thanks">소중한 시간 내어 열람해 주셔서 감사합니다.</div>
+
+      <div class="sign">
+        <div class="s-bar"></div>
+        <img class="s-mark" src="media/sign_accent.png" alt="박종혁 서명">
+      </div>
+    </div>
+  </div>
+</section>
+<!-- PAGE LIST -->
+<nav class="page-list" aria-label="전체 페이지 목록">
+  <div class="container">
+    <div class="pl-dots" aria-label="전체 페이지 바로가기">
+      <a class="pl-dot" href="index.html" data-title="COVER"><span class="pl-num">00</span></a>
+      <a class="pl-dot" href="01_intro.html" data-title="ABOUT"><span class="pl-num">01</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="02_chrono_odyssey.html" data-title="CHRONO ODYSSEY"><span class="pl-num">02</span></a>
+      <a class="pl-dot" href="03_traha_infinity.html" data-title="TRAHA INFINITY"><span class="pl-num">03</span></a>
+      <a class="pl-dot" href="04_traha.html" data-title="TRAHA"><span class="pl-num">04</span></a>
+      <a class="pl-dot" href="05_echo_of_soul.html" data-title="ECHO OF SOUL"><span class="pl-num">05</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="06_work_simplification.html" data-title="SIMPLIFICATION"><span class="pl-num">06</span></a>
+      <a class="pl-dot" href="07_planning_direction.html" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
+      <a class="pl-dot" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot is-current" href="09_closing.html" data-title="CLOSING" aria-current="page"><span class="pl-num">09</span><span class="pl-current-label">CLOSING</span></a>
+    </div>
+  </div>
+</nav>
+
+<footer class="site-foot">
+  <div class="sf-copy">© 2026 박종혁 · Combat Designer · Optimized for Desktop · 1920 × 1080</div>
+</footer>
+
+<div class="backtab" id="backTab"><span class="bt-label">BACK TO TOP</span><a class="bt-body" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="18" y2="4"/><g class="bt-arr"><line x1="12" y1="8.5" x2="12" y2="20"/><path d="M7 13 L12 8 L17 13"/></g></svg></a></div>
+<script>(function(){var t=document.getElementById("backTab");if(!t)return;function u(){if(window.scrollY>400)t.classList.add("show");else t.classList.remove("show");}window.addEventListener("scroll",u,{passive:true});u();})();</script>
+</body>
+</html>
