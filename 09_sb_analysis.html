@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>스텔라 블레이드 전투 분석 · 박종혁 Combat Design</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system.css?v=20260718">
+<style>
+  /* PAGE 05 — Stellar Blade Combat Analysis
+     WHAT IT GOT RIGHT → CURRENT LIMITATIONS → ROOT CAUSE → THE NEXT CHALLENGE */
+
+  .page-header { padding: 74px 0 32px; border-bottom: 1px solid var(--line); }
+  .page-header .label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .page-header h1 { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--text); line-height: 1.4; letter-spacing: -0.005em; }
+  .page-header .purpose { margin-top: 12px; font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.7; max-width: 720px; }
+
+  /* WHAT IT GOT RIGHT — 강점 (이미지 중심) */
+  .strengths { padding: 74px 0; border-bottom: 1px solid var(--line); }
+  .strengths .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .strengths h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+  .strengths .lead { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; max-width: 800px; margin: 6px 0 30px; padding-left: 16px; border-left: 2px solid var(--accent); }
+  .strength-block { margin-bottom: 56px; }
+  .strengths h2 + .strength-block { margin-top: 34px; }
+  .strength-block:last-child { margin-bottom: 0; }
+  .strength-block .s-num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; }
+  .strength-block .s-title { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+  .strength-block p { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.8; max-width: 780px; }
+  .strength-block p strong { color: var(--text); font-weight: 500; }
+
+  /* 강점 증거 이미지 */
+  .evidence-shot { margin: 24px 0 0; max-width: 100%; }
+  .evidence-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+  .evidence-shot figcaption { margin-top: 14px; font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+  .evidence-shot figcaption strong { color: var(--text); font-weight: 500; }
+  .evidence-shot .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: middle; margin-right: 8px; }
+  .evidence-shot .dot.blue { background: #4f8ff0; }
+  .evidence-shot .sig { font-family: var(--mono); font-size: 12px; color: var(--text); letter-spacing: 0.03em; }
+
+  /* 공통 섹션 헤더 (NEXT CHALLENGE / ROOT CAUSE / IMPLICATION) */
+  .next-challenge, .root-cause, .implication { padding: 74px 0; border-bottom: 1px solid var(--line); }
+  .next-challenge .section-label, .root-cause .section-label, .implication .section-label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px;
+  }
+  .next-challenge h2, .root-cause h2, .implication h2 {
+    font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 8px;
+  }
+  .next-challenge .lead, .next-challenge .nc-note,
+  .root-cause p, .implication p {
+    font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; max-width: 800px; margin: 6px 0 0; padding-left: 16px; border-left: 2px solid var(--accent);
+  }
+  .next-challenge .lead strong, .next-challenge .nc-note strong,
+  .root-cause p strong, .implication p strong { color: var(--text); font-weight: 500; }
+  .next-challenge .lead { margin-bottom: 40px; }
+  .next-challenge .nc-note { margin-top: 36px; }
+
+  /* INTENDED vs ACTUAL 플로우 */
+  .flow-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .root-cause p.fc-example, .fc-example { margin: 22px 0 0; padding-left: 0; border-left: 0; font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.75; max-width: 100%; word-break: keep-all; }
+  .fc-example strong { color: var(--text); font-weight: 500; }
+  .fc-col { border: 1px solid var(--line); background: var(--bg-card); padding: 28px 28px 32px; }
+  .fc-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 20px; }
+  .fc-chain { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .fc-chain .node { font-family: var(--sans); font-size: 14px; color: var(--text); }
+  .fc-chain .node.accent { color: var(--accent); font-weight: 500; }
+  .fc-chain .node.dim { color: var(--text-dim); }
+  .fc-chain .node .same { font-family: var(--mono); font-size: 11px; color: #c74436; letter-spacing: .02em; }
+  .fc-chain .v-arrow { font-family: var(--mono); font-size: 13px; color: var(--accent); margin-left: 2px; }
+
+  /* REALITY 증거 영상 */
+  .clip-evidence { margin: 36px 0 0; max-width: 100%; }
+  .clip-evidence video, .clip-evidence img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+  .clip-evidence .clip-frame { border: 1px solid var(--line); background: var(--bg-card); aspect-ratio: 16 / 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+  .clip-evidence .clip-frame .ci-icon { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--text-dim); }
+  .clip-evidence .clip-frame .ci-note { font-family: var(--sans); font-size: 12px; color: var(--text-dim); text-align: center; padding: 0 24px; }
+  .clip-evidence figcaption { margin-top: 14px; font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+  .clip-evidence figcaption strong { color: var(--text); font-weight: 500; }
+  .clip-evidence .shot-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .clip-evidence .shot { display: flex; flex-direction: column; gap: 8px; }
+  .clip-evidence .shot .shot-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--text-dim); }
+  @media (max-width: 700px) { .clip-evidence .shot-row { grid-template-columns: 1fr; } }
+
+  /* 결정 루프 (가로) */
+  .loop-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 24px 0 28px; }
+  .loop-row .node { font-family: var(--mono); font-size: 13px; color: var(--text); border: 1px solid var(--line-hi); padding: 8px 14px; }
+  .loop-row .node.dim { color: var(--text-dim); border-style: dashed; }
+  .loop-row .arrow { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+
+  /* 전투 정체성 후보 리스트 */
+  .identity-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0 12px; }
+  .identity-list .il-item { font-family: var(--mono); font-size: 13px; color: var(--text-mid); border: 1px solid var(--line); padding: 8px 16px; }
+  .root-cause .rc-note { color: var(--text); }
+  .root-cause .rc-note .concept { color: var(--accent); font-weight: 600; }
+
+  /* 유지해야 할 강점 리스트 */
+  .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 28px 0 8px; }
+  .ref-card { border: 1px solid var(--line); background: var(--bg-card); padding: 0; overflow: hidden; }
+  .ref-card .ref-shot { aspect-ratio: 16 / 9; background: var(--bg-base); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .ref-card .ref-shot.has-video { padding: 0; background: #0a0a0a; }
+  .ref-card .ref-shot.has-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ref-card .ref-body { padding: 18px 20px 20px; }
+  .ref-card .ref-en { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 10px; }
+  .ref-card .ref-mech { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .ref-card .ref-desc { font-family: var(--sans); font-size: 12px; color: var(--text-mid); line-height: 1.7; }
+  .ref-card .ref-desc strong { color: var(--text); font-weight: 500; }
+  @media (max-width: 720px) { .ref-grid { grid-template-columns: 1fr; } }
+  /* SYSTEM CONCEPT — 차지 부스트 컨셉 블록 */
+  .concept { padding: 74px 0; border-bottom: 1px solid var(--line); }
+  .concept .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .concept .section-label .badge { color: var(--accent); font-weight: 600; }
+  .concept h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+  .concept .lead { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; max-width: 800px; margin: 6px 0 0; padding-left: 16px; border-left: 2px solid var(--accent); }
+  .concept .lead strong { color: var(--text); font-weight: 500; }
+  /* .concept .sub-label — 아래 통합 규칙으로 대체 */
+  .concept .to-spec { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--text-dim); letter-spacing: 0.06em; }
+  .concept .to-spec a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .concept .to-spec a:hover { color: var(--accent); }
+
+  /* 핵심 한 줄 (페이지의 왕) */
+  .implication .closing-statement { margin: 40px 0 8px; border-left: 3px solid var(--accent); padding-left: 32px; }
+  .implication .cs-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 18px; }
+  .implication .cs-text { font-family: var(--serif); font-size: 24px; font-weight: 500; color: var(--text); line-height: 1.6; letter-spacing: -0.005em; max-width: 880px; }
+  .implication .cs-text .key { color: var(--accent); font-weight: 700; }
+  .implication .cs-question { margin-top: 22px; font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--text-mid); line-height: 1.6; }
+
+  /* 다음 링크 */
+  .implication .next-link { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--text-dim); letter-spacing: 0.1em; }
+  .implication .next-link a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .implication .next-link a:hover { color: var(--accent); }
+
+  /* 핵심 루프 (페이지의 중심 다이어그램) */
+  .hero-loop { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 0; padding: 32px 34px; border: 1px solid var(--line-hi); background: var(--bg-card); }
+  .hero-loop .node { font-family: var(--mono); font-size: 14px; color: var(--text); }
+  .hero-loop .node.dim { color: var(--text-dim); }
+  .hero-loop .arrow { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+
+  /* 파생기 증거 */
+  .derivative { margin-top: 32px; padding: 28px 32px; border: 1px solid var(--line); }
+  .derivative .d-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 20px; }
+  .derivative .d-rows { display: flex; flex-direction: column; gap: 12px; }
+  .derivative .d-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-family: var(--mono); font-size: 14px; }
+  .derivative .d-sys { color: var(--text); min-width: 92px; }
+  .derivative .d-step { color: var(--text-mid); }
+  .derivative .d-arrow { color: var(--accent); }
+  .derivative .d-note { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+  .derivative .d-note strong { color: var(--accent); font-weight: 500; }
+
+  @media (max-width: 800px) {
+    .flow-compare { grid-template-columns: 1fr; gap: 16px; }
+    .implication .cs-text { font-size: 18px; }
+    .implication .closing-statement { padding-left: 20px; }
+  }
+
+  /* ===== PART 02 — SOLUTIONS (병합: 06_sb_solutions) ===== */
+
+  /* PAGE 06 — Stellar Blade Combat Solutions
+     다양한 대응 → 다양한 승리 전략 (WHAT). 플레이스타일(HOW)은 04에서.
+     DESIGN DIRECTION → THE CHANGE → HOW IT FORMS → FOUR PLAYERS → WHY IT WORKS */
+
+  .page-header { padding: 74px 0 32px; border-bottom: 1px solid var(--line); }
+  .page-header .label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .page-header h1 { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--text); line-height: 1.4; letter-spacing: -0.005em; }
+  .page-header .purpose { margin-top: 12px; font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.7; max-width: 720px; }
+  .page-header .purpose strong { color: var(--text); font-weight: 500; }
+
+  .the-change, .how-it-forms, .four-players, .why-it-works, .closing { padding: 58px 0; border-bottom: 1px solid var(--line); }
+  .closing { border-bottom: none; padding-bottom: 58px; }
+  .the-change .section-label, .how-it-forms .section-label, .four-players .section-label, .why-it-works .section-label, .closing .section-label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px;
+  }
+  .the-change h2, .how-it-forms h2, .four-players h2, .why-it-works h2 {
+    font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 8px;
+  }
+  .the-change .lead, .how-it-forms .lead, .four-players .lead {
+    font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.75; max-width: 780px; margin-bottom: 30px;
+  }
+  .the-change .lead strong, .how-it-forms .lead strong, .four-players .lead strong { color: var(--text); font-weight: 500; }
+
+  .change-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .change-col { border: 1px solid var(--line); background: var(--bg-card); padding: 28px 28px 32px; }
+  .change-col .cc-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; margin-bottom: 20px; }
+  .change-col.now .cc-label { color: var(--text-dim); }
+  .change-col.next .cc-label { color: var(--accent); }
+  .cc-chain { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .cc-chain .node { font-family: var(--sans); font-size: 14px; }
+  .change-col.now .cc-chain .node { color: var(--text-dim); }
+  .change-col.next .cc-chain .node { color: var(--text); }
+  .change-col.next .cc-chain .node.end { color: var(--accent); font-weight: 500; }
+  .cc-chain .v-arrow { font-family: var(--mono); font-size: 13px; color: var(--accent); margin-left: 2px; }
+
+  .growth-map { width: 100%; border-collapse: collapse; margin: 0 0 32px; }
+  .growth-map th { text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); padding: 13px 18px; border: 1px solid var(--line); background: var(--bg-card); }
+  .growth-map td { padding: 15px 18px; border: 1px solid var(--line); font-family: var(--mono); font-size: 13px; vertical-align: middle; line-height: 1.6; }
+  .growth-map td.resp { color: var(--text-mid); }
+  .growth-map td.style { color: var(--text); }
+  .growth-map td.win { color: var(--accent); }
+  .growth-map td.win .gx { color: var(--accent); }
+
+  .formation-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 0 0 24px; padding: 26px 30px; border: 1px solid var(--line-hi); background: var(--bg-card); }
+  .formation-flow .ff-node { font-family: var(--sans); font-size: 14px; color: var(--text); }
+  .formation-flow .ff-node.accent { color: var(--accent); font-weight: 500; }
+  .formation-flow .ff-arrow { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+  .how-it-forms .uc-note { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.8; max-width: 800px; }
+  .how-it-forms .uc-note strong { color: var(--text); font-weight: 500; }
+
+  .four-players .same-note { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+  .four-players .same-note .tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--text-mid); border: 1px solid var(--line); padding: 7px 14px; }
+  .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .player-card { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 26px 24px 28px; }
+  .player-card .p-id { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; }
+  .player-card .p-style { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 20px; }
+  .player-card .p-chain { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .player-card .p-chain .node { font-family: var(--mono); font-size: 13px; color: var(--text); }
+  .player-card .p-chain .node.start { color: var(--text-mid); }
+  .player-card .p-chain .node.end { color: var(--accent); }
+  .player-card .p-chain .v-arrow { font-family: var(--mono); font-size: 12px; color: var(--accent); margin-left: 2px; }
+  .four-players .proof-head { font-family: var(--serif); font-size: 18px; color: var(--text); font-weight: 600; margin: 32px 0 14px; line-height: 1.5; text-align: center; }
+  .four-players .flow-down { text-align: center; font-family: var(--mono); font-size: 18px; color: var(--accent); margin: 16px 0; }
+  .four-players .flow-conclusion { text-align: center; font-family: var(--sans); font-size: 16px; color: var(--text-mid); margin: 0; line-height: 1.7; }
+  .four-players .flow-conclusion strong { color: var(--text); font-weight: 500; }
+  .four-players .effect-table { border-collapse: collapse; margin: 20px 0 0; width: 100%; max-width: 460px; }
+  .four-players .effect-table th { text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); font-weight: 400; padding: 0 0 10px; border-bottom: 1px solid var(--line); }
+  .four-players .effect-table td { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; vertical-align: baseline; }
+  .four-players .effect-table td.es { font-family: var(--mono); color: var(--accent); width: 42%; }
+  .four-players .effect-table td.ee { font-family: var(--sans); color: var(--text-mid); }
+  .four-players .effect-table tbody tr:last-child td { border-bottom: none; }
+  .four-players .proof-note strong { color: var(--text); font-weight: 500; }
+
+  .why-row { display: grid; grid-template-columns: 280px 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+  .why-row:first-of-type { border-top: 1px solid var(--line); margin-top: 8px; }
+  .why-row .w-title { font-family: var(--sans); font-size: 16px; font-weight: 500; color: var(--text); }
+  .why-row .w-title .w-en { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 6px; }
+  .why-row .w-desc { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.75; }
+  .why-it-works .footnote { margin-top: 28px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); line-height: 1.7; max-width: 800px; }
+  .why-it-works .footnote .fn-mark { font-family: var(--mono); color: var(--text-dim); }
+
+  .closing .closing-statement { margin: 8px 0; border-left: 3px solid var(--accent); padding-left: 32px; }
+  .closing .cs-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 18px; }
+  .closing .cs-text { font-family: var(--serif); font-size: 24px; font-weight: 500; color: var(--text); line-height: 1.6; letter-spacing: -0.005em; max-width: 880px; }
+  .closing .cs-text .key { color: var(--accent); font-weight: 700; }
+  .closing .next-link { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--text-dim); letter-spacing: 0.1em; }
+  .closing .next-link a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .closing .next-link a:hover { color: var(--accent); }
+
+  /* ── 다이어그램 ── */
+  .flow-svg { width: 100%; height: auto; display: block; }
+  .flow-cap { text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; margin-top: 16px; }
+  .change-col.now .flow-cap { color: var(--text-dim); }
+  .change-col.next .flow-cap { color: var(--accent); }
+
+  .cc-flow { display: flex; flex-direction: column; align-items: stretch; }
+  .cc-glabel { font-family: var(--serif); font-size: 16px; font-weight: 600; letter-spacing: 0; text-align: center; margin-bottom: 7px; color: var(--text); line-height: 1.3; }
+  .cc-glabel.acc { color: var(--accent); }
+  .cc-box { border: 1px solid var(--line); background: var(--bg, #0d0d0d); padding: 9px 12px; font-family: var(--sans); font-size: 12px; line-height: 1.5; text-align: center; }
+  .change-col.now .cc-box { color: var(--text-dim); }
+  .change-col.next .cc-box { color: var(--text-mid); }
+  .cc-box.win { color: var(--accent); border-color: var(--accent); }
+  .cc-down { text-align: center; font-family: var(--mono); font-size: 16px; margin: 9px 0; color: var(--text-dim); }
+  .change-col.next .cc-down { color: var(--accent); }
+
+  svg text.s-src, svg text.s-dim, svg text.s-acc { font-family: var(--mono); font-size: 13px; }
+  svg text.s-src { fill: var(--text-mid); }
+  svg text.s-dim { fill: var(--text-dim); }
+  svg text.s-acc { fill: var(--accent); }
+  svg text.s-boss { fill: var(--text); font-family: var(--serif); font-size: 16px; font-weight: 600; }
+  svg text.s-style { fill: var(--text-dim); font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; }
+  svg .ln { stroke: var(--line-hi); stroke-width: 1.5; fill: none; }
+  svg .ln-acc { stroke: var(--accent); stroke-width: 2.5; fill: none; }
+  svg .bx { fill: var(--bg, #0d0d0d); stroke: var(--line-hi); stroke-width: 1; }
+  svg .bx-acc { fill: var(--bg, #0d0d0d); stroke: var(--accent); stroke-width: 1; }
+  svg .tri { fill: var(--line-hi); }
+  svg .tri-acc { fill: var(--accent); }
+  svg .ic-r { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+  .how-it-forms .ex-note { margin: -16px 0 32px; font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; max-width: 780px; }
+  .how-it-forms .ex-note strong { color: var(--text); font-weight: 500; }
+  .how-it-forms .ex-note .ex-mark { font-family: var(--mono); color: var(--accent); margin-right: 4px; }
+
+  .radial-wrap { max-width: 580px; margin: 0 auto; }
+  .radial-cap { text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); margin-top: 10px; }
+
+  .encounter-grid { margin: 28px 0 0; }
+  .ec-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ec-card { border: 1px solid var(--line); padding: 16px 18px; }
+  .ec-card .ec-str { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+  .ec-card .ec-eff { font-family: var(--sans); font-size: 13px; color: var(--text-mid); margin-top: 6px; }
+  .ec-diagram { margin-top: 40px; }
+  .ec-diagram .radial-wrap { margin: 0 auto; max-width: 520px; }
+  .ec-cap { text-align: center; font-family: var(--sans); font-size: 14px; color: var(--text-mid); margin-top: 14px; }
+  @media (max-width: 800px) { .ec-cards { grid-template-columns: repeat(2, 1fr); } }
+
+  .why-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 8px; }
+  .why-card { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 24px 22px 26px; }
+  .why-card .ic { width: 28px; height: 28px; display: block; margin-bottom: 16px; }
+  .why-card .ic line, .why-card .ic circle, .why-card .ic path { stroke: var(--accent); stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .why-card .wc-en { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; line-height: 1.5; color: var(--accent); margin-bottom: 12px; }
+  .why-card .wc-ko { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.4; }
+  .why-card .wc-desc { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.75; }
+
+  @media (max-width: 800px) {
+    .change-grid { grid-template-columns: 1fr; gap: 16px; }
+    .why-cards { grid-template-columns: 1fr; }
+    .players-grid { grid-template-columns: 1fr; }
+    .why-row { grid-template-columns: 1fr; gap: 8px; }
+    .growth-map, .growth-map tbody, .growth-map tr, .growth-map td, .growth-map th { display: block; }
+    .growth-map th { display: none; }
+    .growth-map td { border-bottom: none; }
+    .growth-map tr { border: 1px solid var(--line); margin-bottom: 12px; padding: 6px 0; }
+  }
+  /* CURRENT LIMITATIONS — 도식 */
+  .scope-split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 40px; max-width: 100%; }
+  .scope-split .sc { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 18px 20px; }
+  .scope-split.stack { grid-template-columns: 1fr; margin-bottom: 0; }
+  .scope-split .sc.keep { border-left: 3px solid #5e5e5e; }
+  .scope-split .sc.fix { border-left: 3px solid var(--accent); }
+  .scope-split .sc-k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--accent); margin-bottom: 8px; }
+  .scope-split .sc.keep .sc-k { color: var(--text-dim); }
+  .scope-split .sc.fix .sc-k { color: var(--accent); }
+  .scope-split .sc-t { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 7px; }
+  .scope-split .sc-d { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+  .scope-split .sc-d strong { color: var(--text); font-weight: 500; }
+  .dg-block { margin: 22px 0 0; max-width: 100%; }
+  .scope-split.stack { margin-top: 40px; }
+  .dg-label { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--accent); margin-bottom: 12px; }
+  .dg-frame { border: 1px solid var(--line); background: var(--bg-card); padding: 14px 16px; }
+  .dg-frame svg { display: block; width: 100%; height: auto; }
+  .dg-cap { margin: 12px 0 0; font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+  .dg-cap strong { color: var(--text); font-weight: 500; }
+  svg .dgn circle { fill: #161616; stroke: var(--text-dim); stroke-width: 2; }
+  svg .dgn text { font-family: var(--mono); font-size: 11px; fill: var(--text-mid); }
+  svg .dgn.acc circle { stroke: var(--accent); }
+  svg .dgn.acc text { fill: var(--accent); }
+  svg .dg-gap { font-family: var(--mono); font-size: 10px; fill: #8a7d74; }
+  svg .dg-note { font-family: var(--sans); font-size: 10px; fill: var(--text-dim); }
+  svg .ax { stroke: #4a4a4a; stroke-width: 1.2; }
+  svg .grid { stroke: #262626; stroke-width: 1; stroke-dasharray: 3 4; }
+  svg .axl { font-family: var(--mono); font-size: 10px; fill: var(--text-dim); }
+  svg .gapzone { fill: rgba(168,107,72,.09); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 4 4; }
+  svg .gapt { font-family: var(--serif); font-size: 14px; font-weight: 600; fill: var(--accent); }
+  svg .gaps { font-family: var(--sans); font-size: 11px; fill: var(--text-mid); }
+  svg .gapf { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; fill: var(--accent); }
+  svg .pt circle { fill: #c74436; }
+  svg .pt text { font-family: var(--mono); font-size: 11px; fill: var(--text); }
+  svg .pt.dim circle { fill: #6f6a64; }
+  svg .pt.dim text { fill: var(--text-mid); }
+  /* 4분면 매트릭스 */
+  svg .qbox { fill: none; stroke: var(--line); stroke-width: 1; }
+  svg .qbox.acc { fill: rgba(168,107,72,.16); stroke: var(--accent); stroke-width: 1.8; stroke-dasharray: 5 4; }
+  /* 분면 구분색 — 테두리는 ? 만 칠하고, 나머지는 마커 네모로만 구분 */
+  svg .qm.b1 { fill: #5f7d8c; }
+  svg .qm.b2 { fill: #8c7d5f; }
+  svg .qm.b3 { fill: #6f8c5f; }
+  svg .qm.acc { fill: var(--accent); }
+  svg .qn { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; fill: #4a4a4a; }
+  svg .qk { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; fill: var(--text-dim); }
+  svg .qt { font-family: var(--serif); font-size: 13px; font-weight: 600; fill: var(--text); }
+  svg .qd { font-family: var(--sans); font-size: 11px; fill: var(--text-mid); }
+  svg .qk.acc { fill: var(--accent); }
+  svg .qt.acc { fill: var(--accent); font-weight: 700; }
+  svg .qd.acc { fill: var(--text); }
+  svg .qmark { font-family: var(--serif); font-size: 46px; font-weight: 700; fill: var(--accent); }
+  /* 매트릭스 절반 축소 표시 — 축소 배율만큼 글자 키움 */
+  svg.mx .qt { font-size: 17px; }
+  svg.mx .axl { font-size: 13px; }
+  svg.mx .qmark { font-size: 58px; }
+  .mx-split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+  .mx-split .dg-frame { display: flex; }
+  .mx-split .dg-frame svg { width: 100%; height: 100%; display: block; }
+  .mx-notes { display: flex; flex-direction: column; gap: 12px; }
+  .mx-card { --c: var(--line-hi); flex: 1; display: flex; align-items: center; gap: 14px; border: 1px solid var(--line); background: var(--bg-card); padding: 14px 18px; }
+  .mx-card::before { content: ""; flex: none; width: 11px; height: 11px; background: var(--c); }
+  .mx-card p { margin: 0; font-family: var(--sans); font-size: 13px; line-height: 1.7; color: var(--text-mid); word-break: keep-all; }
+  .mx-card strong { color: var(--text); font-weight: 500; }
+  .mx-card.b1 { --c: #5f7d8c; }
+  .mx-card.b2 { --c: #8c7d5f; }
+  .mx-card.b3 { --c: #6f8c5f; }
+  .mx-card.acc { --c: var(--accent); border-color: var(--accent); background: rgba(168,107,72,.10); box-shadow: 0 0 0 1px rgba(168,107,72,.22); }
+  .mx-card.acc::before { box-shadow: 0 0 10px rgba(168,107,72,.9); }
+  .mx-card.acc p { color: var(--text); }
+  .mx-card.acc strong { color: var(--accent); font-weight: 600; }
+  @media (max-width: 900px) { .mx-split { grid-template-columns: 1fr; gap: 22px; } .mx-split .dg-frame svg { height: auto; } }
+  .hero-loop .node.acc { color: var(--accent); font-weight: 500; }
+  .hero-loop .node .cost { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text-dim); margin-left: 6px; }
+  .why-cards { margin-top: 0; }
+  .why-cards.q4 { grid-template-columns: repeat(4, 1fr); }
+  .why-cards.q4 .wc-en { color: var(--text-dim); }
+  .why-cards.q4 .wc-en .wc-n { color: var(--accent); margin-right: 9px; }
+  .why-cards.q4 .wc-desc { color: var(--text); }
+  @media (max-width: 900px) { .why-cards.q4 { grid-template-columns: repeat(2, 1fr); } }
+  /* 부스터 차지 — 파생 4종 상세 */
+  .fs-block { margin-top: 52px; }
+  .sub-label + .fs-block { margin-top: 0; }
+  /* 크로노 오디세이 .msec-head 규격 이식 */
+  .fs-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; }
+  .fs-head .fs-num { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--accent); line-height: 1; letter-spacing: .04em; flex: none; }
+  .fs-head .fs-name { margin: 0; font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .fs-head .fs-from { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text-dim); }
+  @media (max-width: 640px) { .fs-head .fs-num, .fs-head .fs-name { font-size: 16px; } }
+  .fs-rows { border: 1px solid var(--line-hi); background: var(--bg-card); }
+  .fs-row { display: grid; grid-template-columns: 82px 1fr; gap: 18px; padding: 16px 22px; border-top: 1px solid var(--line); align-items: baseline; }
+  .fs-row:first-child { border-top: none; }
+  .fs-row .fs-k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--text-dim); }
+  .fs-row .fs-v { font-family: var(--sans); font-size: 13px; line-height: 1.8; color: var(--text-mid); word-break: keep-all; }
+  .fs-row .fs-v strong { color: var(--text); font-weight: 500; }
+  .fs-row.use .fs-k { color: var(--accent); }
+  .fs-row.use .fs-v { color: var(--text); }
+  .fs-block .evidence-duo { margin-top: 18px; }
+  @media (max-width: 640px) { .fs-row { grid-template-columns: 1fr; gap: 4px; } }
+  .implication .sub-label, .concept .sub-label, .next-challenge .sub-label {
+    margin-top: 58px; margin-bottom: 24px; padding-top: 22px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; letter-spacing: .18em; line-height: 1.4; color: var(--accent); }
+  @media (max-width: 700px) { .scope-split { grid-template-columns: 1fr; } }
+  .pin-rows { max-width: 800px; margin: 0 0 26px; border: 1px solid var(--line-hi); background: var(--bg-card); }
+  .pin-rows .pr { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 12px 16px; border-top: 1px solid var(--line); align-items: baseline; }
+  .pin-rows .pr:first-child { border-top: none; }
+  .pin-rows .pr-k { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text-dim); }
+  .pin-rows .pr.no .pr-k { color: #c74436; }
+  .pin-rows .pr.yes .pr-k { color: var(--accent); }
+  .pin-rows .pr-v { font-family: var(--sans); font-size: 13px; line-height: 1.65; color: var(--text-mid); word-break: keep-all; }
+  .pin-rows .pr-v strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 640px) { .pin-rows .pr { grid-template-columns: 1fr; gap: 4px; } }
+  .detail-cta { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto auto; column-gap: 20px; row-gap: 4px;
+    max-width: 800px; padding: 22px 24px; border: 1px solid var(--accent); background: rgba(150,95,55,.07); text-decoration: none;
+    transition: background .2s ease; }
+  .detail-cta:hover { background: rgba(150,95,55,.14); }
+  .detail-cta .dc-k { grid-column: 1; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--accent); }
+  .detail-cta .dc-t { grid-column: 1; font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); }
+  .detail-cta .dc-d { grid-column: 1; font-family: var(--sans); font-size: 12px; line-height: 1.65; color: var(--text-mid); word-break: keep-all; }
+  .detail-cta .dc-arr { grid-column: 2; grid-row: 1 / 4; align-self: center; display: inline-flex; width: 44px; height: 44px;
+    align-items: center; justify-content: center; border: 1px solid var(--accent); border-radius: 50%; color: var(--accent);
+    transition: transform .2s ease; }
+  .detail-cta .dc-arr svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .detail-cta:hover .dc-arr { transform: translateX(5px); }
+
+  .evidence-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0 0; max-width: 100%; }
+  .evidence-duo figure { margin: 0; position: relative; }
+  .evidence-duo.trio { grid-template-columns: 1fr 1fr 2fr; }
+  .evidence-duo.three { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 760px) { .evidence-duo.three { grid-template-columns: 1fr; } }
+  .evidence-duo.trio figure.crop { overflow: hidden; border: 1px solid var(--line); background: #0a0a0a; }
+  .evidence-duo.trio figure:last-child { aspect-ratio: 16 / 9; overflow: hidden; }
+  .evidence-duo.trio figure:last-child video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .evidence-duo.trio figure.crop img, .evidence-duo.trio figure.crop video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; border: 0; }
+  .vid-badge { position: absolute; right: 0; top: 0; z-index: 2; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text); background: rgba(13,13,13,.78); padding: 5px 9px; border-bottom: 1px solid var(--line-hi); border-left: 1px solid var(--line-hi); pointer-events: none; }
+  @media (max-width: 760px) { .evidence-duo.trio { grid-template-columns: 1fr; } .evidence-duo.trio figure.crop { aspect-ratio: 16 / 9; } }
+  .evidence-duo img, .evidence-duo video { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: #0a0a0a; }
+  .evidence-duo .shot-cap { margin-top: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--text-dim); }
+  @media (max-width: 700px) { .evidence-duo { grid-template-columns: 1fr; } }
+
+  /* 의상 라인업 — 정면 컷 5열 (원본 정면+후면 이미지를 CSS로 좌측 절반만 노출) */
+  .costume-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 24px 0 0; max-width: 100%; }
+  .costume-row figure { margin: 0; position: relative; overflow: hidden; border: 1px solid var(--line); background: #0a0a0a; aspect-ratio: 500 / 1079; }
+  .costume-row img { position: absolute; left: 0; top: 0; width: 200%; height: 100%; object-fit: cover; display: block; }
+  .costume-row .cos-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--text); background: rgba(13,13,13,.8); padding: 5px 6px; border-top: 1px solid var(--line-hi); text-align: center; pointer-events: none; }
+  @media (max-width: 700px) { .costume-row { grid-template-columns: repeat(2, 1fr); } }
+
+  /* 배지 안 신호등 점 */
+  .vid-badge .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+  .vid-badge .dot.blue { background: #4f8ff0; }
+
+  /* 단일 증거 영상 */
+  .evidence-solo { margin: 24px 0 0; max-width: 100%; position: relative; }
+  .evidence-solo video { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: #0a0a0a; }
+  /* ── OVERVIEW 논지 스트립 — 크로노 공통 규격 ── */
+  .thesis { display:grid; grid-template-columns:repeat(4,1fr); align-items:stretch; border:1px solid var(--line-hi); background:var(--bg-card); margin-top:38px; }
+  .thesis .tcell { position:relative; padding:20px 24px; background:var(--bg-card); border-right:1px solid var(--line-hi); }
+  .thesis .tcell:last-child { border-right:0; }
+  .thesis .tcell > * { position:relative; z-index:1; }
+  .thesis .tk { display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--accent); margin-bottom:10px; }
+  .thesis .ti { width:15px; height:15px; flex:none; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .thesis .tv { font-family:var(--sans); font-size:13px; color:var(--text-mid); line-height:1.7; word-break:keep-all; text-wrap:balance; }
+  .thesis .tv .tvi { display:block; }
+  .thesis .tv .tvi + .tvi { margin-top:6px; }
+  .thesis a.tcell { display:block; text-decoration:none; cursor:pointer; transition:background-color .2s ease; }
+  .thesis a.tcell:hover { background:linear-gradient(var(--accent-soft), var(--accent-soft)), var(--bg-card); box-shadow:inset 0 0 0 1px var(--accent); }
+  .thesis a.tcell:hover .tv { color:var(--text); }
+  .thesis a.tcell::after { content:attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%) translateY(4px); font-family:var(--sans); font-size:12px; color:var(--text-mid); background:var(--bg-base); border:1px solid var(--line-hi); padding:5px 10px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:5; }
+  .thesis a.tcell:hover::after { opacity:1; transform:translateX(-50%) translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .thesis a.tcell::after { transition:opacity .18s ease; transform:translateX(-50%); } }
+  .section-label .badge { color: var(--accent); font-weight: 600; }
+  @media(max-width:760px) { .thesis { grid-template-columns:1fr; } .thesis .tcell { border-right:0; border-bottom:1px solid var(--line-hi); padding:16px 20px; } .thesis .tcell:last-child { border-bottom:0; } }
+</style>
+</head>
+<body class="accent-copper">
+
+<header class="site-head" id="top">
+  <a class="nav-home" href="index.html" aria-label="홈 (커버)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg></a>
+  <nav class="site-nav" aria-label="주요 메뉴">
+    <a class="nav-top" href="01_intro.html">ABOUT</a>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">PROJECTS <span class="caret">&#9662;</span></span>
+      <div class="dropdown">
+        <a href="02_chrono_odyssey.html">CHRONO ODYSSEY</a>
+        <a href="03_traha_infinity.html">TRAHA INFINITY</a>
+        <a href="04_traha.html">TRAHA</a>
+        <a href="05_echo_of_soul.html">ECHO OF SOUL</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">WORK <span class="caret">&#9662;</span></span>
+      <div class="dropdown">
+        <a href="06_work_simplification.html">SIMPLIFICATION</a>
+        <a href="07_planning_direction.html">STANDARDIZATION</a>
+        <a href="08_work_automation.html">AUTOMATION</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top is-current" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
+      <div class="dropdown">
+        <a href="09_sb_analysis.html" class="is-current">COMBAT ANALYSIS</a>
+        <a href="10_sb_charge_boost.html">CHARGE BOOST</a>
+      </div>
+    </div>
+    <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
+  </nav>
+</header>
+
+<section class="page-header">
+  <div class="container">
+    <div class="label"><span class="badge">COMBAT ANALYSIS</span> &nbsp;/&nbsp; STELLAR BLADE</div>
+    <h1>스텔라 블레이드 전투 분석</h1>
+    <div class="purpose">
+      전투의 강점 분해와 차지 부스트 시스템 확장 제안
+    </div>
+<div class="thesis">
+      <a class="tcell" href="#strengths" data-tip="강점 분석"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.6"/><path d="M6.3 10.2 8.9 12.8 13.8 7.3"/></svg>STEP 01 &middot; STRENGTH</div><div class="tv"><span class="tvi">가독성</span><span class="tvi">피드백 시너지</span><span class="tvi">공수 교대 루틴</span></div></a>
+      <a class="tcell" href="#opportunity" data-tip="기회의 창"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.6v3.1M10 14.3v3.1M17.4 10h-3.1M5.7 10H2.6M15.2 4.8l-2.2 2.2M7 13l-2.2 2.2M15.2 15.2 13 13M7 7 4.8 4.8"/><circle cx="10" cy="10" r="2.6"/></svg>STEP 02 &middot; OPPORTUNITY</div><div class="tv"><span class="tvi">4분할 분석</span><span class="tvi">공백 영역</span></div></a>
+      <a class="tcell" href="#concept" data-tip="핵심 제안"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 2.2 9.6 6.7M12.6 2.2 10.4 6.7"/><circle cx="10" cy="12.6" r="5.4"/><circle cx="10" cy="12.6" r="2"/></svg>STEP 03 &middot; PROPOSAL</div><div class="tv"><span class="tvi">차지 부스트</span><span class="tvi">네 가지 전술 분기</span></div></a>
+      <a class="tcell" href="#impact" data-tip="리스크와 기대 효과"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.4 17.2 6v5.2c0 3.4-3 5.6-7.2 6.8-4.2-1.2-7.2-3.4-7.2-6.8V6z"/><path d="M7.4 10.1 9.4 12.1 13 8.4"/></svg>STEP 04 &middot; RISK &amp; IMPACT</div><div class="tv"><span class="tvi">조작 피로도 · 무용지물화 대비</span><span class="tvi">즉각 피드백 · 반복 플레이</span></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="strengths" id="strengths">
+  <div class="container">
+    <div class="section-label"><span class="badge">STEP 01 &middot; WHAT IT GOT RIGHT</span></div>
+    <h2>높은 가독성과 강렬한 피드백이 만든 뛰어난 전투 기반</h2>
+
+    <div class="strength-block">
+      <div class="s-num">STRENGTH 01</div>
+      <div class="s-title">Combat Readability — 시각적 UX의 가독성</div>
+      <p>
+        색상 기반 텔레그래프와 보스에게도 적용되는 경직 스킬 — <strong>대폭 낮아진 액션 진입 장벽</strong>
+      </p>
+      <div class="evidence-duo">
+        <figure><video src="media/sb_telegraph.mp4" poster="media/sb_telegraph.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 전투 — 색상 텔레그래프"></video><span class="vid-badge"><i class="dot blue"></i>BLUE SIGNAL &middot; BLINK</span></figure>
+        <figure><video src="media/sbboss.mp4" poster="media/sbboss.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 — 보스 경직 구간"></video><span class="vid-badge">STAGGER &middot; 보스 경직</span></figure>
+      </div>
+    </div>
+
+    <div class="strength-block">
+      <div class="s-num">STRENGTH 02</div>
+      <div class="s-title">Feedback Synergy — 피드백의 극대화</div>
+      <p>
+        매력적인 캐릭터의 역동적인 애니메이션과 FX의 완벽한 동기화 — <strong>강렬한 타격감과 시각적 몰입감</strong>
+      </p>
+      <div class="evidence-duo">
+        <figure><video src="media/sb_skill.mp4" poster="media/sb_skill.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 — 도입부 연출"></video><span class="vid-badge">OPENING SEQUENCE &middot; 도입부 연출</span></figure>
+        <figure><video src="media/sb_kill.mp4" poster="media/sb_kill.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 — 처형 연출"></video><span class="vid-badge">EXECUTION &middot; 처형</span></figure>
+      </div>
+    </div>
+
+    <div class="strength-block">
+      <div class="s-num">STRENGTH 03</div>
+      <div class="s-title">Attack-Defense Rotation — 정교한 공수 교대 루틴</div>
+      <p>
+        패링 · 회피를 통한 자원 수급에서 스킬 폭발로 이어지는 극적인 공수 전환 — <strong>정석적인 전투 리듬 구현</strong>
+      </p>
+      <div class="evidence-duo">
+        <figure><video src="media/sb_parry.mp4" poster="media/sb_parry.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 — 패링으로 게이지 축적"></video><span class="vid-badge">BUILD &middot; 게이지 축적</span></figure>
+        <figure><video src="media/sb_burst.mp4" poster="media/sb_burst.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 — 버스트 스킬"></video><span class="vid-badge">RELEASE &middot; 베타 · 버스트</span></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="next-challenge" id="opportunity">
+  <div class="container">
+    <div class="section-label"><span class="badge">STEP 02 &middot; DESIGN OPPORTUNITY</span></div>
+    <h2>난이도 대비 성취 체감 4분할 분석 — 공백 영역의 존재</h2>
+
+    <div class="dg-block">
+      <div class="dg-label">조작 난도 × 성취 체감</div>
+      <div class="mx-split">
+        <div class="dg-frame">
+          <svg class="mx" viewBox="0 0 620 360" role="img" aria-label="리스크와 리턴 2축 매트릭스. 리스크가 낮고 리턴이 큰 좌상단 영역이 비어 있고, 우상단은 베타·버스트 스킬, 좌하단은 블링크·리펄스, 우하단은 퍼펙트 패링·퍼펙트 닷지가 차지함">
+            <rect class="qbox acc" x="66" y="28" width="252" height="125"/>
+            <rect class="qbox" x="334" y="28" width="256" height="125"/>
+            <rect class="qbox" x="66" y="165" width="252" height="125"/>
+            <rect class="qbox" x="334" y="165" width="256" height="125"/>
+            <rect class="qm acc" x="78" y="40" width="11" height="11"/>
+            <rect class="qm b3" x="346" y="40" width="11" height="11"/>
+            <rect class="qm b1" x="78" y="177" width="11" height="11"/>
+            <rect class="qm b2" x="346" y="177" width="11" height="11"/>
+
+            <line class="ax" x1="52" y1="30" x2="52" y2="302"/>
+            <line class="ax" x1="52" y1="302" x2="596" y2="302"/>
+            <path d="M52 20 L47 31 L57 31 Z" fill="#4a4a4a"/>
+            <path d="M606 302 L595 297 L595 307 Z" fill="#4a4a4a"/>
+
+            <text class="axl" x="328" y="330" text-anchor="middle">조작 난도</text>
+            <text class="axl" x="22" y="160" text-anchor="middle" transform="rotate(-90 22 160)">성취 체감</text>
+
+            <text class="qmark" x="192" y="108" text-anchor="middle">?</text>
+            <text class="qt" x="462" y="96" text-anchor="middle">베타 · 버스트 스킬</text>
+            <text class="qt" x="192" y="233" text-anchor="middle">블링크 · 리펄스</text>
+            <text class="qt" x="462" y="233" text-anchor="middle">퍼펙트 패링 · 퍼펙트 닷지</text>
+          </svg>
+        </div>
+        <div class="mx-notes">
+          <div class="mx-card b1"><p><strong>블링크 · 리펄스</strong>는 QTE 성격이 강해 안전장치 역할은 우수하나, 정형화된 연출로 성취감이 빠르게 마모됨</p></div>
+          <div class="mx-card b2"><p><strong>퍼펙트 패링 · 퍼펙트 닷지</strong>는 조작 피로도와 실패 리스크가 매우 높은 반면, 돌아오는 피드백이 즉시 와닿지 않음</p></div>
+          <div class="mx-card b3"><p><strong>자원을 축적해 발동하는 베타 · 버스트 스킬</strong>은 강력하나, 발동까지의 준비 호흡이 긺</p></div>
+          <div class="mx-card acc"><p>적은 리스크 · 적절한 조작만으로 <strong>순간적인 쾌감을 극대화하는 영역의 액션은 부재</strong></p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="concept" id="concept">
+  <div class="container">
+    <div class="section-label"><span class="badge">STEP 03 &middot; PROPOSED FEATURE</span></div>
+    <h2>차지 부스트 시스템</h2>
+    <p class="lead">맹공 풀차지 경직 + <strong>차지 중 플레이어의 판단에 따라 네 가지 전술 분기로 파생</strong></p>
+
+    <div class="sub-label">SYSTEM FLOW</div>
+    <div class="hero-loop">
+      <span class="node">맹공 홀드</span><span class="arrow">→</span>
+      <span class="node acc">차지 구간 <span class="cost">COST 0</span></span><span class="arrow">→</span>
+      <span class="node">분기 입력</span><span class="arrow">→</span>
+      <span class="node">차지 완료 · 파생</span><span class="arrow">→</span>
+      <span class="node acc">풀차지 공격 → 적 경직</span>
+    </div>
+
+    <div class="sub-label">네 가지 분기</div>
+    <div class="why-cards q4">
+      <div class="why-card">
+        <div class="wc-en"><span class="wc-n">01</span>퍼펙트 패링 성공</div>
+        <div class="wc-ko">인스턴트 차지</div>
+        <div class="wc-desc">즉시 차지 완료</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-en"><span class="wc-n">02</span>피격 직전 차지 릴리즈</div>
+        <div class="wc-ko">부스트 체인</div>
+        <div class="wc-desc">연속 처형</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-en"><span class="wc-n">03</span>차지 중 좌우 방향 입력</div>
+        <div class="wc-ko">드리프트 스캔</div>
+        <div class="wc-desc">회피하며 약점 지목</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-en"><span class="wc-n">04</span>차지 중 조준 사격</div>
+        <div class="wc-ko">부스터 버스터</div>
+        <div class="wc-desc">장갑 파괴 증가</div>
+      </div>
+    </div>
+
+    <div class="sub-label">파생 네 가지 &middot; 조작 · 연출 · 용도</div>
+    <div class="fs-block">
+      <div class="fs-head"><span class="fs-num">01</span><span class="fs-name">인스턴트 차지</span><span class="fs-from">FROM 퍼펙트 패링</span></div>
+      <div class="fs-rows">
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">퍼펙트 패링 성공 직후 맹공 입력 — <strong>홀드 없이 즉시 풀차지 성립</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">패링 임팩트에 이어 블레이드 코어 발광 · 히트스톱, 차지 모션 스킵</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">정확한 타이밍의 보상을 지연 없이 — 즉발 반격의 쾌감</div></div>
+      </div>
+      <div class="evidence-duo">
+        <figure><video src="media/ref_dmc.mp4" poster="media/ref_dmc_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">DEVIL MAY CRY 5 &middot; EX-Act</span></figure>
+        <figure><video src="media/parry.mp4" poster="media/parry.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 퍼펙트 패링</span></figure>
+      </div>
+    </div>
+    <div class="fs-block">
+      <div class="fs-head"><span class="fs-num">02</span><span class="fs-name">부스트 체인</span><span class="fs-from">피격 직전 차지 릴리즈</span></div>
+      <div class="fs-rows">
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 적의 공격이 닿기 직전에 릴리즈 — <strong>회피 후 연속 처형으로 전개</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">회피 잔상 → 연타 트레일 색 상승(백 → 청 → 금), 처형 진입 시 로우앵글 + 시간 감속</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">수세를 그대로 공세로 — 다수전에서 끊기지 않는 리듬</div></div>
+      </div>
+      <div class="evidence-duo three">
+        <figure><video src="media/ref_onimusha.mp4" poster="media/ref_onimusha_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">ONIMUSHA &middot; 일섬 연쇄</span></figure>
+        <figure><video src="media/ref_yotei.mp4" poster="media/ref_yotei_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">GHOST OF YOTEI &middot; 맞대결</span></figure>
+        <figure><video src="media/evade.mp4" poster="media/evade.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 퍼펙트 닷지</span></figure>
+      </div>
+    </div>
+    <div class="fs-block">
+      <div class="fs-head"><span class="fs-num">03</span><span class="fs-name">드리프트 스캔</span><span class="fs-from">차지 중 좌우 방향 입력</span></div>
+      <div class="fs-rows">
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 좌우 방향 입력 — 해당 방향으로 <strong>회피 이동하며 차지 계속 진행, 이동 중 약점 지목</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">지면 마찰 스파크 + 궤적 라인, 스캔 성립 시 대상 특정 부위에 마커 점등</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">회피와 스캔을 한 조작으로 — 지목된 부위 타격 시 추가 피해</div></div>
+      </div>
+      <div class="evidence-duo three">
+        <figure><video src="media/ref_mariokart.mp4" poster="media/ref_mariokart_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">MARIO KART 8 &middot; 미니 터보</span></figure>
+        <figure><video src="media/ref_dd2.mp4" poster="media/ref_dd2_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">DRAGON&rsquo;S DOGMA 2 &middot; 매직 아처</span></figure>
+        <figure><video src="media/blink.mp4" poster="media/blink.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 블링크</span></figure>
+      </div>
+    </div>
+    <div class="fs-block">
+      <div class="fs-head"><span class="fs-num">04</span><span class="fs-name">부스터 버스터</span><span class="fs-from">차지 중 조준 사격</span></div>
+      <div class="fs-rows">
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 조준 사격 — <strong>홀드 유지 시 연사</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">드론 전개 + 조준선 표시, 차지 단계별 조준선 두께 · 색 변화</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">원거리 운용 — 적 장갑 파괴 증가</div></div>
+      </div>
+      <div class="evidence-duo">
+        <figure><video src="media/ref_horizon.mp4" poster="media/ref_horizon_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">HORIZON FW &middot; 부위 파괴</span></figure>
+        <figure><video src="media/repulse.mp4" poster="media/repulse.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 리펄스</span></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="implication" id="impact">
+  <div class="container">
+    <div class="section-label"><span class="badge">STEP 04 &middot; RISK &amp; EXPECTED IMPACT</span></div>
+    <h2>기존 생태계를 해치지 않는 120%의 전투 확장</h2>
+
+    <div class="sub-label">RISK MANAGEMENT &middot; 리스크 대비책</div>
+    <div class="scope-split">
+      <div class="sc">
+        <div class="sc-k">RISK 01</div>
+        <div class="sc-t">조작 피로도</div>
+        <div class="sc-d">복잡한 격투 게임 커맨드가 아닌 <strong>방향키 1개 + 버튼 1개</strong>의 단순 단발 분기로 제한</div>
+      </div>
+      <div class="sc">
+        <div class="sc-k">RISK 02</div>
+        <div class="sc-t">기존 베타 · 버스트 스킬의 무용지물화</div>
+        <div class="sc-d">차지 부스트를 직접 폭딜이 아닌 <strong>약화 · 상태이상 디버퍼</strong>로 설계 — 차지 부스트에서 베타 스킬 폭딜로 이어지는 연계 시너지 유도</div>
+      </div>
+    </div>
+
+    <div class="sub-label">EXPECTED IMPACT &middot; 기대 효과</div>
+    <div class="scope-split">
+      <div class="sc fix">
+        <div class="sc-k">IMPACT 01</div>
+        <div class="sc-t">즉각적 조작 피드백</div>
+        <div class="sc-d">분기가 성립하는 순간, <strong>게이지 잔량과 상관없이 즉시 반응하는 손끝의 쾌감</strong> 확보</div>
+      </div>
+      <div class="sc fix">
+        <div class="sc-k">IMPACT 02</div>
+        <div class="sc-t">지속적 도전 재미 &middot; Replayability</div>
+        <div class="sc-d">정형화된 루틴을 넘어 <strong>플레이어의 조작 스타일에 따라 전투를 주도하는 깊이</strong> 완성</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<a class="next-card" href="10_sb_charge_boost.html" aria-label="다음: CHARGE BOOST">
+  <div class="container"><span class="nc-kicker">NEXT PAGE</span><span class="nc-title">CHARGE BOOST</span><span class="nc-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div>
+</a>
+<!-- PAGE LIST -->
+<nav class="page-list" aria-label="전체 페이지 목록">
+  <div class="container">
+    <div class="pl-dots" aria-label="전체 페이지 바로가기">
+      <a class="pl-dot" href="index.html" data-title="COVER"><span class="pl-num">00</span></a>
+      <a class="pl-dot" href="01_intro.html" data-title="ABOUT"><span class="pl-num">01</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="02_chrono_odyssey.html" data-title="CHRONO ODYSSEY"><span class="pl-num">02</span></a>
+      <a class="pl-dot" href="03_traha_infinity.html" data-title="TRAHA INFINITY"><span class="pl-num">03</span></a>
+      <a class="pl-dot" href="04_traha.html" data-title="TRAHA"><span class="pl-num">04</span></a>
+      <a class="pl-dot" href="05_echo_of_soul.html" data-title="ECHO OF SOUL"><span class="pl-num">05</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="06_work_simplification.html" data-title="SIMPLIFICATION"><span class="pl-num">06</span></a>
+      <a class="pl-dot" href="07_planning_direction.html" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
+      <a class="pl-dot" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot is-current" href="09_sb_analysis.html" data-title="COMBAT ANALYSIS" aria-current="page"><span class="pl-num">09</span><span class="pl-current-label">COMBAT ANALYSIS</span></a>
+      <a class="pl-dot pl-dot-next" href="10_sb_charge_boost.html" data-title="CHARGE BOOST"><span class="pl-num">10</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="11_closing.html" data-title="CLOSING"><span class="pl-num">11</span></a>
+    </div>
+  </div>
+</nav>
+<!-- /PAGER -->
+
+<footer class="site-foot">
+  <div class="sf-copy">© 2026 박종혁 · Combat Designer · Optimized for Desktop · 1920 × 1080</div>
+</footer>
+
+<div class="backtab" id="backTab"><span class="bt-label">BACK TO TOP</span><a class="bt-body" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="18" y2="4"/><g class="bt-arr"><line x1="12" y1="8.5" x2="12" y2="20"/><path d="M7 13 L12 8 L17 13"/></g></svg></a></div>
+<script>(function(){var t=document.getElementById("backTab");if(!t)return;function u(){if(window.scrollY>400)t.classList.add("show");else t.classList.remove("show");}window.addEventListener("scroll",u,{passive:true});u();})();</script>
+</body>
+</html>
