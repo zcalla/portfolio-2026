@@ -19,11 +19,12 @@
   .page-header .purpose strong { color: var(--text); font-weight: 500; }
 
   /* ---- 기획서 서식 ---- */
-  .doc-meta { margin-top: 26px; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); max-width: 900px; }
-  .doc-meta .dm-cell { background: var(--bg-base); padding: 11px 14px; }
-  .doc-meta .dm-k { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text-dim); margin-bottom: 5px; }
-  .doc-meta .dm-v { display: block; font-family: var(--sans); font-size: 12px; color: var(--text); }
-  .sec .doc-no { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--accent); margin-bottom: 6px; }
+  .doc-toc { margin-top: 26px; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); max-width: 900px; }
+  .doc-toc a { display: block; background: var(--bg-base); padding: 11px 14px 12px; text-decoration: none; transition: background .15s ease; }
+  .doc-toc .tc-en { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--text-dim); margin-bottom: 5px; transition: color .15s ease; }
+  .doc-toc .tc-ko { display: block; font-family: var(--sans); font-size: 12px; color: var(--text); }
+  .doc-toc a:hover { background: var(--bg-card); }
+  .doc-toc a:hover .tc-en { color: var(--accent); }
   .term-list { max-width: 900px; border: 1px solid var(--line); }
   .term-list .tl-row { display: grid; grid-template-columns: 160px minmax(0,1fr); border-bottom: 1px solid var(--line); }
   .term-list .tl-row:last-child { border-bottom: none; }
@@ -48,12 +49,13 @@
   .std-table td { font-family: var(--sans); font-size: 12px; color: var(--text-mid); line-height: 1.65; padding: 11px 14px; border-bottom: 1px solid var(--line); word-break: keep-all; vertical-align: top; }
   .std-table tr:last-child td { border-bottom: none; }
   .std-table .c-case { color: var(--text); }
+  .std-table td strong { color: var(--text); font-weight: 500; }
   .std-table .c-val { font-family: var(--mono); font-size: 11px; color: var(--accent); white-space: nowrap; }
   .std-table .c-param { font-family: var(--mono); font-size: 11px; color: var(--text); }
   .tuning-flag { display: inline-block; margin-left: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text-dim); border: 1px solid var(--line-hi); padding: 3px 7px; vertical-align: middle; }
   .sec .spec-note { margin-top: 14px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); line-height: 1.7; max-width: 900px; word-break: keep-all; }
   @media (max-width: 820px) {
-    .doc-meta { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .doc-toc { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .term-list .tl-row, .spec-card .sc-row { grid-template-columns: 1fr; }
     .term-list .tl-k, .spec-card .sc-k { border-right: none; border-bottom: 1px solid var(--line); }
   }
@@ -62,6 +64,19 @@
   .sec h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
   .sec .how-note { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; max-width: 100%; margin-top: 14px; word-break: keep-all; }
   .sec .how-note strong { color: var(--text); font-weight: 500; }
+
+  /* 입력 상태 전이도 */
+  .fsm { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 30px 28px 22px; margin-top: 26px; }
+  .fsm svg { width: 100%; height: auto; display: block; }
+  .fsm svg text { font-family: var(--sans); font-size: 13px; fill: var(--text-mid); }
+  .fsm svg .fx-box { fill: #101010; stroke: var(--line-hi); }
+  .fsm svg .fx-acc { fill: rgba(168,107,72,.12); stroke: var(--accent); }
+  .fsm svg .fx-ln { stroke: var(--line-hi); fill: none; }
+  .fsm svg .fx-arw { fill: var(--line-hi); }
+  .fsm svg .fx-k { font-family: var(--mono); font-size: 11px; fill: var(--text-dim); letter-spacing: .06em; }
+  .fsm svg .fx-code { font-family: var(--mono); font-size: 13px; fill: var(--text); letter-spacing: .03em; }
+  .fsm svg .fx-n { fill: var(--accent); }
+  .fsm .fx-cap { font-family: var(--sans); font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 18px; word-break: keep-all; }
 
   /* 차지 타임라인 도식 */
   .cflow { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 32px 30px 26px; margin-top: 26px; }
@@ -101,7 +116,7 @@
   .fdiag svg .fd-arw, .fdiag svg .fd-mark { fill: var(--accent); }
   .fdiag .fd-cap { font-family: var(--sans); font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 16px; word-break: keep-all; }
 
-  /* 표식 분기 매트릭스 */
+  /* 분기별 결과 매트릭스 */
   .bf-matrix { margin-top: 22px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
   .bf-matrix .bm-lane { border: 1px solid var(--line); background: var(--bg-card); display: flex; flex-direction: column; }
   .bf-matrix .bm-charge { font-family: var(--mono); font-size: 12px; color: var(--text-mid); text-align: center; padding: 13px 8px; border-bottom: 1px solid var(--line); }
@@ -120,6 +135,10 @@
   .why-card .wc-en { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; }
   .why-card .wc-ko { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 10px; line-height: 1.4; }
   .why-card .wc-desc { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; word-break: keep-all; }
+  .why-card .wc-sub { margin-top: 16px; }
+  .why-card .wc-sub:first-of-type { margin-top: 12px; }
+  .why-card .wc-st { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+  .why-card .wc-sd { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; word-break: keep-all; }
 
   @media (max-width: 800px) { .why-cards { grid-template-columns: 1fr; } }
 
@@ -152,8 +171,9 @@
     <div class="nav-item">
       <span class="nav-top is-current" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
       <div class="dropdown">
-        <a href="09_sb_analysis.html">COMBAT ANALYSIS</a>
-        <a href="10_sb_charge_boost.html" class="is-current">CHARGE BOOST</a>
+        <div class="dd-head">STELLAR BLADE</div>
+        <a href="09_sb_analysis.html">COMBAT INSIGHTS</a>
+        <a href="10_sb_charge_boost.html" class="is-current">DESIGN DOCUMENTS</a>
       </div>
     </div>
     <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
@@ -162,53 +182,72 @@
 
 <section class="page-header">
   <div class="container">
-    <div class="label"><span class="badge">DESIGN SPECIFICATION</span> &nbsp;/&nbsp; STELLAR BLADE</div>
+    <div class="label"><span class="badge">STELLAR BLADE</span> &nbsp;/&nbsp; DESIGN DOCUMENTS</div>
     <h1>차지 부스트 시스템 기획서</h1>
-    <div class="purpose">맹공 차지 구간에 얹는 <strong>네 가지 분기의 입력 · 판정 · 연출 · 결과 사양</strong></div>
-    <div class="doc-meta">
-      <div class="dm-cell"><span class="dm-k">문서 구분</span><span class="dm-v">시스템 상세 기획서</span></div>
-      <div class="dm-cell"><span class="dm-k">적용 범위</span><span class="dm-v">전투 — 맹공 차지 구간</span></div>
-      <div class="dm-cell"><span class="dm-k">선행 문서</span><span class="dm-v"><a href="09_sb_analysis.html" style="color:var(--text);border-bottom:1px solid var(--accent);text-decoration:none">스텔라 블레이드 전투 분석</a></span></div>
-      <div class="dm-cell"><span class="dm-k">수치 상태</span><span class="dm-v">제안값 · 튜닝 대상</span></div>
-    </div>
+    <div class="purpose">맹공 차지 조작을 통한 <strong>네 가지 분기 설계</strong></div>
+    <nav class="doc-toc" aria-label="목차">
+      <a href="#scope"><span class="tc-en">SCOPE</span><span class="tc-ko">설계 범위</span></a>
+      <a href="#terms"><span class="tc-en">TERMS</span><span class="tc-ko">용어 정의</span></a>
+      <a href="#core"><span class="tc-en">CORE RULE</span><span class="tc-ko">공통 규칙</span></a>
+      <a href="#spec"><span class="tc-en">SPEC</span><span class="tc-ko">분기별 사양</span></a>
+      <a href="#matrix"><span class="tc-en">RESULT MATRIX</span><span class="tc-ko">결과 비교</span></a>
+      <a href="#edge"><span class="tc-en">EDGE CASES</span><span class="tc-ko">개발 블로커</span></a>
+      <a href="#param"><span class="tc-en">PARAMETERS</span><span class="tc-ko">제안값</span></a>
+      <a href="#verify"><span class="tc-en">VERIFICATION</span><span class="tc-ko">검증 항목</span></a>
+    </nav>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="scope">
   <div class="container">
-    <div class="doc-no">01</div>
     <div class="section-label"><span class="badge">SCOPE</span></div>
-    <h2>맹공 홀드에 차지 구간을 신설하고, 그 구간을 분기로 연다</h2>
-    <p class="how-note">원작의 맹공은 단발 공격이다. <strong>맹공격 버튼을 홀드하면 진입하는 차지 구간</strong>을 신설하고, 이 구간에서만 성립하는 <strong>네 가지 분기</strong>를 얹는다. 탭 입력은 단발 맹공으로 남겨 기존 조작 위에 덧쓰지 않는다</p>
+    <h2>맹공 홀드 차지 구간을 신설, 해당 구간 추가 조작을 통해 분기를 확장</h2>
 
     <div class="why-cards">
       <div class="why-card">
         <svg class="ic" viewBox="0 0 28 28"><path d="M4 14 L12 14"/><path d="M12 14 L24 6"/><path d="M12 14 L24 14"/><path d="M12 14 L24 22"/></svg>
         <div class="wc-en">DESIGN 01</div>
-        <div class="wc-ko">차지 구간 = 판단 구간</div>
-        <div class="wc-desc">기다리기만 하는 시간을 만들지 않는다 — 차지가 도는 동안 <strong>무엇을 겹쳐 넣을지가 곧 전술 선택</strong></div>
+        <div class="wc-sub">
+          <div class="wc-st">대기 시간의 최소화</div>
+          <div class="wc-sd">의미 없이 기를 모으는 수동적 대기 시간을 지양</div>
+        </div>
+        <div class="wc-sub">
+          <div class="wc-st">전술적 선택</div>
+          <div class="wc-sd">차지 도중 상황 판단에 맞춰 어떤 플레이를 연계할지가 핵심 전술 요소</div>
+        </div>
       </div>
       <div class="why-card">
         <svg class="ic" viewBox="0 0 28 28"><path d="M14 4 L16 12 L24 14 L16 16 L14 24 L12 16 L4 14 L12 12 Z"/></svg>
         <div class="wc-en">DESIGN 02</div>
-        <div class="wc-ko">추가 자원 없음</div>
-        <div class="wc-desc">신규 게이지 · 소모 자원 · 쿨타임을 만들지 않음 — 분기의 유일한 조건은 <strong>차지 홀드 유지</strong></div>
+        <div class="wc-sub">
+          <div class="wc-st">복잡도 최소화</div>
+          <div class="wc-sd">신규 게이지, 소모 자원, 별도 쿨타임을 신설하지 않음</div>
+        </div>
+        <div class="wc-sub">
+          <div class="wc-st">단일 조건</div>
+          <div class="wc-sd">분기 진입의 유일한 조건은 차지 홀드 유지</div>
+        </div>
       </div>
       <div class="why-card">
         <svg class="ic" viewBox="0 0 28 28"><path d="M3 14 Q14 5 25 14 Q14 23 3 14 Z"/><circle cx="14" cy="14" r="3.5"/></svg>
         <div class="wc-en">DESIGN 03</div>
-        <div class="wc-ko">실패 비용 없음</div>
-        <div class="wc-desc">분기 입력에 실패해도 차지 공격은 정상 발동 — 시도가 손해가 되지 않아야 학습이 일어남</div>
+        <div class="wc-sub">
+          <div class="wc-st">실패 대가 없음</div>
+          <div class="wc-sd">분기 연계에 실패하더라도 차지는 취소되지 않고 유지</div>
+        </div>
+        <div class="wc-sub">
+          <div class="wc-st">차지 해제 조건</div>
+          <div class="wc-sd">적에게 피격당하지 않는 한 차지 홀드 유지 가능</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="terms">
   <div class="container">
-    <div class="doc-no">02</div>
     <div class="section-label"><span class="badge">TERMS</span></div>
-    <h2>이 문서에서 고정하는 표기</h2>
+    <h2>용어 정의</h2>
 
     <div class="term-list" style="margin-top:20px">
       <div class="tl-row"><div class="tl-k">맹공 차지</div><div class="tl-v">맹공격 버튼 <span class="key">홀드</span>로 진입하는 차지. 홀드 유지 시간에 따라 단계가 오름. <span class="key">탭</span> 입력은 단발 맹공</div></div>
@@ -216,25 +255,79 @@
       <div class="tl-row"><div class="tl-k">차지 부스트</div><div class="tl-v">차지 구간에서만 성립하는 <span class="key">네 가지 분기 조작</span>의 총칭</div></div>
       <div class="tl-row"><div class="tl-k">분기 입력</div><div class="tl-v">차지 홀드를 유지한 채 겹쳐 넣는 추가 입력. 홀드가 풀리면 분기 성립 불가</div></div>
       <div class="tl-row"><div class="tl-k">릴리즈</div><div class="tl-v">맹공격 홀드를 떼는 것. 뗀 시점의 차지 단계로 공격이 발동</div></div>
-      <div class="tl-row"><div class="tl-k">표식</div><div class="tl-v">분기 공격 적중 시 대상에 부여되는 상태 변화. 분기 종류에 따라 <span class="key">4종</span>으로 갈림</div></div>
+      <div class="tl-row"><div class="tl-k">차지 블라스터</div><div class="tl-v">원작의 원거리 차지 무기. 차지 트랜스퍼가 <span class="key">맹공 차지를 넘겨받는 대상</span></div></div>
+      <div class="tl-row"><div class="tl-k">약점 노출</div><div class="tl-v">드리프트 스캔으로 드러낸 적의 부위. 해당 부위 타격 시 <span class="key">추가 피해</span></div></div>
       <div class="tl-row"><div class="tl-k">버튼 표기</div><div class="tl-v">플랫폼 키 이름 대신 <span class="key">기능명</span>으로 표기 — 약공격 · 맹공격 · 회피 · 사격 · 좌스틱</div></div>
     </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="core">
   <div class="container">
-    <div class="doc-no">03</div>
     <div class="section-label"><span class="badge">CORE RULE</span></div>
     <h2>차지 구간과 분기의 공통 규칙</h2>
     <p class="how-note">네 분기는 서로 다른 입력을 쓰지만, <strong>차지 홀드가 살아 있는 동안에만 성립</strong>한다는 하나의 조건을 공유</p>
 
+    <div class="fsm">
+      <svg viewBox="0 0 940 286" role="img" aria-label="맹공 입력 상태 전이도 — 탭은 기존 단발 공격, 홀드는 차지 상태로 전이하고 홀드 유지 중 추가 입력으로 네 분기가 갈라진다">
+        <rect class="fx-box" x="230" y="24" width="230" height="38"/>
+        <text class="fx-code" x="345" y="43" text-anchor="middle">Attack_Normal</text>
+        <text class="fx-k" x="345" y="57" text-anchor="middle">단발 맹공 — 기존 로직 유지</text>
+        <rect class="fx-box" x="20" y="104" width="150" height="38"/>
+        <text class="fx-code" x="95" y="128" text-anchor="middle">Idle / Attack</text>
+        <path class="fx-ln" d="M95 104 L95 43 L221 43"/>
+        <path class="fx-arw" d="M230 43 L221 38 L221 48 Z"/>
+        <text class="fx-k" x="150" y="35" text-anchor="middle">Tap</text>
+        <path class="fx-ln" d="M170 123 L221 123"/>
+        <path class="fx-arw" d="M230 123 L221 118 L221 128 Z"/>
+        <text class="fx-k" x="196" y="114" text-anchor="middle">Hold</text>
+        <rect class="fx-acc" x="230" y="104" width="170" height="38"/>
+        <text class="fx-code fx-n" x="315" y="128" text-anchor="middle">Charge_State</text>
+        <rect class="fx-box" x="420" y="108" width="56" height="30"/>
+        <text class="fx-k" x="448" y="127" text-anchor="middle">Lv1</text>
+        <rect class="fx-box" x="486" y="108" width="56" height="30"/>
+        <text class="fx-k" x="514" y="127" text-anchor="middle">Lv2</text>
+        <rect class="fx-acc" x="552" y="108" width="84" height="30"/>
+        <text class="fx-k fx-n" x="594" y="127" text-anchor="middle">Lv3 MAX</text>
+        <path class="fx-ln" d="M400 123 L412 123"/>
+        <path class="fx-ln" d="M476 123 L479 123"/>
+        <path class="fx-ln" d="M542 123 L545 123"/>
+        <path class="fx-ln" d="M636 123 L681 123"/>
+        <path class="fx-arw" d="M690 123 L681 118 L681 128 Z"/>
+        <text class="fx-k" x="658" y="114" text-anchor="middle">Release</text>
+        <rect class="fx-box" x="690" y="104" width="150" height="38"/>
+        <text x="765" y="128" text-anchor="middle">차지 공격</text>
+        <path class="fx-ln" d="M315 142 L315 182 M110 182 L830 182"/>
+        <text class="fx-k" x="830" y="174" text-anchor="end">Active Window — 홀드 유지 중 추가 입력</text>
+        <path class="fx-ln" d="M110 182 L110 205"/>
+        <path class="fx-arw" d="M110 214 L105 205 L115 205 Z"/>
+        <rect class="fx-acc" x="10" y="214" width="200" height="52"/>
+        <text class="fx-k" x="110" y="234" text-anchor="middle">패리</text>
+        <text class="fx-n" x="110" y="254" text-anchor="middle">인스턴트 차지</text>
+        <path class="fx-ln" d="M350 182 L350 205"/>
+        <path class="fx-arw" d="M350 214 L345 205 L355 205 Z"/>
+        <rect class="fx-acc" x="250" y="214" width="200" height="52"/>
+        <text class="fx-k" x="350" y="234" text-anchor="middle">공격 직전 반응</text>
+        <text class="fx-n" x="350" y="254" text-anchor="middle">부스트 체인</text>
+        <path class="fx-ln" d="M590 182 L590 205"/>
+        <path class="fx-arw" d="M590 214 L585 205 L595 205 Z"/>
+        <rect class="fx-acc" x="490" y="214" width="200" height="52"/>
+        <text class="fx-k" x="590" y="234" text-anchor="middle">좌스틱 좌우</text>
+        <text class="fx-n" x="590" y="254" text-anchor="middle">드리프트 스캔</text>
+        <path class="fx-ln" d="M830 182 L830 205"/>
+        <path class="fx-arw" d="M830 214 L825 205 L835 205 Z"/>
+        <rect class="fx-acc" x="730" y="214" width="200" height="52"/>
+        <text class="fx-k" x="830" y="234" text-anchor="middle">조준</text>
+        <text class="fx-n" x="830" y="254" text-anchor="middle">차지 트랜스퍼</text>
+      </svg>
+      <div class="fx-cap">탭은 기존 단발 맹공 그대로, 홀드만 차지 상태로 전이 — 네 분기는 홀드가 살아 있는 동안에만 갈라짐</div>
+    </div>
     <div class="cflow">
       <svg viewBox="0 0 940 300" role="img" aria-label="맹공 차지 타임라인과 네 가지 분기 입력 지점을 나타낸 도식">
         <g class="cf-chip">
           <rect x="200" y="18" width="205" height="34"/><text x="302" y="40" text-anchor="middle">부스트 체인</text>
           <rect x="425" y="18" width="205" height="34"/><text x="527" y="40" text-anchor="middle">드리프트 스캔</text>
-          <rect x="650" y="18" width="210" height="34"/><text x="755" y="40" text-anchor="middle">부스터 버스터</text>
+          <rect x="650" y="18" width="210" height="34"/><text x="755" y="40" text-anchor="middle">차지 트랜스퍼</text>
         </g>
         <g class="cf-line">
           <line x1="302" y1="52" x2="302" y2="96"/>
@@ -262,10 +355,10 @@
         <text class="cf-t" x="604" y="218" text-anchor="middle">2단계</text>
         <text class="cf-t acc" x="860" y="218" text-anchor="end">풀차지 · 적 경직</text>
         <rect class="cf-chip2" x="90" y="252" width="200" height="34"/>
-        <text x="190" y="274" text-anchor="middle">퍼펙트 패링 성공</text>
+        <text x="190" y="274" text-anchor="middle">차지 중 패리 성립</text>
         <line class="cf-by" x1="296" y1="269" x2="634" y2="269"/>
         <path class="cf-arw" d="M652 269 L633 261 L633 277 Z"/>
-        <text class="cf-byl" x="466" y="256" text-anchor="middle">인스턴트 차지 — 차지 모션 스킵</text>
+        <text class="cf-byl" x="466" y="256" text-anchor="middle">인스턴트 차지 — 차지 즉시 완료 + 반격</text>
         <rect class="cf-chip3" x="660" y="252" width="200" height="34"/>
         <text class="cf-acct" x="760" y="274" text-anchor="middle">차지 단계 즉시 3</text>
       </svg>
@@ -288,91 +381,64 @@
       <div class="sc-row"><div class="sc-k">유효 시점</div><div class="sc-v">차지 진입 <span class="key">+6F</span> 이후 (인스턴트 차지는 차지 이전 단계에서 성립)</div></div>
       <div class="sc-row"><div class="sc-k">중복</div><div class="sc-v">한 번의 차지에 분기 <strong>1종만</strong> — 먼저 성립한 분기가 그 차지를 점유</div></div>
       <div class="sc-row"><div class="sc-k">자원</div><div class="sc-v">소모 없음 · 쿨타임 없음 — 차지를 거는 횟수가 곧 사용 횟수</div></div>
-      <div class="sc-row"><div class="sc-k">우선순위</div><div class="sc-v">스킬 입력 &gt; 분기 입력 &gt; 통상 공격 순으로 처리</div></div>
+      <div class="sc-row"><div class="sc-k">우선순위</div><div class="sc-v">스킬 입력 &gt; 분기 입력 &gt; 통상 공격 순으로 처리. 분기끼리 같은 프레임에 겹치면 <span class="key">패리 &gt; 조준 &gt; 방향</span> 순</div></div>
       <div class="sc-row"><div class="sc-k">시각 신호</div><div class="sc-v">분기 유효 구간 동안 블레이드 코어에 미세 명멸 — 단계 상승마다 명멸 주기 단축</div></div>
-      <div class="sc-row"><div class="sc-k">실패</div><div class="sc-v">분기 미성립 시 차지 공격으로 종료 — <strong>페널티 없음</strong></div></div>
+      <div class="sc-row"><div class="sc-k">실패</div><div class="sc-v">분기 미성립 시 차지는 유지 — 추가 페널티 없음. <strong>피격 시에만 차지 캔슬</strong></div></div>
     </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="spec">
   <div class="container">
-    <div class="doc-no">04</div>
     <div class="section-label"><span class="badge">SPEC</span></div>
     <h2>분기별 상세 사양 — 입력 · 판정 · 연출 · 결과</h2>
 
     <div class="spec-card">
-      <div class="sc-head"><span class="sc-no">CB-01</span><span class="sc-name">인스턴트 차지</span><span class="sc-from">TRIGGER 퍼펙트 패링</span></div>
-      <div class="sc-row"><div class="sc-k">선행 조건</div><div class="sc-v">퍼펙트 패링 성립</div></div>
-      <div class="sc-row"><div class="sc-k">입력</div><div class="sc-v">패링 성립 직후 <span class="key">맹공격 1회 탭</span> — 홀드 불필요</div></div>
-      <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">패링 성립 <span class="key">+0 ~ +12F</span></div></div>
-      <div class="sc-row"><div class="sc-k">판정</div><div class="sc-v">창 내 탭 → 성립 · 창 밖 탭 → 단발 맹공 · 미입력 → 통상 패링 종료</div></div>
-      <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">홀드 없이 차지 단계를 <strong>즉시 3단계로 설정</strong>, 차지 모션 스킵</div></div>
+      <div class="sc-head"><span class="sc-no">CB-01</span><span class="sc-name">인스턴트 차지</span><span class="sc-from">TRIGGER 차지 중 패리</span></div>
+      <div class="sc-row"><div class="sc-k">선행 조건</div><div class="sc-v">차지 홀드 유지 중 · 적 공격의 판정 프레임이 임박</div></div>
+      <div class="sc-row"><div class="sc-k">입력</div><div class="sc-v">맹공격 홀드를 유지한 채 <span class="key">패리 입력</span> — 성립 시 추가 입력 없이 반격</div></div>
+      <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">원작 퍼펙트 패리와 동일한 판정 창 — 별도 창을 만들지 않음</div></div>
+      <div class="sc-row"><div class="sc-k">판정</div><div class="sc-v">패리 성립 → 차지 즉시 완료 + 반격 발동 · 실패 → 통상 피격, 차지 초기화</div></div>
+      <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">남은 홀드 시간과 무관하게 <strong>차지 단계를 즉시 3단계로 설정</strong>, 차지 모션 스킵</div></div>
       <div class="sc-row"><div class="sc-k">연출</div><div class="sc-v">성립 순간 히트스톱 5F · 블레이드 코어 발광 · 화이트 플래시 1F / 카메라 FOV −3 순간 줌인 후 8F 복귀 / 전용 SE(금속 공명 + 저역 임팩트)</div></div>
-      <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">풀차지 공격 즉시 발동 — 적중 시 <strong>균형 상실</strong> 표식</div></div>
-      <div class="sc-row aim"><div class="sc-k">노리는 재미</div><div class="sc-v">정확한 타이밍의 보상을 지연 없이 — 즉발 반격의 쾌감</div></div>
-    </div>
-    <div class="fdiag">
-      <svg viewBox="0 0 940 196" role="img" aria-label="인스턴트 차지 — 72프레임짜리 통상 홀드 차지를 12프레임으로 압축하는 비교 도식">
-        <text class="fd-f" x="90" y="36" text-anchor="start">통상 홀드 차지</text>
-        <rect class="fd-tr" x="90" y="46" width="770" height="14"/>
-        <rect class="fd-s1" x="90" y="46" width="257" height="14"/>
-        <rect class="fd-s2" x="347" y="46" width="257" height="14"/>
-        <rect class="fd-s3" x="604" y="46" width="256" height="14"/>
-        <g class="fd-tick">
-          <line x1="347" y1="42" x2="347" y2="64"/><line x1="604" y1="42" x2="604" y2="64"/>
-        </g>
-        <text class="fd-f" x="90" y="84" text-anchor="start">0F</text>
-        <text class="fd-f" x="347" y="84" text-anchor="middle">24F</text>
-        <text class="fd-f" x="604" y="84" text-anchor="middle">48F</text>
-        <text class="fd-f" x="860" y="84" text-anchor="end">72F · 3단계</text>
-        <text class="fd-f acc" x="90" y="134" text-anchor="start">인스턴트 차지</text>
-        <rect class="fd-tr" x="90" y="144" width="128" height="14"/>
-        <rect class="fd-s3" x="90" y="144" width="128" height="14"/>
-        <path class="fd-arw" d="M250 151 L232 143 L232 159 Z"/>
-        <rect class="fd-boxa" x="266" y="136" width="200" height="30"/>
-        <text class="fd-t acc" x="366" y="156" text-anchor="middle">3단계 확정</text>
-        <text class="fd-f" x="90" y="182" text-anchor="start">0 ~ 12F</text>
-      </svg>
-      <div class="fd-cap">퍼펙트 패링에 성공하면 72F의 홀드 차지가 12F로 압축 — 차지 모션 스킵</div>
+      <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">반격 즉시 발동 — 적중 시 적의 <strong>균형 상실 구슬 1개를 추가로 소모</strong></div></div>
+      <div class="sc-row"><div class="sc-k">제약</div><div class="sc-v">무기 공격(손톱 · 발톱 포함)에만 성립 — <strong>브레스 등 비무기 공격은 패리가 통하지 않고 그대로 피격</strong></div></div>
+      <div class="sc-row aim"><div class="sc-k">노리는 재미</div><div class="sc-v">차지 → 패리 → 반격 → 다시 차지로 이어지는 리듬 — 연계기처럼 굴리는 손맛</div></div>
     </div>
 
     <div class="spec-card">
-      <div class="sc-head"><span class="sc-no">CB-02</span><span class="sc-name">부스트 체인</span><span class="sc-from">TRIGGER 피격 직전 릴리즈</span></div>
+      <div class="sc-head"><span class="sc-no">CB-02</span><span class="sc-name">부스트 체인</span><span class="sc-from">TRIGGER 공격 직전 반응</span></div>
       <div class="sc-row"><div class="sc-k">선행 조건</div><div class="sc-v">차지 1단계 이상 유지 중 · 적 공격의 판정 프레임이 임박</div></div>
-      <div class="sc-row"><div class="sc-k">입력</div><div class="sc-v">적 공격이 닿기 직전 <span class="key">맹공격 홀드 릴리즈</span></div></div>
-      <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">적 공격 판정 <span class="key">−10 ~ −2F</span> (8F)<span class="tuning-flag">제안값 · 튜닝 대상</span></div></div>
+      <div class="sc-row"><div class="sc-k">입력</div><div class="sc-v">적 공격 직전 신호에 맞춰 <span class="key">맹공격 홀드 릴리즈 1회</span> — 추가 커맨드 없음</div></div>
+      <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">공격 판정 <span class="key">−18 ~ −2F</span> (16F) — 보고 반응할 수 있는 폭<span class="tuning-flag">제안값 · 튜닝 대상</span></div></div>
       <div class="sc-row"><div class="sc-k">판정</div><div class="sc-v">창 내 릴리즈 → 성립 · 창 이전 릴리즈 → 통상 차지 공격 · 창 이후 → 통상 피격</div></div>
-      <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">릴리즈 시점의 차지 단계가 전개 길이를 결정 — <span class="key">1단계 2연타 · 2단계 3연타 · 3단계 연속 처형</span></div></div>
-      <div class="sc-row"><div class="sc-k">연출</div><div class="sc-v">회피 잔상 → 연타 트레일 색 상승(백 → 청 → 금) / 히트마다 히트스톱 3F / 처형 진입 시 카메라 로우앵글 + 시간 감속 0.85배 12F</div></div>
-      <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">회피 성립 직후 반격 전개 — 3단계 성립 시 대상에 <strong>처형</strong> 표식</div></div>
+      <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">릴리즈 시점의 차지 단계는 <strong>반격 한 방의 위력만 결정</strong> — 전개 길이는 단계와 무관</div></div>
+      <div class="sc-row"><div class="sc-k">연출</div><div class="sc-v">회피 잔상 → 반격 트레일 / 히트스톱 3F / 처치 연결 시 카메라 로우앵글 + 시간 감속 0.85배 12F</div></div>
+      <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">회피 성립 직후 반격 — <strong>그 반격으로 대상을 처치하면 다음 적으로 연속 처치</strong></div></div>
+      <div class="sc-row"><div class="sc-k">제약</div><div class="sc-v">그 공격으로 대상을 <strong>처치하지 못하면 연속 처치가 발동하지 않음</strong> — 체력이 남은 적에게는 통상 반격으로 끝남</div></div>
       <div class="sc-row aim"><div class="sc-k">노리는 재미</div><div class="sc-v">수세를 그대로 공세로 — 다수전에서 끊기지 않는 리듬</div></div>
     </div>
     <div class="fdiag">
-      <svg viewBox="0 0 940 200" role="img" aria-label="부스트 체인 — 릴리즈 시점의 차지 단계가 전개 길이를 결정하는 도식">
-        <text class="fd-t" x="90" y="26" text-anchor="start">적 공격 −10 ~ −2F 구간에서 릴리즈</text>
-        <text class="fd-t acc" x="860" y="26" text-anchor="end">릴리즈 시점의 단계 = 전개 길이</text>
-        <rect class="fd-tr" x="90" y="46" width="770" height="14"/>
-        <rect class="fd-s1" x="90" y="46" width="257" height="14"/>
-        <rect class="fd-s2" x="347" y="46" width="257" height="14"/>
-        <rect class="fd-s3" x="604" y="46" width="256" height="14"/>
-        <g class="fd-tick">
-          <line x1="347" y1="40" x2="347" y2="68"/><line x1="604" y1="40" x2="604" y2="68"/><line x1="860" y1="40" x2="860" y2="68"/>
-        </g>
-        <text class="fd-f" x="347" y="88" text-anchor="middle">1단계</text>
-        <text class="fd-f" x="604" y="88" text-anchor="middle">2단계</text>
-        <text class="fd-f acc" x="860" y="88" text-anchor="end">3단계</text>
-        <path class="fd-conn" d="M347 98 L347 138"/>
-        <path class="fd-conn" d="M604 98 L604 138"/>
-        <path class="fd-conn" d="M860 98 L860 118 L780 118 L780 138"/>
-        <rect class="fd-box" x="267" y="138" width="160" height="36"/>
-        <text x="347" y="161" text-anchor="middle">2연타</text>
-        <rect class="fd-box" x="524" y="138" width="160" height="36"/>
-        <text x="604" y="161" text-anchor="middle">3연타</text>
-        <rect class="fd-boxa" x="700" y="138" width="160" height="36"/>
-        <text class="fd-t acc" x="780" y="161" text-anchor="middle">연속 처형</text>
+      <svg viewBox="0 0 940 190" role="img" aria-label="부스트 체인 — 릴리즈 타이밍은 성립과 실패 두 가지뿐이고, 반격으로 대상을 처치했을 때만 연속 처치로 이어지는 도식">
+        <text class="fd-f acc" x="575" y="34" text-anchor="middle">−18 ~ −2F 릴리즈 창</text>
+        <rect class="fd-tr" x="90" y="46" width="610" height="14"/>
+        <rect class="fd-s3" x="490" y="46" width="170" height="14"/>
+        <g class="fd-tick"><line x1="700" y1="38" x2="700" y2="72"/></g>
+        <text class="fd-f" x="90" y="82" text-anchor="start">차지 유지</text>
+        <text class="fd-f acc" x="716" y="58" text-anchor="start">적 공격 판정</text>
+        <line class="fd-conn" x1="575" y1="64" x2="575" y2="104"/>
+        <path class="fd-arw" d="M575 114 L568 100 L582 100 Z"/>
+        <rect class="fd-box" x="90" y="116" width="290" height="36"/>
+        <text x="235" y="139" text-anchor="middle">창 밖 · 미입력 — 통상 피격</text>
+        <rect class="fd-boxa" x="430" y="116" width="290" height="36"/>
+        <text class="fd-t acc" x="575" y="139" text-anchor="middle">창 안 릴리즈 — 회피 + 반격</text>
+        <line class="fd-conn" x1="720" y1="134" x2="746" y2="134"/>
+        <path class="fd-arw" d="M756 134 L742 127 L742 141 Z"/>
+        <text class="fd-f" x="738" y="120" text-anchor="middle">처치 시</text>
+        <rect class="fd-boxa" x="766" y="116" width="154" height="36"/>
+        <text class="fd-t acc" x="843" y="139" text-anchor="middle">연속 처치</text>
       </svg>
-      <div class="fd-cap">늦게 참을수록 전개가 길어짐 — 다만 릴리즈가 늦으면 그대로 피격</div>
+      <div class="fd-cap">타이밍은 성립·실패 두 가지뿐 — 연쇄는 그 반격으로 대상을 처치했을 때만 이어짐</div>
     </div>
 
     <div class="spec-card">
@@ -382,9 +448,10 @@
       <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">차지 진입 +6F 이후 상시 · 회피 이동 지속 최대 <span class="key">40F</span></div></div>
       <div class="sc-row"><div class="sc-k">판정</div><div class="sc-v">이동 중 무적 프레임은 최초 8F에만 부여 — 남용 방지. 방향 입력 해제 시 통상 차지 상태로 복귀</div></div>
       <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">이동 중에도 <strong>차지 단계는 정상 진행</strong> — 회피가 차지를 끊지 않음</div></div>
-      <div class="sc-row"><div class="sc-k">스캔</div><div class="sc-v">이동 <span class="key">2m마다</span> 시야 내 대상의 약점 부위 1곳 지목 — 대상당 1곳, 최대 3곳</div></div>
+      <div class="sc-row"><div class="sc-k">스캔</div><div class="sc-v">원작 <strong>드론 스팅어의 조준 · 사격과 같은 방식</strong>으로 부위를 지정 — 이동 <span class="key">2m마다</span> 카메라가 향한 방향의 적 1체, 대상당 1곳, 최대 3곳</div></div>
       <div class="sc-row"><div class="sc-k">연출</div><div class="sc-v">지면 마찰 스파크 + 궤적 라인 / 스캔 성립 시 해당 부위에 마커 점등 + 단발 SE / 3곳 도달 시 캐릭터 림라이트</div></div>
-      <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">지목된 부위 타격 시 <strong>추가 피해</strong> — 릴리즈 후에도 8초간 마커 유지</div></div>
+      <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">노출된 부위 타격 시 <strong>추가 피해</strong> — 릴리즈 후에도 8초간 마커 유지</div></div>
+      <div class="sc-row"><div class="sc-k">제약</div><div class="sc-v">이동 거리를 확보할 수 있는 <strong>공격 사이의 텀에서만 성립</strong> — 연속 공격 중에는 스캔이 끊김</div></div>
       <div class="sc-row aim"><div class="sc-k">노리는 재미</div><div class="sc-v">회피와 스캔을 한 조작으로 — 피하는 움직임이 그대로 공략이 됨</div></div>
     </div>
     <div class="fdiag">
@@ -407,105 +474,121 @@
         <text class="fd-f" x="630" y="184" text-anchor="middle">4m · 약점 2</text>
         <text class="fd-f acc" x="860" y="184" text-anchor="end">6m · 약점 3</text>
       </svg>
-      <div class="fd-cap">방향 입력 중에도 차지는 정상 진행 — 이동 2m마다 약점 1곳 지목, 최대 3곳</div>
+      <div class="fd-cap">방향 입력 중에도 차지는 정상 진행 — 이동 2m마다 카메라가 향한 방향의 약점 1곳 노출, 최대 3곳</div>
     </div>
 
     <div class="spec-card">
-      <div class="sc-head"><span class="sc-no">CB-04</span><span class="sc-name">부스터 버스터</span><span class="sc-from">TRIGGER 차지 중 조준 사격</span></div>
+      <div class="sc-head"><span class="sc-no">CB-04</span><span class="sc-name">차지 트랜스퍼</span><span class="sc-from">TRIGGER 차지 중 조준</span></div>
       <div class="sc-row"><div class="sc-k">선행 조건</div><div class="sc-v">차지 유지 중 · 차지 진입 +6F 경과</div></div>
-      <div class="sc-row"><div class="sc-k">입력</div><div class="sc-v"><span class="key">맹공격 홀드 유지 + 사격 버튼</span> — 사격 홀드 유지 시 연사</div></div>
-      <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">차지 진입 +6F 이후 상시 — 차지가 유지되는 한 발사 제한 없음</div></div>
-      <div class="sc-row"><div class="sc-k">판정</div><div class="sc-v">1발마다 차지 진행 속도 <span class="key">−20%</span> — 차지와 사격이 같은 시간을 나눠 씀. 단계 하락은 없음</div></div>
-      <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">사격 중에도 차지는 계속 진행 — 언제 쏘고 언제 멈출지가 곧 운용 판단</div></div>
-      <div class="sc-row"><div class="sc-k">연출</div><div class="sc-v">드론 전개 + 조준선 표시 / 차지 단계별 조준선 두께 · 색 변화 / 발사 반동으로 조준선 일시 확산</div></div>
+      <div class="sc-row"><div class="sc-k">입력</div><div class="sc-v"><span class="key">맹공격 홀드 유지 + 조준</span> — 맹공 차지가 그대로 <strong>차지 블라스터 차지로 승계</strong></div></div>
+      <div class="sc-row"><div class="sc-k">성립 창</div><div class="sc-v">차지 진입 +6F 이후 상시 — 맹공 홀드가 유지되는 동안 언제든 조준 전환</div></div>
+      <div class="sc-row"><div class="sc-k">판정</div><div class="sc-v">조준 진입 시점의 맹공 차지 단계가 <span class="key">1:1로</span> 차지 블라스터의 차지량으로 전환 — 단계 손실 없음</div></div>
+      <div class="sc-row"><div class="sc-k">차지 처리</div><div class="sc-v">인스턴트 차지 · 드리프트 스캔으로 3단계를 만든 뒤 조준하면 <strong>즉시 풀차지 블라스터 발사</strong></div></div>
+      <div class="sc-row"><div class="sc-k">연출</div><div class="sc-v">조준 전환과 동시에 블라스터 조준선 표시 / 승계된 차지량에 따라 조준선 두께 · 색 변화 / 발사 반동으로 조준선 일시 확산</div></div>
       <div class="sc-row"><div class="sc-k">결과</div><div class="sc-v">명중 시 <strong>장갑 파괴</strong> 수치 누적 — 파괴 시 방어 관통 상태 부여</div></div>
-      <div class="sc-row aim"><div class="sc-k">노리는 재미</div><div class="sc-v">원거리 운용 — 차지를 기다리는 시간이 그대로 견제 시간이 됨</div></div>
+      <div class="sc-row"><div class="sc-k">제약</div><div class="sc-v"><strong>장갑을 가진 적에게만 효과적</strong> — 장갑이 없는 적에게는 통상 사격과 차이가 없음</div></div>
+      <div class="sc-row aim"><div class="sc-k">노리는 재미</div><div class="sc-v">근접 분기로 만든 풀차지를 원거리로 환전 — 패리 · 드리프트에서 블라스터로 이어지는 연계</div></div>
     </div>
     <div class="fdiag">
-      <svg viewBox="0 0 940 196" role="img" aria-label="부스터 버스터 — 사격 1발마다 차지 진행이 20퍼센트 느려져 풀차지 도달이 지연되는 비교 도식">
-        <text class="fd-f" x="90" y="36" text-anchor="start">사격 없음</text>
-        <rect class="fd-tr" x="90" y="46" width="520" height="14"/>
-        <rect class="fd-s3" x="90" y="46" width="520" height="14"/>
-        <text class="fd-f" x="626" y="58" text-anchor="start">72F 풀차지</text>
-        <text class="fd-f" x="90" y="118" text-anchor="start">사격 3발</text>
-        <path class="fd-arw" d="M250 110 L241 124 L259 124 Z"/>
-        <path class="fd-arw" d="M420 110 L411 124 L429 124 Z"/>
-        <path class="fd-arw" d="M590 110 L581 124 L599 124 Z"/>
-        <rect class="fd-tr" x="90" y="130" width="690" height="14"/>
-        <rect class="fd-s3" x="90" y="130" width="690" height="14"/>
-        <text class="fd-f acc" x="796" y="142" text-anchor="start">약 96F 풀차지</text>
-        <text class="fd-f" x="250" y="172" text-anchor="middle">사격</text>
-        <text class="fd-f" x="420" y="172" text-anchor="middle">사격</text>
-        <text class="fd-f" x="590" y="172" text-anchor="middle">사격</text>
+      <svg viewBox="0 0 940 200" role="img" aria-label="맹공 차지가 차지 블라스터의 차지량으로 그대로 승계되는 두 경로 비교 도식">
+        <text class="fd-f" x="90" y="36" text-anchor="start">맹공 홀드 차지</text>
+        <rect class="fd-tr" x="90" y="46" width="380" height="14"/>
+        <rect class="fd-s1" x="90" y="46" width="126" height="14"/>
+        <rect class="fd-s2" x="216" y="46" width="127" height="14"/>
+        <rect class="fd-s3" x="343" y="46" width="127" height="14"/>
+        <text class="fd-f" x="482" y="58" text-anchor="start">72F · 3단계</text>
+        <line class="fd-conn" x1="592" y1="53" x2="614" y2="53"/>
+        <path class="fd-arw" d="M624 53 L610 46 L610 60 Z"/>
+        <text class="fd-f" x="603" y="38" text-anchor="middle">조준</text>
+        <rect class="fd-box" x="636" y="37" width="284" height="32"/>
+        <text x="778" y="58" text-anchor="middle">차지 블라스터 — 차지량 1 : 1 승계</text>
+        <text class="fd-f acc" x="90" y="126" text-anchor="start">패리 · 드리프트로 3단계 확정</text>
+        <rect class="fd-tr" x="90" y="136" width="150" height="14"/>
+        <rect class="fd-s3" x="90" y="136" width="150" height="14"/>
+        <line class="fd-conn" x1="262" y1="143" x2="614" y2="143"/>
+        <path class="fd-arw" d="M624 143 L610 136 L610 150 Z"/>
+        <text class="fd-f" x="440" y="128" text-anchor="middle">조준</text>
+        <rect class="fd-boxa" x="636" y="127" width="284" height="32"/>
+        <text class="fd-t acc" x="778" y="148" text-anchor="middle">즉시 풀차지 블라스터</text>
       </svg>
-      <div class="fd-cap">1발마다 차지 진행 −20% — 견제와 빠른 풀차지를 동시에 취할 수 없음</div>
+      <div class="fd-cap">근접 분기로 만든 차지를 손실 없이 원거리로 옮김 — 패리 · 드리프트에서 블라스터로 이어지는 연계</div>
     </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="matrix">
   <div class="container">
-    <div class="doc-no">05</div>
     <div class="section-label"><span class="badge">RESULT MATRIX</span></div>
-    <h2>분기별 표식과 트레이드오프</h2>
-    <p class="how-note">네 분기는 피해량이 아니라 <strong>대상에 남기는 상태</strong>로 갈림 — 무엇을 선택했는지가 다음 한 수를 바꿈</p>
+    <h2>분기별 결과와 트레이드오프</h2>
+    <p class="how-note">딜량을 비교해서 고르는 것이 아니라, <strong>적을 어떤 상태로 만들 것인지 상황을 선택하는 구조</strong></p>
 
     <div class="bf-matrix">
       <div class="bm-lane">
         <div class="bm-charge">인스턴트 차지</div>
         <div class="bm-arrow">↓</div>
-        <div class="bm-effect">균형 상실</div>
-        <div class="bm-eval">즉시 경직으로 판을 뒤집음 — 대신 네 분기 중 가장 좁은 판정(퍼펙트 패링)이 전제</div>
+        <div class="bm-effect">균형 상실 구슬 −1</div>
+        <div class="bm-eval">경직까지의 거리를 한 칸 당김 — 무기 공격에만 성립하고 브레스 등에는 통하지 않음</div>
       </div>
       <div class="bm-lane">
         <div class="bm-charge">부스트 체인</div>
         <div class="bm-arrow">↓</div>
-        <div class="bm-effect">처형</div>
-        <div class="bm-eval">다수전에서 끊기지 않는 연속 처형 — 피격 직전 릴리즈라는 최고 난도의 판단이 필요</div>
+        <div class="bm-effect">연속 처치</div>
+        <div class="bm-eval">다수전에서 끊기지 않는 처치 연결 — 타이밍은 성립·실패뿐이고, 처치하지 못하면 연쇄가 끊김</div>
       </div>
       <div class="bm-lane">
         <div class="bm-charge">드리프트 스캔</div>
         <div class="bm-arrow">↓</div>
-        <div class="bm-effect">약점 지목</div>
-        <div class="bm-eval">지목 부위 추가 피해 — 지목까지 이동 거리와 시간을 확보해야 함</div>
+        <div class="bm-effect">약점 노출</div>
+        <div class="bm-eval">노출 부위 추가 피해 — 스캔까지 이동 거리와 시간을 확보해야 함</div>
       </div>
       <div class="bm-lane">
-        <div class="bm-charge">부스터 버스터</div>
+        <div class="bm-charge">차지 트랜스퍼</div>
         <div class="bm-arrow">↓</div>
         <div class="bm-effect">장갑 파괴</div>
-        <div class="bm-eval">방어 관통 상태를 유도 — 차지 진행이 느려지고 직접 피해량은 가장 낮음</div>
+        <div class="bm-eval">방어 관통 상태를 유도 — 장갑을 가진 적에게만 효과적</div>
       </div>
     </div>
+
+    <p class="how-note" style="margin-top:36px">네 결과 중 <strong>새로 만드는 상태는 약점 노출 하나뿐</strong> — 나머지는 이미 있는 수치와 이벤트를 그대로 씀</p>
+    <table class="std-table">
+      <thead><tr><th>분기 결과</th><th>기존 시스템과의 연동</th><th>신규 데이터</th></tr></thead>
+      <tbody>
+        <tr><td class="c-case">균형 상실 구슬 −1</td><td>기존 <strong>균형 상실 게이지의 구슬을 직접 1개 차감</strong> — 전용 수치를 새로 만들지 않음</td><td class="c-val">없음</td></tr>
+        <tr><td class="c-case">연속 처치</td><td>상태 부여 없음 — <strong>처치 성립 이벤트에 다음 타겟 전환과 카메라 연출을 연결</strong></td><td class="c-val">없음</td></tr>
+        <tr><td class="c-case">약점 노출</td><td>부위 단위 <strong>디버프 1종 신설</strong> — 대상당 1개, 동시 최대 3대상</td><td class="c-val">부위 ID<br>추가 피해율 · 지속</td></tr>
+        <tr><td class="c-case">장갑 파괴</td><td>기존 <strong>장갑 수치를 직접 차감</strong>, 0 도달 시 방어 관통 상태로 전환</td><td class="c-val">없음</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="edge">
   <div class="container">
-    <div class="doc-no">06</div>
     <div class="section-label"><span class="badge">EDGE CASES</span></div>
-    <h2>정의해 두지 않으면 구현이 멈추는 지점</h2>
+    <h2>개발 블로커</h2>
 
     <table class="std-table">
       <thead><tr><th>상황</th><th>처리</th><th>근거</th></tr></thead>
       <tbody>
-        <tr><td class="c-case">차지 중 피격 — 체인 창 밖</td><td>차지 단계 초기화, 통상 피격 처리</td><td>분기 실패에 추가 페널티를 얹지 않음</td></tr>
-        <tr><td class="c-case">방향 · 사격 동시 입력</td><td>먼저 성립한 분기가 차지를 점유, 나머지는 무시</td><td>한 차지에 분기 1종 원칙</td></tr>
-        <tr><td class="c-case">인스턴트 차지 직후 방향 입력</td><td>이미 풀차지 확정 — 이동만 동작하고 스캔은 미성립</td><td>단계를 건너뛴 차지에 스캔 보상까지 겹치지 않도록</td></tr>
-        <tr><td class="c-case">공중에서 차지</td><td>인스턴트 차지 · 부스터 버스터 허용, 드리프트 스캔은 착지 후 성립</td><td>드리프트는 지면 이동을 전제로 한 상태</td></tr>
+        <tr><td class="c-case">차지 중 피격 — 체인 창 밖</td><td>차지 캔슬, 단계 초기화 후 통상 피격 처리</td><td>피격은 차지를 끊는 유일한 조건</td></tr>
+        <tr><td class="c-case">방향 · 조준 동시 입력</td><td>같은 프레임이면 조준 우선, 나머지는 무시</td><td>한 차지에 분기 1종 원칙 — 우선순위로 모호함 제거</td></tr>
+        <tr><td class="c-case">록온 중 좌우 입력</td><td>항상 드리프트로 성립</td><td>좌스틱은 이동 입력이고 카메라는 우스틱이 담당 — 충돌하지 않음</td></tr>
+        <tr><td class="c-case">드리프트 중 스캔 대상</td><td>카메라가 향한 방향의 적만 스캔, 등 뒤 적은 제외</td><td>보는 곳을 살핀다는 조작 감각과 일치</td></tr>
+        <tr><td class="c-case">인스턴트 차지 직후 방향 입력</td><td>이미 반격 모션 중 — 이동만 동작하고 스캔은 미성립</td><td>단계를 건너뛴 차지에 스캔 보상까지 겹치지 않도록</td></tr>
+        <tr><td class="c-case">공중에서 차지</td><td>인스턴트 차지 · 부스트 체인 · 차지 트랜스퍼 허용, 드리프트 스캔은 착지 후 성립</td><td>드리프트는 지면 이동을 전제로 한 상태</td></tr>
         <tr><td class="c-case">분기 유효 구간 중 스킬 입력</td><td>스킬 입력 우선 처리, 차지와 분기 즉시 소멸</td><td>스킬은 자원을 소모한 선택이므로 항상 우선</td></tr>
-        <tr><td class="c-case">대상이 이미 그로기 · 다운</td><td>차지 처리 정상, 상태 표식만 미적용</td><td>표식 중첩으로 인한 무한 경직 방지</td></tr>
+        <tr><td class="c-case">대상이 이미 그로기 · 다운</td><td>차지 처리 정상, 균형 상실 추가 소모만 미적용</td><td>중첩으로 인한 무한 경직 방지</td></tr>
         <tr><td class="c-case">드리프트 중 벽 · 낙하 지형</td><td>이동만 중단, 차지는 계속 진행</td><td>지형으로 인한 손실을 플레이어 실수로 처리하지 않음</td></tr>
         <tr><td class="c-case">다수 적 대상 스캔</td><td>대상별 최대 1곳, 총 3곳까지 누적</td><td>한 대상에 마커를 몰아 넣는 편법 차단</td></tr>
-        <tr><td class="c-case">부스터 버스터 탄약 소진</td><td>사격만 중단, 차지 속도는 정상으로 복귀</td><td>탄약 관리가 차지 자체를 막지는 않도록</td></tr>
+        <tr><td class="c-case">블라스터 탄약 소진</td><td>조준은 유지, 발사만 불가 — 승계된 차지량은 보존</td><td>탄약 관리가 차지 자체를 막지는 않도록</td></tr>
         <tr><td class="c-case">풀차지 도달 후 홀드 유지</td><td>단계는 3에서 고정, 분기 입력은 계속 유효</td><td>기다린 플레이어가 손해를 보지 않아야 함</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="param">
   <div class="container">
-    <div class="doc-no">07</div>
     <div class="section-label"><span class="badge">PARAMETERS</span></div>
     <h2>초기 제안값과 산정 근거<span class="tuning-flag">제안값 · 튜닝 대상</span></h2>
 
@@ -515,13 +598,13 @@
         <tr><td class="c-param">차지 단계 도달</td><td class="c-val">24F · 48F · 72F</td><td>풀차지까지 1.2초 — 판단할 시간은 주되 교전 리듬을 끊지 않는 길이</td></tr>
         <tr><td class="c-param">분기 유효 시작</td><td class="c-val">+6F</td><td>탭(단발 맹공)과 홀드(차지)를 가르는 경계 — 이보다 짧으면 오입력이 분기로 잡힘</td></tr>
         <tr><td class="c-param">인스턴트 차지 성립 창</td><td class="c-val">12F</td><td>퍼펙트 판정 창과 유사한 체감 — 패링에 성공한 플레이어가 놓치지 않는 최소치</td></tr>
-        <tr><td class="c-param">부스트 체인 성립 창</td><td class="c-val">−10 ~ −2F</td><td>보고 반응하기에는 짧고 읽고 대비하면 잡히는 폭 — 네 분기 중 최고 난도</td></tr>
-        <tr><td class="c-param">체인 전개 길이</td><td class="c-val">2연타 · 3연타<br>연속 처형</td><td>차지 단계와 1:1 대응 — 오래 참을수록 전개가 길어지는 구조</td></tr>
+        <tr><td class="c-param">부스트 체인 성립 창</td><td class="c-val">−18 ~ −2F</td><td>공격 직전 신호를 보고 한 번 반응할 수 있는 폭</td></tr>
+        <tr><td class="c-param">반격 위력 계수</td><td class="c-val">1단계 ×1.0<br>2단계 ×1.5 · 3단계 ×2.2</td><td>차지 단계는 한 방의 위력만 결정 — 처치에 닿느냐가 연쇄를 가름</td></tr>
         <tr><td class="c-param">드리프트 지속</td><td class="c-val">최대 40F</td><td>측면 진입에는 충분하고 회피 수단으로 남용되지는 않는 길이</td></tr>
         <tr><td class="c-param">드리프트 무적</td><td class="c-val">최초 8F</td><td>회피 성능은 주되 이동 전 구간 무적은 주지 않음</td></tr>
         <tr><td class="c-param">스캔 성립 이동 거리</td><td class="c-val">2m / 최대 3곳</td><td>3곳 = 6m — 근접 교전 거리에서 측면 도달이 가능한 폭</td></tr>
-        <tr><td class="c-param">약점 부위 추가 피해</td><td class="c-val">+35% · 8초</td><td>스캔에 쓴 시간을 회수하되 통상 공격을 대체하지 않는 폭</td></tr>
-        <tr><td class="c-param">사격 중 차지 속도</td><td class="c-val">−20% / 발</td><td>연사와 차지 완료를 동시에 취할 수 없게 만드는 최소 저항</td></tr>
+        <tr><td class="c-param">노출 부위 추가 피해</td><td class="c-val">+35% · 8초</td><td>스캔에 쓴 시간을 회수하되 통상 공격을 대체하지 않는 폭</td></tr>
+        <tr><td class="c-param">차지량 승계율</td><td class="c-val">1 : 1</td><td>맹공 3단계 = 블라스터 풀차지 — 근접에서 만든 차지를 손실 없이 원거리로 옮김</td></tr>
         <tr><td class="c-param">장갑 파괴 누적</td><td class="c-val">+8% / 명중</td><td>단독으로는 느리고 근접 분기와 병행하면 빨라지는 값</td></tr>
         <tr><td class="c-param">히트스톱 — 인스턴트</td><td class="c-val">5F</td><td>즉발 반격의 무게를 확보하되 조작 흐름은 끊지 않는 값</td></tr>
       </tbody>
@@ -530,11 +613,10 @@
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="verify">
   <div class="container">
-    <div class="doc-no">08</div>
     <div class="section-label"><span class="badge">VERIFICATION</span></div>
-    <h2>무엇을 보고 성공·실패를 판단하는가</h2>
+    <h2>검증 항목</h2>
 
     <table class="std-table">
       <thead><tr><th>검증 항목</th><th>측정 방법</th><th>판단 기준</th></tr></thead>
@@ -569,8 +651,8 @@
       <a class="pl-dot" href="07_planning_direction.html" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
       <a class="pl-dot" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT ANALYSIS"><span class="pl-num">09</span></a>
-      <a class="pl-dot is-current" href="10_sb_charge_boost.html" data-title="CHARGE BOOST" aria-current="page"><span class="pl-num">10</span><span class="pl-current-label">CHARGE BOOST</span></a>
+      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
+      <a class="pl-dot is-current" href="10_sb_charge_boost.html" data-title="DESIGN DOCUMENTS" aria-current="page"><span class="pl-num">10</span><span class="pl-current-label">DESIGN DOCUMENTS</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
       <a class="pl-dot pl-dot-next" href="11_closing.html" data-title="CLOSING"><span class="pl-num">11</span></a>
     </div>

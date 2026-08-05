@@ -19,7 +19,7 @@
   @media (max-width: 760px) { .hdr-grid { opacity: .5; } }
   .page-header .label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
   .page-header h1 { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--text); line-height: 1.4; letter-spacing: -0.005em; }
-  .page-header .purpose { margin: 6px 0 0; padding-left: 16px; border-left: 2px solid var(--accent); font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; max-width: 800px; }
+  .page-header .purpose { margin: 14px 0 0; font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.8; max-width: 100%; word-break: keep-all; }
   .page-header .purpose strong { color: var(--text); font-weight: 500; }
   /* ══ WORK 페이지 공통 위계 — 세 페이지 동일 ══════════════════════
      section-label(mono·kicker) → h2(serif·제목) → lead(sans·리드문)
@@ -158,7 +158,7 @@
   .thesis a.tcell { display:block; text-decoration:none; cursor:pointer; transition:background-color .2s ease; }
   .thesis a.tcell:hover { background:var(--accent); }
   .thesis a.tcell:hover .tv { color:var(--text); }
-  .section-label .badge { color: var(--accent); font-weight: 600; }
+  .section-label .badge, .page-header .label .badge { color: var(--accent); font-weight: 600; }
   @media(max-width:760px) { .thesis { grid-template-columns:1fr; } .thesis .tcell, .thesis .tcell:first-child, .thesis .tcell:last-child { clip-path:none; margin-right:0; padding:16px 20px; } .thesis .tcell::before, .thesis .tcell:first-child::before, .thesis .tcell:last-child::before { clip-path:none; inset:1px; } }
 </style>
 </head>
@@ -188,8 +188,9 @@
     <div class="nav-item">
       <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
       <div class="dropdown">
-        <a href="09_sb_analysis.html">COMBAT ANALYSIS</a>
-        <a href="10_sb_charge_boost.html">CHARGE BOOST</a>
+        <div class="dd-head">STELLAR BLADE</div>
+        <a href="09_sb_analysis.html">COMBAT INSIGHTS</a>
+        <a href="10_sb_charge_boost.html">DESIGN DOCUMENTS</a>
       </div>
     </div>
     <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
@@ -199,7 +200,7 @@
 <header class="page-header">
 <svg class="hdr-grid" width="880" height="210" viewBox="0 0 880 210" aria-hidden="true" focusable="false"><defs><linearGradient id="g1" x1="-40" y1="0" x2="940" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.30" stop-color="#fff" stop-opacity="1"/><stop offset="0.97" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="m1"><rect x="0" y="0" width="880" height="210" fill="url(#g1)"/></mask></defs><g mask="url(#m1)"><path d="M0 0V210M20 0V210M40 0V210M60 0V210M80 0V210M100 0V210M120 0V210M140 0V210M160 0V210M180 0V210M200 0V210M220 0V210M240 0V210M260 0V210M280 0V210M300 0V210M320 0V210M340 0V210M360 0V210M380 0V210M400 0V210M420 0V210M440 0V210M460 0V210M480 0V210M500 0V210M520 0V210M540 0V210M560 0V210M580 0V210M600 0V210M620 0V210M640 0V210M660 0V210M680 0V210M700 0V210M720 0V210M740 0V210M760 0V210M780 0V210M800 0V210M820 0V210M840 0V210M860 0V210M880 0V210M0 0H880M0 20H880M0 40H880M0 60H880M0 80H880M0 100H880M0 120H880M0 140H880M0 160H880M0 180H880M0 200H880" stroke="#c4825a" stroke-width=".4" fill="none" opacity=".07"/><path d="M-24 34 H880" stroke="#c4825a" stroke-width=".8" fill="none" opacity=".22"/><path d="M2.0 34 V39M28.0 34 V39M54.0 34 V39M122.0 34 V39M148.0 34 V39M174.0 34 V39M242.0 34 V39M268.0 34 V39M294.0 34 V39M362.0 34 V39M388.0 34 V39M414.0 34 V39M482.0 34 V39M508.0 34 V39M534.0 34 V39M602.0 34 V39M628.0 34 V39M654.0 34 V39M722.0 34 V39M748.0 34 V39M774.0 34 V39M842.0 34 V39M868.0 34 V39M894.0 34 V39M962.0 34 V39M988.0 34 V39M1014.0 34 V39" stroke="#c4825a" stroke-width=".7" fill="none" opacity=".18"/><path d="M-24 34 V45M80 34 V45M96 34 V45M200 34 V45M216 34 V45M320 34 V45M336 34 V45M440 34 V45M456 34 V45M560 34 V45M576 34 V45M680 34 V45M696 34 V45M800 34 V45M816 34 V45M920 34 V45M936 34 V45M1040 34 V45" stroke="#c4825a" stroke-width="1" fill="none" opacity=".34"/><path d="M148.0 64 V132M250.3 64 V132M284.6 64 V132M342 98.0 H434M482.0 64 V132M462 106.0 H554M628.0 64 V132M582 86.0 H674M582 114.0 H674M702 78.0 H794M702 98.0 H794M702 118.0 H794M857.6 64 V132M888.8 64 V132M822 102.0 H914" stroke="#c4825a" stroke-width=".7" fill="none" opacity=".16"/><path d="M96 58 H200 V138 H96 ZM216 58 H320 V138 H216 ZM336 58 H440 V138 H336 ZM456 58 H560 V138 H456 ZM576 58 H680 V138 H576 ZM696 58 H800 V138 H696 ZM816 58 H920 V138 H816 Z" stroke="#c4825a" stroke-width="1.15" fill="#c4825a" fill-opacity=".035" opacity=".38"/><path d="M122.0 58 v6M122.0 138 v-6M148.0 58 v6M148.0 138 v-6M174.0 58 v6M174.0 138 v-6M242.0 58 v6M242.0 138 v-6M268.0 58 v6M268.0 138 v-6M294.0 58 v6M294.0 138 v-6M362.0 58 v6M362.0 138 v-6M388.0 58 v6M388.0 138 v-6M414.0 58 v6M414.0 138 v-6M482.0 58 v6M482.0 138 v-6M508.0 58 v6M508.0 138 v-6M534.0 58 v6M534.0 138 v-6M602.0 58 v6M602.0 138 v-6M628.0 58 v6M628.0 138 v-6M654.0 58 v6M654.0 138 v-6M722.0 58 v6M722.0 138 v-6M748.0 58 v6M748.0 138 v-6M774.0 58 v6M774.0 138 v-6M842.0 58 v6M842.0 138 v-6M868.0 58 v6M868.0 138 v-6M894.0 58 v6M894.0 138 v-6" stroke="#c4825a" stroke-width=".9" fill="none" opacity=".30"/><path d="M96 162 H200 M96 162 l6 -3.5 M96 162 l6 3.5 M200 162 l-6 -3.5 M200 162 l-6 3.5M96 155 V169 M200 155 V169M216 162 H320 M216 162 l6 -3.5 M216 162 l6 3.5 M320 162 l-6 -3.5 M320 162 l-6 3.5M216 155 V169 M320 155 V169M336 162 H440 M336 162 l6 -3.5 M336 162 l6 3.5 M440 162 l-6 -3.5 M440 162 l-6 3.5M336 155 V169 M440 155 V169M456 162 H560 M456 162 l6 -3.5 M456 162 l6 3.5 M560 162 l-6 -3.5 M560 162 l-6 3.5M456 155 V169 M560 155 V169M576 162 H680 M576 162 l6 -3.5 M576 162 l6 3.5 M680 162 l-6 -3.5 M680 162 l-6 3.5M576 155 V169 M680 155 V169M696 162 H800 M696 162 l6 -3.5 M696 162 l6 3.5 M800 162 l-6 -3.5 M800 162 l-6 3.5M696 155 V169 M800 155 V169M816 162 H920 M816 162 l6 -3.5 M816 162 l6 3.5 M920 162 l-6 -3.5 M920 162 l-6 3.5M816 155 V169 M920 155 V169" stroke="#c4825a" stroke-width=".8" fill="none" opacity=".26"/></g></svg>
   <div class="container">
-    <div class="label">WORK 02 / STANDARDIZATION</div>
+    <div class="label"><span class="badge">WORK</span> &nbsp;/&nbsp; STANDARDIZATION</div>
     <h1>규격화</h1>
     <p class="purpose">분명한 기준을 세우고, <strong>누구나 같은 결과를 낼 수 있게 구조화</strong></p>
     <div class="thesis">
@@ -305,8 +306,8 @@
       <a class="pl-dot is-current" href="07_planning_direction.html" data-title="STANDARDIZATION" aria-current="page"><span class="pl-num">07</span><span class="pl-current-label">STANDARDIZATION</span></a>
       <a class="pl-dot pl-dot-next" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT ANALYSIS"><span class="pl-num">09</span></a>
-      <a class="pl-dot" href="10_sb_charge_boost.html" data-title="CHARGE BOOST"><span class="pl-num">10</span></a>
+      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
+      <a class="pl-dot" href="10_sb_charge_boost.html" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
       <a class="pl-dot" href="11_closing.html" data-title="CLOSING"><span class="pl-num">11</span></a>
     </div>

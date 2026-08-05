@@ -436,6 +436,14 @@
 
   .evidence-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0 0; max-width: 100%; }
   .evidence-duo figure { margin: 0; position: relative; }
+  .why-split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+  .why-split .ws-vid { position: relative; margin: 0; display: flex; border: 1px solid var(--line-hi); overflow: hidden; }
+  .why-split .ws-vid video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .why-split .ws-notes { display: flex; flex-direction: column; gap: 14px; }
+  .why-split .ws-card { flex: 1; display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--line-hi); background: var(--bg-card); padding: 22px 26px; }
+  .why-split .ws-t { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 9px; }
+  .why-split .ws-d { font-family: var(--sans); font-size: 13px; line-height: 1.75; color: var(--text-mid); word-break: keep-all; }
+  @media (max-width: 900px) { .why-split { grid-template-columns: 1fr; gap: 20px; } }
   .evidence-duo.trio { grid-template-columns: 1fr 1fr 2fr; }
   .evidence-duo.three { grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 760px) { .evidence-duo.three { grid-template-columns: 1fr; } }
@@ -479,7 +487,7 @@
   .thesis a.tcell::after { content:attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%) translateY(4px); font-family:var(--sans); font-size:12px; color:var(--text-mid); background:var(--bg-base); border:1px solid var(--line-hi); padding:5px 10px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:5; }
   .thesis a.tcell:hover::after { opacity:1; transform:translateX(-50%) translateY(0); }
   @media (prefers-reduced-motion: reduce) { .thesis a.tcell::after { transition:opacity .18s ease; transform:translateX(-50%); } }
-  .section-label .badge { color: var(--accent); font-weight: 600; }
+  .section-label .badge, .page-header .label .badge { color: var(--accent); font-weight: 600; }
   @media(max-width:760px) { .thesis { grid-template-columns:1fr; } .thesis .tcell { border-right:0; border-bottom:1px solid var(--line-hi); padding:16px 20px; } .thesis .tcell:last-child { border-bottom:0; } }
 </style>
 </head>
@@ -509,8 +517,9 @@
     <div class="nav-item">
       <span class="nav-top is-current" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
       <div class="dropdown">
-        <a href="09_sb_analysis.html" class="is-current">COMBAT ANALYSIS</a>
-        <a href="10_sb_charge_boost.html">CHARGE BOOST</a>
+        <div class="dd-head">STELLAR BLADE</div>
+        <a href="09_sb_analysis.html" class="is-current">COMBAT INSIGHTS</a>
+        <a href="10_sb_charge_boost.html">DESIGN DOCUMENTS</a>
       </div>
     </div>
     <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
@@ -519,16 +528,16 @@
 
 <section class="page-header">
   <div class="container">
-    <div class="label"><span class="badge">COMBAT ANALYSIS</span> &nbsp;/&nbsp; STELLAR BLADE</div>
+    <div class="label"><span class="badge">STELLAR BLADE</span> &nbsp;/&nbsp; COMBAT INSIGHTS</div>
     <h1>스텔라 블레이드 전투 분석</h1>
     <div class="purpose">
       전투의 강점 분해와 차지 부스트 시스템 확장 제안
     </div>
 <div class="thesis">
-      <a class="tcell" href="#strengths" data-tip="강점 분석"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.6"/><path d="M6.3 10.2 8.9 12.8 13.8 7.3"/></svg>STEP 01 &middot; STRENGTH</div><div class="tv"><span class="tvi">가독성</span><span class="tvi">피드백 시너지</span><span class="tvi">공수 교대 루틴</span></div></a>
-      <a class="tcell" href="#opportunity" data-tip="기회의 창"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.6v3.1M10 14.3v3.1M17.4 10h-3.1M5.7 10H2.6M15.2 4.8l-2.2 2.2M7 13l-2.2 2.2M15.2 15.2 13 13M7 7 4.8 4.8"/><circle cx="10" cy="10" r="2.6"/></svg>STEP 02 &middot; OPPORTUNITY</div><div class="tv"><span class="tvi">4분할 분석</span><span class="tvi">공백 영역</span></div></a>
-      <a class="tcell" href="#concept" data-tip="핵심 제안"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 2.2 9.6 6.7M12.6 2.2 10.4 6.7"/><circle cx="10" cy="12.6" r="5.4"/><circle cx="10" cy="12.6" r="2"/></svg>STEP 03 &middot; PROPOSAL</div><div class="tv"><span class="tvi">차지 부스트</span><span class="tvi">네 가지 전술 분기</span></div></a>
-      <a class="tcell" href="#impact" data-tip="리스크와 기대 효과"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.4 17.2 6v5.2c0 3.4-3 5.6-7.2 6.8-4.2-1.2-7.2-3.4-7.2-6.8V6z"/><path d="M7.4 10.1 9.4 12.1 13 8.4"/></svg>STEP 04 &middot; RISK &amp; IMPACT</div><div class="tv"><span class="tvi">조작 피로도 · 무용지물화 대비</span><span class="tvi">즉각 피드백 · 반복 플레이</span></div></a>
+      <a class="tcell" href="#strengths" data-tip="강점 분석"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.6"/><path d="M6.3 10.2 8.9 12.8 13.8 7.3"/></svg>WHAT IT GOT RIGHT</div><div class="tv"><span class="tvi">가독성&nbsp;· 피드백 시너지&nbsp;· 공수 교대 루틴</span></div></a>
+      <a class="tcell" href="#opportunity" data-tip="기회의 창"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.6v3.1M10 14.3v3.1M17.4 10h-3.1M5.7 10H2.6M15.2 4.8l-2.2 2.2M7 13l-2.2 2.2M15.2 15.2 13 13M7 7 4.8 4.8"/><circle cx="10" cy="10" r="2.6"/></svg>OPPORTUNITY AREAS</div><div class="tv"><span class="tvi">조작 성취감 분석에서 발견한 공백 영역</span></div></a>
+      <a class="tcell" href="#concept" data-tip="핵심 제안"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 2.2 9.6 6.7M12.6 2.2 10.4 6.7"/><circle cx="10" cy="12.6" r="5.4"/><circle cx="10" cy="12.6" r="2"/></svg>PROPOSAL</div><div class="tv"><span class="tvi">차지 부스트&nbsp;· 네 가지 전술 분기</span></div></a>
+      <a class="tcell" href="#impact" data-tip="리스크 대비 및 기대 효과"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.4 17.2 6v5.2c0 3.4-3 5.6-7.2 6.8-4.2-1.2-7.2-3.4-7.2-6.8V6z"/><path d="M7.4 10.1 9.4 12.1 13 8.4"/></svg>RISK &amp; IMPACT</div><div class="tv"><span class="tvi">예상되는 리스크 대비책&nbsp;· 기대 효과</span></div></a>
     </div>
   </div>
 </section>
@@ -540,9 +549,9 @@
 
     <div class="strength-block">
       <div class="s-num">STRENGTH 01</div>
-      <div class="s-title">Combat Readability — 시각적 UX의 가독성</div>
+      <div class="s-title">Combat Readability — 전투 UX의 높은 가독성</div>
       <p>
-        색상 기반 텔레그래프와 보스에게도 적용되는 경직 스킬 — <strong>대폭 낮아진 액션 진입 장벽</strong>
+        색상 기반 텔레그래프와 보스에게도 적용되는 경직 스킬 — <strong>대폭 낮춘 액션의 진입장벽</strong>
       </p>
       <div class="evidence-duo">
         <figure><video src="media/sb_telegraph.mp4" poster="media/sb_telegraph.jpg" autoplay muted loop playsinline preload="metadata" aria-label="스텔라 블레이드 전투 — 색상 텔레그래프"></video><span class="vid-badge"><i class="dot blue"></i>BLUE SIGNAL &middot; BLINK</span></figure>
@@ -625,7 +634,22 @@
   <div class="container">
     <div class="section-label"><span class="badge">STEP 03 &middot; PROPOSED FEATURE</span></div>
     <h2>차지 부스트 시스템</h2>
-    <p class="lead">맹공 풀차지 경직 + <strong>차지 중 플레이어의 판단에 따라 네 가지 전술 분기로 파생</strong></p>
+    <p class="lead">맹공 차지 중 <strong>플레이어의 판단에 따라 네 가지 전술 분기로 파생</strong></p>
+
+    <div class="sub-label">왜 차지인가</div>
+    <div class="why-split">
+      <figure class="ws-vid"><video src="media/sb2_morph.mp4" poster="media/sb2_morph.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE 2</span></figure>
+      <div class="ws-notes">
+        <div class="ws-card">
+          <div class="ws-t">쉬운 조작</div>
+          <div class="ws-d">홀드와 릴리즈만으로 다양한 분기를 만들어내는 데 적합</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-t">변형 연출에 최적</div>
+          <div class="ws-d">액션 중에도 이어지는 기계적 무기 변형을 표현하기에 적합</div>
+        </div>
+      </div>
+    </div>
 
     <div class="sub-label">SYSTEM FLOW</div>
     <div class="hero-loop">
@@ -639,59 +663,59 @@
     <div class="sub-label">네 가지 분기</div>
     <div class="why-cards q4">
       <div class="why-card">
-        <div class="wc-en"><span class="wc-n">01</span>퍼펙트 패링 성공</div>
+        <div class="wc-en"><span class="wc-n">01</span>차지 중 패리</div>
         <div class="wc-ko">인스턴트 차지</div>
-        <div class="wc-desc">즉시 차지 완료</div>
+        <div class="wc-desc">추가 입력 없이 반격</div>
       </div>
       <div class="why-card">
-        <div class="wc-en"><span class="wc-n">02</span>피격 직전 차지 릴리즈</div>
+        <div class="wc-en"><span class="wc-n">02</span>공격 직전 반응</div>
         <div class="wc-ko">부스트 체인</div>
-        <div class="wc-desc">연속 처형</div>
+        <div class="wc-desc">연속 처치</div>
       </div>
       <div class="why-card">
         <div class="wc-en"><span class="wc-n">03</span>차지 중 좌우 방향 입력</div>
         <div class="wc-ko">드리프트 스캔</div>
-        <div class="wc-desc">회피하며 약점 지목</div>
+        <div class="wc-desc">회피하며 약점 노출</div>
       </div>
       <div class="why-card">
-        <div class="wc-en"><span class="wc-n">04</span>차지 중 조준 사격</div>
-        <div class="wc-ko">부스터 버스터</div>
-        <div class="wc-desc">장갑 파괴 증가</div>
+        <div class="wc-en"><span class="wc-n">04</span>차지 중 조준</div>
+        <div class="wc-ko">차지 트랜스퍼</div>
+        <div class="wc-desc">차지 블라스터로 승계</div>
       </div>
     </div>
 
     <div class="sub-label">파생 네 가지 &middot; 조작 · 연출 · 용도</div>
     <div class="fs-block">
-      <div class="fs-head"><span class="fs-num">01</span><span class="fs-name">인스턴트 차지</span><span class="fs-from">FROM 퍼펙트 패링</span></div>
+      <div class="fs-head"><span class="fs-num">01</span><span class="fs-name">인스턴트 차지</span><span class="fs-from">차지 중 패리</span></div>
       <div class="fs-rows">
-        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">퍼펙트 패링 성공 직후 맹공 입력 — <strong>홀드 없이 즉시 풀차지 성립</strong></div></div>
-        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">패링 임팩트에 이어 블레이드 코어 발광 · 히트스톱, 차지 모션 스킵</div></div>
-        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">정확한 타이밍의 보상을 지연 없이 — 즉발 반격의 쾌감</div></div>
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 홀드를 유지한 채 패리 — 성립 시 <strong>추가 입력 없이 반격</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">패리 임팩트에 이어 블레이드 코어 발광 · 히트스톱, 차지 모션 스킵</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">차지 → 패리 → 반격을 이어 붙이는 리듬 — 적의 균형 상실 구슬을 하나 더 소모</div></div>
       </div>
       <div class="evidence-duo">
         <figure><video src="media/ref_dmc.mp4" poster="media/ref_dmc_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">DEVIL MAY CRY 5 &middot; EX-Act</span></figure>
-        <figure><video src="media/parry.mp4" poster="media/parry.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 퍼펙트 패링</span></figure>
+        <figure><video src="media/parry.mp4" poster="media/parry.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 퍼펙트 패리</span></figure>
       </div>
     </div>
     <div class="fs-block">
-      <div class="fs-head"><span class="fs-num">02</span><span class="fs-name">부스트 체인</span><span class="fs-from">피격 직전 차지 릴리즈</span></div>
+      <div class="fs-head"><span class="fs-num">02</span><span class="fs-name">부스트 체인</span><span class="fs-from">공격 직전 반응</span></div>
       <div class="fs-rows">
-        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 적의 공격이 닿기 직전에 릴리즈 — <strong>회피 후 연속 처형으로 전개</strong></div></div>
-        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">회피 잔상 → 연타 트레일 색 상승(백 → 청 → 금), 처형 진입 시 로우앵글 + 시간 감속</div></div>
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">적 공격 직전 신호에 맞춰 홀드 릴리즈 — <strong>회피 후 반격, 그 공격으로 처치하면 다음 적으로 연속 처치</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">회피 잔상 → 반격 트레일, 처치 연결 시 로우앵글 + 시간 감속</div></div>
         <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">수세를 그대로 공세로 — 다수전에서 끊기지 않는 리듬</div></div>
       </div>
       <div class="evidence-duo three">
-        <figure><video src="media/ref_onimusha.mp4" poster="media/ref_onimusha_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">ONIMUSHA &middot; 일섬 연쇄</span></figure>
         <figure><video src="media/ref_yotei.mp4" poster="media/ref_yotei_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">GHOST OF YOTEI &middot; 맞대결</span></figure>
+        <figure><video src="media/ref_onimusha.mp4" poster="media/ref_onimusha_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">ONIMUSHA &middot; 일섬 연쇄</span></figure>
         <figure><video src="media/evade.mp4" poster="media/evade.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 퍼펙트 닷지</span></figure>
       </div>
     </div>
     <div class="fs-block">
       <div class="fs-head"><span class="fs-num">03</span><span class="fs-name">드리프트 스캔</span><span class="fs-from">차지 중 좌우 방향 입력</span></div>
       <div class="fs-rows">
-        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 좌우 방향 입력 — 해당 방향으로 <strong>회피 이동하며 차지 계속 진행, 이동 중 약점 지목</strong></div></div>
-        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">지면 마찰 스파크 + 궤적 라인, 스캔 성립 시 대상 특정 부위에 마커 점등</div></div>
-        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">회피와 스캔을 한 조작으로 — 지목된 부위 타격 시 추가 피해</div></div>
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 좌우 방향 입력 — 해당 방향으로 <strong>회피 이동하며 차지 계속 진행, 카메라가 향한 방향의 적을 스캔해 약점 노출</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">지면 마찰 스파크 + 궤적 라인, 원작 드론 스팅어와 같은 방식으로 부위 지정 후 마커 점등</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">회피와 스캔을 한 조작으로 — 노출된 부위 타격 시 추가 피해</div></div>
       </div>
       <div class="evidence-duo three">
         <figure><video src="media/ref_mariokart.mp4" poster="media/ref_mariokart_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">MARIO KART 8 &middot; 미니 터보</span></figure>
@@ -700,15 +724,15 @@
       </div>
     </div>
     <div class="fs-block">
-      <div class="fs-head"><span class="fs-num">04</span><span class="fs-name">부스터 버스터</span><span class="fs-from">차지 중 조준 사격</span></div>
+      <div class="fs-head"><span class="fs-num">04</span><span class="fs-name">차지 트랜스퍼</span><span class="fs-from">차지 중 조준</span></div>
       <div class="fs-rows">
-        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 조준 사격 — <strong>홀드 유지 시 연사</strong></div></div>
-        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">드론 전개 + 조준선 표시, 차지 단계별 조준선 두께 · 색 변화</div></div>
-        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">원거리 운용 — 적 장갑 파괴 증가</div></div>
+        <div class="fs-row"><div class="fs-k">조작</div><div class="fs-v">차지 유지 중 조준 — 맹공 차지가 <strong>그대로 차지 블라스터 차지로 승계</strong></div></div>
+        <div class="fs-row"><div class="fs-k">연출</div><div class="fs-v">조준 전환과 동시에 블라스터 조준선 표시, 승계된 차지량에 따라 두께 · 색 변화</div></div>
+        <div class="fs-row use"><div class="fs-k">용도</div><div class="fs-v">패리 · 드리프트로 만든 풀차지를 원거리로 환전 — 장갑 파괴에 특화</div></div>
       </div>
       <div class="evidence-duo">
         <figure><video src="media/ref_horizon.mp4" poster="media/ref_horizon_poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">HORIZON FW &middot; 부위 파괴</span></figure>
-        <figure><video src="media/repulse.mp4" poster="media/repulse.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 리펄스</span></figure>
+        <figure><video src="media/sb_blaster.mp4" poster="media/sb_blaster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="vid-badge">STELLAR BLADE &middot; 차지 블라스터</span></figure>
       </div>
     </div>
   </div>
@@ -719,19 +743,19 @@
 <section class="implication" id="impact">
   <div class="container">
     <div class="section-label"><span class="badge">STEP 04 &middot; RISK &amp; EXPECTED IMPACT</span></div>
-    <h2>기존 생태계를 해치지 않는 120%의 전투 확장</h2>
+    <h2>리스크 대비 및 기대 효과</h2>
 
     <div class="sub-label">RISK MANAGEMENT &middot; 리스크 대비책</div>
     <div class="scope-split">
       <div class="sc">
         <div class="sc-k">RISK 01</div>
         <div class="sc-t">조작 피로도</div>
-        <div class="sc-d">복잡한 격투 게임 커맨드가 아닌 <strong>방향키 1개 + 버튼 1개</strong>의 단순 단발 분기로 제한</div>
+        <div class="sc-d"><strong>[홀드 유지 + 추가 입력 하나]</strong>로 제한 — 격투 게임식 커맨드 없음</div>
       </div>
       <div class="sc">
         <div class="sc-k">RISK 02</div>
         <div class="sc-t">기존 베타 · 버스트 스킬의 무용지물화</div>
-        <div class="sc-d">차지 부스트를 직접 폭딜이 아닌 <strong>약화 · 상태이상 디버퍼</strong>로 설계 — 차지 부스트에서 베타 스킬 폭딜로 이어지는 연계 시너지 유도</div>
+        <div class="sc-d">차지 부스트에 새 자원을 주지 않고 <strong>기존 수치(균형 상실 · 장갑)를 흔드는 역할</strong>로 한정 — 폭딜은 베타 · 버스트가 계속 담당</div>
       </div>
     </div>
 
@@ -751,8 +775,8 @@
   </div>
 </section>
 
-<a class="next-card" href="10_sb_charge_boost.html" aria-label="다음: CHARGE BOOST">
-  <div class="container"><span class="nc-kicker">NEXT PAGE</span><span class="nc-title">CHARGE BOOST</span><span class="nc-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div>
+<a class="next-card" href="10_sb_charge_boost.html" aria-label="다음: DESIGN DOCUMENTS">
+  <div class="container"><span class="nc-kicker">NEXT PAGE</span><span class="nc-title">DESIGN DOCUMENTS</span><span class="nc-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div>
 </a>
 <!-- PAGE LIST -->
 <nav class="page-list" aria-label="전체 페이지 목록">
@@ -770,8 +794,8 @@
       <a class="pl-dot" href="07_planning_direction.html" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
       <a class="pl-dot" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot is-current" href="09_sb_analysis.html" data-title="COMBAT ANALYSIS" aria-current="page"><span class="pl-num">09</span><span class="pl-current-label">COMBAT ANALYSIS</span></a>
-      <a class="pl-dot pl-dot-next" href="10_sb_charge_boost.html" data-title="CHARGE BOOST"><span class="pl-num">10</span></a>
+      <a class="pl-dot is-current" href="09_sb_analysis.html" data-title="COMBAT INSIGHTS" aria-current="page"><span class="pl-num">09</span><span class="pl-current-label">COMBAT INSIGHTS</span></a>
+      <a class="pl-dot pl-dot-next" href="10_sb_charge_boost.html" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
       <a class="pl-dot" href="11_closing.html" data-title="CLOSING"><span class="pl-num">11</span></a>
     </div>

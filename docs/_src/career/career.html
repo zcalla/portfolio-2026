@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>박종혁 경력기술서</title>
+<style>
+  @font-face { font-family:'Noto Sans CJK KR', sans-serif; src:url('fonts/NotoSansKR-Bold.ttf');    font-weight:700; }
+
+  @page { size:A4; margin:18mm 18mm 22mm; }
+
+  :root { --accent:#a86b48; --ink:#1a1a1a; --sub:#2a2a2a; --mid:#6a6a6a; --dim:#aeaeae; --beige:#f5f2ef; --line:#e2e2e2; }
+
+  body { margin:0; font-family:'Noto Sans CJK KR', sans-serif; color:var(--sub); font-size:8.5pt; line-height:1.62; }
+
+  .eyebrow { font-size:9.5pt; letter-spacing:.28em; color:var(--accent); margin:0 0 1.5mm; }
+  h1       { font-size:18pt; font-weight:700; color:var(--ink); margin:0 0 3.4mm; line-height:1.15; }
+  .rule    { height:0; border:0; border-top:1.4pt solid var(--ink); margin:0; }
+
+  .core       { background:var(--beige); padding:6mm 8mm; margin:6.5mm 0 0; }
+  .core-k     { font-size:8.5pt; font-weight:700; color:var(--accent); margin:0 0 3mm; }
+  .core p     { margin:0 0 1.4mm; padding-left:5.5mm; text-indent:-5.5mm; color:var(--ink); }
+  .core p:last-child { margin-bottom:0; }
+  .core .em   { font-weight:700; }
+
+  .proj       { margin-top:11mm; }
+  .proj.brk   { break-before:page; margin-top:0; }
+  .p-head     { display:flex; align-items:flex-end; justify-content:space-between; gap:8mm; margin-bottom:1.8mm; }
+  .p-head h2  { font-size:13pt; font-weight:700; color:var(--ink); margin:0; line-height:1.2; }
+  .p-meta     { text-align:right; font-size:7.5pt; color:var(--mid); line-height:1.5; }
+  .p-role     { font-size:8.5pt; font-weight:700; color:var(--accent); margin:2.6mm 0 0; }
+
+  .grp        { margin-top:3.4mm; }
+  .grp-k      { font-size:7.5pt; color:var(--mid); margin:0 0 1.2mm; }
+  .grp p      { margin:0 0 .9mm; padding-left:4mm; text-indent:-4mm; }
+  .grp p:last-child { margin-bottom:0; }
+  .grp .mk    { color:var(--dim); }
+  .grp .mk-a  { color:var(--accent); }
+  b           { font-weight:700; color:var(--ink); }
+
+  .foot { margin-top:12mm; padding-top:3mm; border-top:.6pt solid var(--line); font-size:7pt; color:var(--dim); }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Professional Experience</div>
+<h1>박종혁</h1>
+<hr class="rule">
+
+<div class="core">
+  <div class="core-k">핵심 역량</div>
+  <p><span class="mk">—</span>&nbsp; MMORPG·액션 RPG 전투 기획 경력 <span class="em">13년차</span></p>
+  <p><span class="mk">—</span>&nbsp; PC·모바일·콘솔 환경에서 <span class="em">클래스·스킬·PvP·전투 자원·상태 시스템 설계</span></p>
+  <p><span class="mk">—</span>&nbsp; 클래스 디자인부터 <span class="em">전투 파트 리딩, 전투 총괄까지 수행</span></p>
+  <p><span class="mk">—</span>&nbsp; 라이브 서비스 밸런싱, PvP 매칭·시즌 구조, 자동전투 개선 경험</p>
+  <p><span class="mk">—</span>&nbsp; 스킬 데이터 구조화, 검수 자동화, 통계 기반 밸런싱 도구 제작 경험</p>
+</div>
+
+<div class="proj">
+  <div class="p-head">
+    <h2>크로노 오디세이</h2>
+    <div class="p-meta">크로노스튜디오 · 2025 ~ 현재<br>PC · 콘솔 / 소울라이크 MMORPG / UE5</div>
+  </div>
+  <hr class="rule">
+  <div class="p-role">전투 콘텐츠 기획 / 전투 캐릭터팀 리드</div>
+
+  <div class="grp">
+    <div class="grp-k">핵심 과제</div>
+    <p><span class="mk">·</span> 기존 와우식 딜사이클 중심 전투를 <b>소울라이크 기반의 반응형 액션 전투로 전환</b></p>
+  </div>
+  <div class="grp">
+    <div class="grp-k">주요 기여</div>
+    <p><span class="mk">·</span> 고정된 스킬 로테이션·쿨타임 운용 중심의 전투를, <b>적의 공격에 반응하고 빈틈을 만들어 대응하는 구조로 재설계</b></p>
+    <p><span class="mk">·</span> <b>전투 카메라·강인도·가드·패링·카운터·스태미나</b> 등 핵심 전투 시스템 설계</p>
+    <p><span class="mk">·</span> 스태미나 기반 공격·회피·방어 밸런스로 행동마다 리스크·비용이 발생하는 전투 템포 조정</p>
+    <p><span class="mk">·</span> <b>히트스톱(공격자·피격자 시간 분리)·방향성 기반 카메라·Push</b> 등 타격감 요소를 파라미터로 분해하고 프리셋·룰로 고정해 팀 전체가 재현 가능한 타격감 기준 정립</p>
+    <p><span class="mk">·</span> <b>6개 클래스 × 3개 무기</b> 기준 스킬 매트릭스 설계 (메커니즘 변화 중심 A/B 분기)</p>
+    <p><span class="mk">·</span> 스킬 데이터 테이블을 <b>RAW / VIEW / Editor 3계층</b> 구조로 재설계</p>
+    <p><span class="mk">·</span> <b>Jira·Slack·Confluence·Perforce Submit Log</b>를 연동한 히스토리 관리 도구 제작</p>
+    <p><span class="mk">·</span> 구두 공유·개인 기억에 의존하던 전투팀 업무 방식을 <b>문서·일감·작업 로그 기반의 추적 가능한 체계로 전환</b></p>
+  </div>
+  <div class="grp">
+    <div class="grp-k">성과</div>
+    <p><span class="mk-a">▸</span> 프로젝트 전투 방향성을 <b>딜사이클 MMORPG에서 반응형 액션 전투로 전환</b></p>
+    <p><span class="mk-a">▸</span> PD로부터 <b>전투 전반의 의사결정 권한을 위임</b>받음</p>
+    <p><span class="mk-a">▸</span> <b>투자사 카카오게임즈로부터 업무 방식과 전투 작업물에 대해 긍정적 평가</b></p>
+    <p><span class="mk-a">▸</span> 스킬 작성·검수 흐름을 단일 View 중심으로 통합해 <b>디버그·검수 속도 약 2~3배 개선</b></p>
+    <p><span class="mk-a">▸</span> 전투팀 작업 히스토리·의사결정·기획 변경·데이터 반영 내역의 <b>추적 가능성 개선</b></p>
+  </div>
+</div>
+
+<div class="proj brk">
+  <div class="p-head">
+    <h2>트라하 / 트라하 인피니티</h2>
+    <div class="p-meta">모아이게임즈 · 2017 ~ 2025<br>모바일 / MMORPG · RvR · 방치형 RPG / 라이브 서비스 / UE4</div>
+  </div>
+  <hr class="rule">
+  <div class="p-role">클래스 스킬 디자이너 &rarr; 전투/캐릭터 파트장 &rarr; 트라하 인피니티 전투팀장</div>
+
+  <div class="grp">
+    <div class="grp-k">핵심 과제</div>
+    <p><span class="mk">·</span> 트라하에서 클래스 스킬 디자인·PvP 콘텐츠·라이브 밸런싱을 담당하고 글로벌 단계에서 <b>전투/캐릭터 파트장으로 전체 클래스 리워크를 총괄</b>. 이후 <b>트라하 인피니티 라이브 중 전투 문제가 누적된 시점에 투입</b>돼 자동전투 안정성과 스킬 운용 구조를 개선</p>
+  </div>
+  <div class="grp">
+    <div class="grp-k">주요 기여</div>
+    <p><span class="mk">·</span> <b>쌍검·활 클래스</b>의 스킬 구조·전투 사이클·역할성 설계</p>
+    <p><span class="mk">·</span> 클래스 간 상성 구조를 기반으로 <b>PvP 밸런스 기준 정립</b></p>
+    <p><span class="mk">·</span> <b>전장 15v15, 투기장 1v1 / 3v3, 결투</b> 등 PvP 콘텐츠 전반 설계</p>
+    <p><span class="mk">·</span> <b>ELO 기반 MMR 매칭·시즌 소프트리셋·랭킹 보상</b> 구조 설계</p>
+    <p><span class="mk">·</span> 라이브 서비스 전투 로그·플레이 지표를 기반으로 클래스 밸런스 조정</p>
+    <p><span class="mk">·</span> [글로벌] 전체 클래스 리워크 및 밸런스 조정 <b>총괄</b></p>
+    <p><span class="mk">·</span> [인피니티] 자동전투 중 반복 사망 구간을 분석, <b>스킬 메커니즘·우선순위 조정으로 사냥 안정성 개선</b></p>
+    <p><span class="mk">·</span> [인피니티] PvP용·사냥용으로 분리돼 운용 폭이 좁던 스킬셋을 <b>상황에 따라 혼용 가능한 구조로 리워크</b></p>
+  </div>
+  <div class="grp">
+    <div class="grp-k">성과</div>
+    <p><span class="mk-a">▸</span> <b>트라하 애플 앱스토어 매출 1위·구글 플레이 매출 2위</b> 달성 프로젝트 참여</p>
+    <p><span class="mk-a">▸</span> 클래스 디자인에서 라이브 밸런싱·글로벌 리워크·전투 파트 리딩까지 역할 확장</p>
+    <p><span class="mk-a">▸</span> 글로벌 단계에서 전체 클래스 리워크를 총괄하며 <b>전투 운영 기준 정립</b></p>
+    <p><span class="mk-a">▸</span> 원작 라이브 경험을 바탕으로 <b>후속작의 누적 전투 문제를 구조적으로 개선</b></p>
+  </div>
+</div>
+
+<div class="proj">
+  <div class="p-head">
+    <h2>에오스 / 에오스 더 블루</h2>
+    <div class="p-meta">엔비어스 · 미스터블루 · 2013 ~ 2017<br>PC MMORPG / UE2.5</div>
+  </div>
+  <hr class="rule">
+  <div class="p-role">클래스 스킬 디자이너 &rarr; 전투 밸런스</div>
+
+  <div class="grp">
+    <div class="grp-k">핵심 과제</div>
+    <p><span class="mk">·</span> 클래스 스킬과 전투 사이클 설계를 시작으로, 재론칭 버전에서는 <b>밸런스를 포함한 전투 전반을 맡아 필드 사냥·오픈필드 PvP 중심의 전투 구조로 전환</b></p>
+  </div>
+  <div class="grp">
+    <div class="grp-k">주요 기여</div>
+    <p><span class="mk">·</span> <b>워록·팔라딘</b> 등 주요 클래스의 스킬 트리·전투 사이클·역할성 설계</p>
+    <p><span class="mk">·</span> 파티 기여도·장비 세트·스킬 트리를 활용한 <b>클래스별 플레이 차별화</b></p>
+    <p><span class="mk">·</span> 재론칭 버전에서 <b>필드 광역 사냥·오픈필드 PvP·클래스 밸런스</b> 구조 정비</p>
+  </div>
+  <div class="grp">
+    <div class="grp-k">성과</div>
+    <p><span class="mk-a">▸</span> 클래스 스킬 설계에서 <b>밸런스를 포함한 전투 전반으로 담당 범위 확장</b></p>
+    <p><span class="mk-a">▸</span> 재론칭 버전의 핵심 전투 루프와 클래스 밸런스 개선</p>
+    <p><span class="mk-a">▸</span> 이후 전투 리드·라이브 밸런싱 업무의 기반이 된 <b>클래스·PvP 설계 경험 축적</b></p>
+  </div>
+</div>
+
+<div class="foot">상세 설계·분석 과정은 별도 포트폴리오에서 확인할 수 있습니다. &nbsp;·&nbsp; 트라하 흥행 순위는 출시 당시 양대 마켓 집계 기준.</div>
+
+</body>
+</html>

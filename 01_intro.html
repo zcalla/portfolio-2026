@@ -17,7 +17,7 @@
   .cover .cover-text { padding-top: 40px; padding-bottom: 72px; position: relative; z-index: 2; }
   .cover .cover-text { flex: 1; min-width: 0; max-width: 60%; display: flex; flex-direction: column; }
   .cover .cover-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--text-dim); margin-bottom: 24px; }
-  .cover .name { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.015em; line-height: 1.2; margin: 0 0 18px; }
+  .cover .name { font-family: var(--serif); font-size: 27.6px; font-weight: 700; color: var(--text); letter-spacing: -0.015em; line-height: 1.2; margin: 0 0 18px; white-space: nowrap; }
   .cover .name-en { font-family: var(--mono); font-size: 51px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.15; color: var(--text); margin: 0 0 6px; width: fit-content; white-space: nowrap; }
   .cover .name .name-tail { font-size: 20px; font-weight: 400; color: var(--text-mid); margin-left: 1px; }
   .cover .cover-note { margin-top: 22px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); line-height: 1.7; max-width: 440px; }
@@ -158,7 +158,8 @@
 
   @media (max-width: 800px) {
     .cover { padding: 72px 0 56px; }
-    .cover .name { font-size: 32px; }
+    .cover .name-en { font-size: 34px; }
+    .cover .name { font-size: 18.4px; }
     .cover .cover-note { margin-top: 22px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); line-height: 1.7; max-width: 440px; }
   .cover .catchphrase { font-size: 16px; padding-left: 18px; }
     .cover .cover-desc { margin-top: 20px; font-size: 14px; }
@@ -292,8 +293,9 @@
     <div class="nav-item">
       <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
       <div class="dropdown">
-        <a href="09_sb_analysis.html">COMBAT ANALYSIS</a>
-        <a href="10_sb_charge_boost.html">CHARGE BOOST</a>
+        <div class="dd-head">STELLAR BLADE</div>
+        <a href="09_sb_analysis.html">COMBAT INSIGHTS</a>
+        <a href="10_sb_charge_boost.html">DESIGN DOCUMENTS</a>
       </div>
     </div>
     <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
@@ -305,7 +307,7 @@
     <div class="cover-inner">
       <div class="cover-text">
         <div class="name-en">Park Jonghyeok</div>
-        <div class="name">박종혁</div>
+        <div class="name">안녕하세요박종혁입니다잘부탁드립니다</div>
         <div class="tags-block">
           <div class="cover-tags">
             <span><span class="tag-num tag-emoji">⚡</span><br>FAST<br>PROTOTYPING</span>
@@ -337,7 +339,7 @@
       </div>
     </div>
     <div class="meta-row">
-      <div class="m-label">PROJECT</div>
+      <div class="m-label">CURRENT</div>
       <div class="m-value">
         <p class="m-note">현재 <b>크로노 스튜디오</b>에서 오픈월드 MMORPG <b>크로노 오디세이</b> 프로젝트에 전투 캐릭터팀 리드로 참여하고 있으며, 전투 시스템 및 캐릭터 스킬 설계를 담당합니다.</p>
       </div>
@@ -401,8 +403,8 @@
       <a class="pl-dot" href="07_planning_direction.html" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
       <a class="pl-dot" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT ANALYSIS"><span class="pl-num">09</span></a>
-      <a class="pl-dot" href="10_sb_charge_boost.html" data-title="CHARGE BOOST"><span class="pl-num">10</span></a>
+      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
+      <a class="pl-dot" href="10_sb_charge_boost.html" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
       <a class="pl-dot" href="11_closing.html" data-title="CLOSING"><span class="pl-num">11</span></a>
     </div>
