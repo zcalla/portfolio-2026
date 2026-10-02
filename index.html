@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="design-system.css">
+<link rel="stylesheet" href="design-system.css?v=20261002a">
 <style>
   html { scroll-behavior: smooth; }
   /* INDEX — 목차 */
@@ -128,7 +128,7 @@
   .site-nav .nav-item { position: relative; display: inline-flex; align-items: center; }
   .site-nav .nav-item::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 18px; }
   .site-nav .dropdown { position: absolute; top: calc(100% + 12px); right: 0; min-width: 190px; background: var(--bg-card); border: 1px solid var(--line-hi); padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity .15s, transform .15s; z-index: 60; }
-  .site-nav .nav-item:hover .dropdown, .site-nav .nav-item:focus-within .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .site-nav .nav-item:hover .dropdown, .site-nav .nav-item:has(:focus-visible) .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
   .site-nav .dropdown a { display: block; padding: 11px 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-align: right; color: var(--text-mid); text-decoration: none; white-space: nowrap; }
   .site-nav .dropdown a:hover { background: var(--bg-card-hi); color: var(--accent); }
 
@@ -155,34 +155,54 @@
 
 <header class="site-head" id="top">
   <a class="nav-home is-current" href="index.html" aria-label="홈 (커버)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg></a>
-  <nav class="site-nav" aria-label="주요 메뉴">
+        <nav class="site-nav" aria-label="주요 메뉴">
     <a class="nav-top" href="01_intro.html">ABOUT</a>
     <div class="nav-item">
       <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">PROJECTS <span class="caret">&#9662;</span></span>
-      <div class="dropdown">
-        <a href="02_chrono_odyssey.html">CHRONO ODYSSEY</a>
-        <a href="03_traha_infinity.html">TRAHA INFINITY</a>
-        <a href="04_traha.html">TRAHA</a>
-        <a href="05_echo_of_soul.html">ECHO OF SOUL</a>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">PROJECTS</div><div class="tm-t">참여 프로젝트에서 맡은 일과 결과</div><div class="tm-s">타이틀별 담당 역할 · 설계 내용 · 성과</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">CHRONO ODYSSEY <span class="n">2025 – 현재</span></div><div class="tl">
+            <a href="02_chrono_odyssey.html"><span class="nm">전투 구조 · 메타 설계<span class="en">COMBAT STRUCTURE</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">TRAHA INFINITY <span class="n">2023 – 2025</span></div><div class="tl">
+            <a href="04_traha_infinity.html"><span class="nm">자동 사냥 안정성 개선<span class="en">CLASS REWORK</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">TRAHA <span class="n">2017 – 2023</span></div><div class="tl">
+            <a href="05_traha.html"><span class="nm">PvP 메타 밸런스 설계<span class="en">PVP BALANCE</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">ECHO OF SOUL <span class="n">2013 – 2017</span></div><div class="tl">
+            <a href="06_echo_of_soul.html"><span class="nm">클래스 · 전장 기획<span class="en">CLASS &amp; BATTLEFIELD</span></span></a>
+          </div></div>
+        </div>
       </div>
     </div>
     <div class="nav-item">
       <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">WORK <span class="caret">&#9662;</span></span>
-      <div class="dropdown">
-        <a href="06_work_simplification.html">SIMPLIFICATION</a>
-        <a href="07_planning_direction.html">STANDARDIZATION</a>
-        <a href="08_work_automation.html">AUTOMATION</a>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">WORK</div><div class="tm-t">전투 캐릭터팀 리드로서 일하는 기준</div><div class="tm-s">팀 공통 규칙 · 품질 규격 · 도구화</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">TEAM OPERATION <span class="n">크로노 오디세이 · 2025 – 현재</span></div><div class="tl">
+            <a href="07_work_simplification.html"><span class="nm">업무 단순화<span class="en">SIMPLIFICATION</span></span></a>
+            <a href="08_planning_direction.html"><span class="nm">연출 · 타격감 규격화<span class="en">STANDARDIZATION</span></span></a>
+            <a href="09_work_automation.html"><span class="nm">AI 전투 기획 자동화<span class="en">AUTOMATION</span></span></a>
+          </div></div>
+        </div>
       </div>
     </div>
     <div class="nav-item">
       <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
-      <div class="dropdown">
-        <div class="dd-head">STELLAR BLADE</div>
-        <a href="09_sb_analysis.html">COMBAT INSIGHTS</a>
-        <a href="10_sb_charge_boost.html">DESIGN DOCUMENTS</a>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">CASE STUDY</div><div class="tm-t">출시작 분석과 개인 기획 과제</div><div class="tm-s">외부 타이틀 전투 분석 · 기획서 습작</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">STELLAR BLADE</div><div class="tl">
+            <a href="10_sb_analysis.html"><span class="nm">전투 분석<span class="en">COMBAT INSIGHTS</span></span></a>
+            <a href="11_sb_charge_boost.html"><span class="nm">차지 부스트 시스템 기획서<span class="en">DESIGN DOCUMENT</span></span></a>
+          </div></div>
+        </div>
       </div>
     </div>
-    <a class="nav-top" href="01_intro.html#contact">CONTACT</a>
+    <a class="nav-contact" href="01_intro.html#contact" aria-label="연락처" title="CONTACT"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.8 6.6 8.2 6.3 8.2-6.3"/></svg></a>
   </nav>
 </header>
 
@@ -279,31 +299,31 @@
   <div class="container"><span class="nc-kicker">NEXT PAGE</span><span class="nc-title">ABOUT</span><span class="nc-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div>
 </a>
 <!-- PAGE LIST -->
-<nav class="page-list" aria-label="전체 페이지 목록">
+<nav class="page-list" id="pages" aria-label="전체 페이지 목록">
   <div class="container">
     <div class="pl-dots" aria-label="전체 페이지 바로가기">
-      <a class="pl-dot is-current" href="index.html" data-title="COVER" aria-current="page"><span class="pl-num">00</span><span class="pl-current-label">COVER</span></a>
-      <a class="pl-dot pl-dot-next" href="01_intro.html" data-title="ABOUT"><span class="pl-num">01</span></a>
+      <a class="pl-dot is-current" href="index.html#pages" data-title="COVER" aria-current="page"><span class="pl-num">00</span><span class="pl-current-label">COVER</span></a>
+      <a class="pl-dot pl-dot-next" href="01_intro.html#pages" data-title="ABOUT"><span class="pl-num">01</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="02_chrono_odyssey.html" data-title="CHRONO ODYSSEY"><span class="pl-num">02</span></a>
-      <a class="pl-dot" href="03_traha_infinity.html" data-title="TRAHA INFINITY"><span class="pl-num">03</span></a>
-      <a class="pl-dot" href="04_traha.html" data-title="TRAHA"><span class="pl-num">04</span></a>
-      <a class="pl-dot" href="05_echo_of_soul.html" data-title="ECHO OF SOUL"><span class="pl-num">05</span></a>
+      <a class="pl-dot" href="02_chrono_odyssey.html#pages" data-title="CHRONO ODYSSEY"><span class="pl-num">02</span></a>
+      <a class="pl-dot" href="04_traha_infinity.html#pages" data-title="TRAHA INFINITY"><span class="pl-num">03</span></a>
+      <a class="pl-dot" href="05_traha.html#pages" data-title="TRAHA"><span class="pl-num">04</span></a>
+      <a class="pl-dot" href="06_echo_of_soul.html#pages" data-title="ECHO OF SOUL"><span class="pl-num">05</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="06_work_simplification.html" data-title="SIMPLIFICATION"><span class="pl-num">06</span></a>
-      <a class="pl-dot" href="07_planning_direction.html" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
-      <a class="pl-dot" href="08_work_automation.html" data-title="AUTOMATION"><span class="pl-num">08</span></a>
+      <a class="pl-dot" href="07_work_simplification.html#pages" data-title="SIMPLIFICATION"><span class="pl-num">06</span></a>
+      <a class="pl-dot" href="08_planning_direction.html#pages" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
+      <a class="pl-dot" href="09_work_automation.html#pages" data-title="AUTOMATION"><span class="pl-num">08</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="09_sb_analysis.html" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
-      <a class="pl-dot" href="10_sb_charge_boost.html" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
+      <a class="pl-dot" href="10_sb_analysis.html#pages" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
+      <a class="pl-dot" href="11_sb_charge_boost.html#pages" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
       <span class="pl-sep" aria-hidden="true"></span>
-      <a class="pl-dot" href="11_closing.html" data-title="CLOSING"><span class="pl-num">11</span></a>
+      <a class="pl-dot" href="18_closing.html#pages" data-title="CLOSING"><span class="pl-num">11</span></a>
     </div>
   </div>
 </nav>
 <!-- /PAGER -->
 <footer class="site-foot">
-  <div class="sf-copy">© 2026 박종혁 · Combat Designer · Optimized for Desktop · 1920 × 1080</div>
+  <div class="sf-copy">© 2026 <span class="ko">박종혁</span> · Combat Designer · Optimized for Desktop · 1920 × 1080</div>
 </footer>
 
 <div class="video-modal" id="videoModal" aria-hidden="true">
@@ -327,5 +347,6 @@
 </script>
 <div class="backtab" id="backTab"><span class="bt-label">BACK TO TOP</span><a class="bt-body" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="18" y2="4"/><g class="bt-arr"><line x1="12" y1="8.5" x2="12" y2="20"/><path d="M7 13 L12 8 L17 13"/></g></svg></a></div>
 <script>(function(){var t=document.getElementById("backTab");if(!t)return;function u(){if(window.scrollY>400)t.classList.add("show");else t.classList.remove("show");}window.addEventListener("scroll",u,{passive:true});u();})();</script>
+<script id="scrollTopOnLoad">(function(){var d=document,w=window,de=d.documentElement;try{if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}function top0(){var sb=de.style.scrollBehavior;de.style.scrollBehavior="auto";try{w.scrollTo(0,0);de.scrollTop=0;if(d.body)d.body.scrollTop=0;}catch(e){}de.style.scrollBehavior=sb;}function internal(a){if(!a||a.target==="_blank"||a.hasAttribute("download"))return false;var h=a.getAttribute("href")||"";if(!h||h.charAt(0)==="#"||/^[a-z]+:/i.test(h)&&h.indexOf(location.origin)!==0)return false;return /\.html?(\?|$)/i.test(h.split("#")[0]);}d.addEventListener("click",function(ev){if(ev.defaultPrevented||ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;var a=ev.target.closest&&ev.target.closest("a[href]");if(!internal(a))return;var h=a.getAttribute("href");if(h.indexOf("#")>-1)return;if(d.body){d.body.style.transition="none";d.body.style.opacity="0";setTimeout(function(){d.body.style.opacity="";},1500);}top0();},true);w.addEventListener("pageshow",function(){if(d.body)d.body.style.opacity="";});if(location.hash==="#pages"){var st2=false;["wheel","touchstart","keydown","mousedown"].forEach(function(t){w.addEventListener(t,function(){st2=true;},{passive:true,once:true});});var bot=function(){if(st2)return;var sb=de.style.scrollBehavior;de.style.scrollBehavior="auto";w.scrollTo(0,Math.max(de.scrollHeight,d.body?d.body.scrollHeight:0));de.style.scrollBehavior=sb;};bot();d.addEventListener("DOMContentLoaded",bot);w.addEventListener("load",bot);w.addEventListener("pageshow",bot);[60,250,700,1500].forEach(function(t){setTimeout(bot,t);});return;}if(location.hash)return;var stop=false;function halt(){stop=true;}["wheel","touchstart","keydown","mousedown"].forEach(function(t){w.addEventListener(t,halt,{passive:true,once:true});});function go(){if(!stop)top0();}go();d.addEventListener("DOMContentLoaded",go);w.addEventListener("load",go);w.addEventListener("pageshow",go);[60,250,700,1500].forEach(function(t){setTimeout(go,t);});})();</script>
 </body>
 </html>

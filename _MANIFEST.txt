@@ -1,126 +1,158 @@
-# 배포 파일 목록 — portfolio_site/_deploy
-# 123개 · 284 MB · 생성 2026-08-05
-
-.DS_Store                                                           8.0 KB
-.gitattributes                                                      0.0 KB
-.gitignore                                                          0.0 KB
-.nojekyll                                                           0.0 KB
-01_intro.html                                                      58.1 KB
-02_chrono_odyssey.html                                            184.8 KB
-03_traha_infinity.html                                             84.1 KB
-04_traha.html                                                      72.6 KB
-05_echo_of_soul.html                                               45.2 KB
-06_work_simplification.html                                        62.9 KB
-07_planning_direction.html                                         34.8 KB
-08_work_automation.html                                            42.1 KB
-09_sb_analysis.html                                                63.2 KB
-10_sb_charge_boost.html                                            55.4 KB
-11_closing.html                                                    34.2 KB
-README.md                                                           0.7 KB
-_MANIFEST.txt                                                       1.2 KB
-design-system.css                                                  33.0 KB
-docs/Park_JongHyeok_Career.pdf                                    320.0 KB
-docs/Park_JongHyeok_Resume.pdf                                    294.6 KB
-docs/Park_JongHyeok_Resume_Career.pdf                             326.9 KB
-docs/_src/README.md                                                 1.6 KB
-docs/_src/career/career.html                                        9.9 KB
-docs/_src/career/fonts/NotoSansKR-Bold.ttf                        159.0 KB
-docs/_src/career/fonts/NotoSansKR-Regular.ttf                     155.1 KB
-docs/_src/resume/fonts/NotoSansKR-Bold.ttf                        159.0 KB
-docs/_src/resume/fonts/NotoSansKR-Regular.ttf                     155.1 KB
-docs/_src/resume/resume.html                                        4.1 KB
-fonts/JetBrainsMono-Bold.woff2                                     16.9 KB
-fonts/JetBrainsMono-Medium.woff2                                   16.8 KB
-fonts/JetBrainsMono-Regular.woff2                                  16.2 KB
-fonts/NotoSansKR-Bold.woff                                        106.8 KB
-fonts/NotoSansKR-Bold.woff2                                        92.4 KB
-fonts/NotoSansKR-Medium.woff2                                      52.8 KB
-fonts/NotoSansKR-Regular.woff                                     105.6 KB
-fonts/NotoSansKR-Regular.woff2                                     91.3 KB
-fonts/NotoSansKR-SemiBold.woff2                                    53.0 KB
-fonts/NotoSerifKR-Bold.woff                                       199.3 KB
-fonts/NotoSerifKR-Bold.woff2                                      164.0 KB
-fonts/NotoSerifKR-Medium.woff2                                    113.3 KB
-fonts/NotoSerifKR-Regular.woff                                    196.8 KB
-fonts/NotoSerifKR-Regular.woff2                                   161.6 KB
-fonts/NotoSerifKR-SemiBold.woff2                                  109.2 KB
-index.html                                                         25.9 KB
-media/blink.jpg                                                    29.0 KB
-media/blink.mp4                                                   820.5 KB
-media/card_dungeon.mp4                                           3453.5 KB
-media/card_field.mp4                                             3465.2 KB
-media/chrono_dungeon_gate.jpg                                     319.9 KB
-media/chrono_logo.png                                              12.8 KB
-media/chrono_trailer.mp4                                         5614.5 KB
-media/chrono_trailer_poster.jpg                                    36.9 KB
-media/chronoodyssey-gallery-1.jpg                                 384.4 KB
-media/chronoodyssey-gallery-9.jpg                                 662.5 KB
-media/chronotector.mp4                                           3887.0 KB
-media/chronotector_poster.jpg                                      63.1 KB
-media/docs/career-preview.png                                     401.2 KB
-media/docs/resume-preview.png                                     297.5 KB
-media/don_ink_copper.png                                          395.0 KB
-media/eos_logo.jpeg                                                18.8 KB
-media/eos_trailer.mp4                                            8857.8 KB
-media/eos_trailer_poster.jpg                                       76.3 KB
-media/eos_warlock.mp4                                            5640.9 KB
-media/eos_warlock_poster.jpg                                       54.2 KB
-media/evade.jpg                                                    56.4 KB
-media/evade.mp4                                                  1259.3 KB
-media/family.jpeg                                                 282.1 KB
-media/feel_knockback_compare.jpg                                  162.3 KB
-media/feel_knockback_compare.mp4                                 2768.6 KB
-media/feel_knockdown.mp4                                         7515.3 KB
-media/feel_knockdown_frame.jpg                                    321.0 KB
-media/feel_weakknockback.mp4                                     6188.0 KB
-media/feel_weakknockback_frame.jpg                                386.2 KB
-media/field2.png                                                 1105.0 KB
-media/logo-footer.png                                               4.3 KB
-media/parry.jpg                                                    67.5 KB
-media/parry.mp4                                                   513.2 KB
-media/profile_edge.png                                            609.2 KB
-media/ref_dd2.mp4                                                 223.1 KB
-media/ref_dd2_poster.jpg                                           32.4 KB
-media/ref_dmc.mp4                                                1176.1 KB
-media/ref_dmc_poster.jpg                                           78.5 KB
-media/ref_horizon.mp4                                            3799.8 KB
-media/ref_horizon_poster.jpg                                      110.4 KB
-media/ref_mariokart.mp4                                          2080.5 KB
-media/ref_mariokart_poster.jpg                                     51.8 KB
-media/ref_onimusha.mp4                                           1583.1 KB
-media/ref_onimusha_poster.jpg                                      53.7 KB
-media/ref_yotei.mp4                                              2010.5 KB
-media/ref_yotei_poster.jpg                                         47.5 KB
-media/sb2_morph.jpg                                                55.2 KB
-media/sb2_morph.mp4                                               764.4 KB
-media/sb_beta.png                                                 253.7 KB
-media/sb_blaster.jpg                                               35.1 KB
-media/sb_blaster.mp4                                             1848.7 KB
-media/sb_blood_rain.jpg                                            81.7 KB
-media/sb_burst.jpg                                                 77.6 KB
-media/sb_burst.mp4                                               1044.3 KB
-media/sb_character_fantasy.jpg                                     96.6 KB
-media/sb_kill.jpg                                                  55.1 KB
-media/sb_kill.mp4                                                2673.4 KB
-media/sb_parry.jpg                                                 32.2 KB
-media/sb_parry.mp4                                                725.8 KB
-media/sb_skill.jpg                                                 35.3 KB
-media/sb_skill.mp4                                                783.5 KB
-media/sb_telegraph.jpg                                            100.6 KB
-media/sb_telegraph.mp4                                            603.0 KB
-media/sbboss.jpg                                                   53.7 KB
-media/sbboss.mp4                                                  830.8 KB
-media/sign_accent.png                                              58.3 KB
-media/solar_cutout.png                                             89.9 KB
-media/teaser.mp4                                                19141.7 KB
-media/tool_balance_poise.png                                      589.9 KB
-media/tool_balance_stamina.png                                    433.5 KB
-media/tool_balance_wdps.png                                        80.0 KB
-media/tool_node_editor.png                                        867.2 KB
-media/traha_cinematic.mp4                                       26894.2 KB
-media/traha_cinematic_poster.jpg                                   59.1 KB
-media/traha_infinity_hero.mp4                                   14762.2 KB
-media/traha_infinity_hero_poster.jpg                              104.2 KB
-media/traha_infinity_logo.png                                       3.4 KB
-media/traha_logo.png                                                5.1 KB
-robots.txt                                                          0.0 KB
+# _deploy manifest — 2026-10-02 — 157 files
+.DS_Store	10244
+.gitattributes	66
+.gitignore	24
+.nojekyll	0
+01_intro.html	66950
+02_chrono_odyssey.html	208719
+03_traha_infinity.html	1233
+04_traha.html	1179
+04_traha_infinity.html	95227
+05_echo_of_soul.html	1221
+05_traha.html	97310
+06_echo_of_soul.html	75054
+06_system_design.html	1179
+06_work_simplification.html	1253
+07_planning_direction.html	1251
+07_work_simplification.html	71077
+08_planning_direction.html	41609
+08_work_automation.html	1229
+09_sb_analysis.html	1223
+09_system_design.html	1179
+09_work_automation.html	55844
+10_monster_design.html	1167
+10_sb_analysis.html	71302
+10_sb_charge_boost.html	1241
+11_closing.html	1191
+11_dnf_needle.html	1167
+11_sb_analysis.html	1223
+11_sb_charge_boost.html	74247
+12_ba_design.html	1167
+12_dnf_needle.html	1167
+12_sb_charge_boost.html	1241
+13_ba_analysis.html	1167
+13_ba_design.html	1167
+13_closing.html	1191
+14_ba_design.html	1167
+14_ba_skill_design.html	1167
+14_closing.html	1191
+15_closing.html	1191
+18_closing.html	39808
+README.md	725
+design-system.css	37741
+docs/Park_JongHyeok_Career.pdf	327731
+docs/Park_JongHyeok_Resume.pdf	301738
+docs/Park_JongHyeok_Resume_Career.pdf	334808
+docs/_src/README.md	1710
+docs/_src/career/career.html	10175
+docs/_src/career/fonts/NotoSansKR-Bold.ttf	162836
+docs/_src/career/fonts/NotoSansKR-Regular.ttf	158908
+docs/_src/resume/fonts/NotoSansKR-Bold.ttf	162836
+docs/_src/resume/fonts/NotoSansKR-Regular.ttf	158908
+docs/_src/resume/resume.html	4281
+fonts/JetBrainsMono-Bold.woff2	17328
+fonts/JetBrainsMono-Medium.woff2	17292
+fonts/JetBrainsMono-Regular.woff2	16608
+fonts/NotoSansKR-Bold.woff	109444
+fonts/NotoSansKR-Bold.woff2	94628
+fonts/NotoSansKR-Medium.woff2	54124
+fonts/NotoSansKR-Regular.woff	108148
+fonts/NotoSansKR-Regular.woff2	93528
+fonts/NotoSansKR-SemiBold.woff2	54332
+fonts/NotoSerifKR-Bold.woff	204176
+fonts/NotoSerifKR-Bold.woff2	167960
+fonts/NotoSerifKR-Medium.woff2	116080
+fonts/NotoSerifKR-Regular.woff	201604
+fonts/NotoSerifKR-Regular.woff2	165512
+fonts/NotoSerifKR-SemiBold.woff2	111920
+index.html	31312
+media/blink.jpg	29724
+media/blink.mp4	840201
+media/card_dungeon.mp4	3536401
+media/card_field.mp4	3548396
+media/chrono_dungeon_gate.jpg	327676
+media/chrono_logo.png	13207
+media/chrono_trailer.mp4	5749345
+media/chrono_trailer_poster.jpg	37813
+media/chronoodyssey-gallery-1.jpg	393656
+media/chronoodyssey-gallery-9.jpg	678456
+media/chronotector.mp4	3980326
+media/chronotector_poster.jpg	64700
+media/docs/career-preview.png	410855
+media/docs/resume-preview.png	304708
+media/don_ink_copper.png	404552
+media/eos_logo.jpeg	19303
+media/eos_trailer.mp4	9070480
+media/eos_trailer_poster.jpg	78229
+media/eos_warlock.mp4	5776324
+media/eos_warlock_poster.jpg	55517
+media/evade.jpg	57815
+media/evade.mp4	1289610
+media/family.jpeg	288956
+media/feel_knockback_compare.jpg	166231
+media/feel_knockback_compare.mp4	2835103
+media/feel_knockdown.mp4	7695768
+media/feel_knockdown_frame.jpg	328744
+media/feel_weakknockback.mp4	6336517
+media/feel_weakknockback_frame.jpg	395501
+media/field2.png	1131534
+media/logo-footer.png	4422
+media/parry.jpg	69138
+media/parry.mp4	525571
+media/profile_edge.png	623855
+media/ref_dd2.mp4	228479
+media/ref_dd2_poster.jpg	33230
+media/ref_dmc.mp4	1204350
+media/ref_dmc_poster.jpg	80442
+media/ref_horizon.mp4	3891025
+media/ref_horizon_poster.jpg	113115
+media/ref_mariokart.mp4	2130454
+media/ref_mariokart_poster.jpg	53052
+media/ref_onimusha.mp4	1621171
+media/ref_onimusha_poster.jpg	55038
+media/ref_yotei.mp4	2058849
+media/ref_yotei_poster.jpg	48729
+media/sb2_morph.jpg	56585
+media/sb2_morph.mp4	782778
+media/sb_beta.png	259837
+media/sb_blaster.jpg	35977
+media/sb_blaster.mp4	1893113
+media/sb_blood_rain.jpg	83727
+media/sb_burst.jpg	79493
+media/sb_burst.mp4	1069442
+media/sb_character_fantasy.jpg	98921
+media/sb_kill.jpg	56439
+media/sb_kill.mp4	2737602
+media/sb_parry.jpg	32975
+media/sb_parry.mp4	743277
+media/sb_skill.jpg	36202
+media/sb_skill.mp4	802347
+media/sb_telegraph.jpg	103062
+media/sb_telegraph.mp4	617492
+media/sbboss.jpg	54990
+media/sbboss.mp4	850759
+media/sign_accent.png	59795
+media/solar_cutout.png	92070
+media/sys/ffa_blessing.jpg	21465
+media/sys/ffa_corpse_reactor.jpg	41608
+media/sys/ffa_deadly_fog.jpg	35899
+media/sys/ffa_map.jpg	84940
+media/sys/ffa_supply_off.jpg	17184
+media/sys/ffa_supply_on.jpg	19585
+media/sys/ffa_topdown.jpg	31802
+media/sys/ffa_ui_info.jpg	25588
+media/sys/ffa_ui_result.jpg	30881
+media/teaser.mp4	19601122
+media/tool_balance_poise.png	604136
+media/tool_balance_stamina.png	443967
+media/tool_balance_wdps.png	81952
+media/tool_node_editor.png	888018
+media/traha_cinematic.mp4	27539762
+media/traha_cinematic_poster.jpg	60521
+media/traha_infinity_hero.mp4	15116554
+media/traha_infinity_hero_poster.jpg	106710
+media/traha_infinity_logo.png	3573
+media/traha_logo.png	5322
+robots.txt	26
+sat_ba_skill_design.html	1167
+sat_dnf_needle_full.html	1167

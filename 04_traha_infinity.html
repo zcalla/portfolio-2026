@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>TRAHA INFINITY — Analysis &amp; Improvement · 박종혁 Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system.css?v=20261002a">
+<style>
+  /* ============================================================
+     TRAHA — page styles
+     크로노 오디세이(chrono_odyssey.html)와 토큰 정렬 완료
+     ============================================================ */
+
+  /* ===== 공통 섹션 토큰 (크로노와 동일) ===== */
+  .page-header { padding: 74px 0 74px; border-bottom: 1px solid var(--line); }
+  .page-header .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .page-header .section-label .badge { color: var(--accent); font-weight: 600; }
+  .ph-title { margin-top:0; font-family:var(--serif); font-size:20px; font-weight:700; color:var(--text); line-height:1.4; letter-spacing:-0.005em; }
+  .prove { margin-top:16px; font-family:var(--sans); font-size:14px; color:var(--text-mid); line-height:1.7; }
+  .page-header .prove { margin:6px 0 0; padding-left:16px; border-left:2px solid var(--accent); line-height:1.85; }
+  .prove b { color: var(--accent); font-weight: 600; }
+
+  .sec { padding: 74px 0; border-bottom: 1px solid var(--line); }
+  .sec .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .sec .section-label .badge { color: var(--accent); }
+  .sec h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
+  .sec .cap { font-family: var(--sans); font-size: 12px; color: var(--text-dim); margin: 14px 0 0; }
+  .sec .cap b { color: var(--text-mid); font-weight: 600; }
+  /* why 문단: 고정폭(760px) 해제 — 창 크기에 따라 줄수 유동 */
+  .sec .why { max-width: none; }
+  .blk { margin-top: 44px; }
+  .blk-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 14px; word-break: keep-all; line-height: 1.6; }
+
+  /* ===== THESIS — 4칸 요약 바 (챕터당 문제·증명 2칸) ===== */
+  .thesis { display: grid; grid-template-columns: repeat(4,1fr); align-items: stretch; border: 1px solid var(--line-hi); background: var(--bg-card); margin-top: 44px; overflow: hidden; }
+  .thesis .tcell { position: relative; padding: 20px 30px 20px 46px; background: var(--line-hi); clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); margin-right: -14px; }
+  .thesis .tcell:first-child { padding-left: 32px; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); }
+  .thesis .tcell:last-child { margin-right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+  .thesis .tcell::before { content: ""; position: absolute; inset: 1.5px; background: var(--bg-card); clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%, 15px 50%); pointer-events: none; z-index: 0; }
+  .thesis .tcell:first-child::before { clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%); }
+  .thesis .tcell:last-child::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 15px 50%); }
+  /* 증명(PROVED) 칸만 강조 — 2번째·4번째 */
+  .thesis .tcell.is-proved::before { background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--bg-card); }
+  .thesis .tcell.is-proved .tv { color: var(--text); }
+  .thesis .tcell > * { position: relative; z-index: 1; }
+  .thesis .tch { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--text-dim); margin-bottom: 5px; }
+  .thesis .tk { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--accent); margin-bottom: 10px; }
+  .thesis .ti { width: 15px; height: 15px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .thesis .tv { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; word-break: keep-all; text-wrap: balance; }
+  .thesis a.tcell { display: block; text-decoration: none; cursor: pointer; transition: background-color .2s ease; }
+  .thesis a.tcell:hover { background: var(--accent); }
+  .thesis a.tcell:hover .tv { color: var(--text); }
+  /* 중간 폭: 노치(>)를 같이 줄이고 좌측 여백을 노치에 맞춰 유지 */
+  @media (min-width: 761px) and (max-width: 980px) {
+    .thesis .tcell { padding: 16px 18px 16px 30px; margin-right: -9px;
+      clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 0 100%, 11px 50%); }
+    .thesis .tcell:first-child { padding-left: 18px;
+      clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 0 100%); }
+    .thesis .tcell:last-child { margin-right: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 11px 50%); }
+    .thesis .tcell::before { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%); }
+    .thesis .tcell:first-child::before { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%); }
+    .thesis .tcell:last-child::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 10px 50%); }
+    .thesis .tv { font-size: 12px; line-height: 1.6; }
+    .thesis .tk { font-size: 10px; gap: 5px; }
+    .thesis .ti { width: 13px; height: 13px; }
+  }
+
+  /* ===== 챕터 헤드 ===== */
+  .chapter-mark { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .chapter-mark .cm-no { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent); border: 1px solid var(--accent); padding: 5px 9px; }
+  .chapter-mark .cm-logo { height: 32px; width: auto; border-radius: 3px; background: var(--bg-card); }
+  .chapter-mark .cm-name { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 0.01em; }
+  .chapter-cap { margin-top: 16px; }
+  .chapter-cap .cc-title { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .chapter-cap .cc-ko { margin-top: 8px; font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text-mid); }
+  .chapter-cap .cc-game { margin-top: 12px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--text-dim); border-left: 2px solid var(--accent); padding-left: 11px; }
+
+  /* ===== 챕터 개요 2단 ===== */
+  .proj-top { display: grid; grid-template-columns: 1fr 360px; gap: 34px; align-items: start; padding: 30px 0 6px; }
+  .proj-summary { font-family: var(--sans); font-size: 16px; color: var(--text-mid); line-height: 1.9; }
+  .proj-summary b { color: var(--text); font-weight: 600; }
+  .proj-body { min-width: 0; }
+  .pspec { margin: 0; }
+  .pspec > div { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .pspec > div:first-child { border-top: 1px solid var(--line); }
+  .pspec dt { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .pspec dd { margin: 0; font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+  .pvid { aspect-ratio: 16/9; border: 1px solid var(--line-hi); overflow: hidden; margin-top: 16px; }
+  .pj-video { display: block; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; cursor: pointer; border: 0; padding: 0; }
+  .pj-video::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.18); transition: background .15s; }
+  .pj-video:hover::after { background: rgba(0,0,0,.05); }
+  .pj-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2; width: 56px; height: 56px; border-radius: 50%; background: rgba(10,10,10,.62); border: 1.5px solid rgba(255,255,255,.85); display: flex; align-items: center; justify-content: center; transition: background .15s, transform .15s; }
+  .pj-video:hover .pj-play { background: var(--accent); transform: translate(-50%,-50%) scale(1.06); }
+  .pj-play svg { width: 20px; height: 20px; margin-left: 3px; fill: #fff; }
+  @media (max-width: 760px) { .proj-top { grid-template-columns: 1fr; gap: 22px; } }
+
+  /* ===== 챕터 구분선 ===== */
+  .proj-divider { height: 1px; background: linear-gradient(to right, transparent, var(--line-hi) 18%, var(--accent) 50%, var(--line-hi) 82%, transparent); opacity: .7; }
+
+  /* ===== Problem → Cause → Constraint → Solution 수직 플로우 ===== */
+  .pcs { max-width: 640px; }
+  .pcs .ps { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 16px 20px; }
+  .pcs .ps .pk { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 7px; text-transform: uppercase; }
+  .pcs .ps .pv { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+  .pcs .ps .pv b { color: var(--text); font-weight: 600; }
+  .pcs .ps.sol { border-color: var(--accent); background: var(--accent-soft); }
+  .pcs .ps.sol .pk { color: var(--accent); }
+  .pcs .ps.sol .pv { color: var(--text); }
+  .pcs .pdown { text-align: center; color: var(--accent); font-size: 16px; padding: 7px 0; }
+
+  /* ===== BEFORE / AFTER 도식 ===== */
+  .compare2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cbx { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 20px; text-align: center; }
+  .cbx.after { border-color: var(--accent); }
+  .cbx .cl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 6px; }
+  .cbx.after .cl { color: var(--accent); }
+  .cbx .csum { font-family: var(--serif); font-size: 16px; color: var(--text); margin-bottom: 14px; }
+  .cbx svg { width: 100%; height: auto; }
+
+  /* ===== 클래스 원라이너 ===== */
+  .oneliners { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line-hi); border-left: 1px solid var(--line-hi); }
+  .oneliners .ol { display: flex; align-items: baseline; gap: 14px; padding: 17px 20px; border-bottom: 1px solid var(--line-hi); border-right: 1px solid var(--line-hi); }
+  .oneliners .ol .oe { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); min-width: 70px; }
+  .oneliners .ol .ov { font-family: var(--serif); font-size: 16px; color: var(--text); }
+
+  /* ===== 설계 철학 pull-quote ===== */
+  .principle { border-left: 3px solid var(--accent); padding: 4px 0 4px 22px; }
+  .principle .pl-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 11px; }
+  .principle .pl-q { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.5; }
+  .principle .pl-q .hi { color: var(--accent); }
+
+  /* ===== 숙련 4축 카드 ===== */
+  .means { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .means .m { border: 1px solid var(--line); background: var(--bg-card); padding: 16px 14px; text-align: center; }
+  .means .m svg { width: 28px; height: 28px; color: var(--accent); margin-bottom: 10px; }
+  .means .m .mk { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; color: var(--text); margin-bottom: 6px; }
+  .means .m .mv { font-family: var(--sans); font-size: 12px; color: var(--text-dim); line-height: 1.55; }
+
+  /* ===== 번호 붙은 판단 스텝 ===== */
+  .decision-step { padding-top: 30px; border-top: 1px solid var(--line-hi); margin-bottom: 34px; }
+  .decision-step .ds-head { display: flex; align-items: baseline; gap: 11px; flex-wrap: wrap; margin-bottom: 8px; }
+  .decision-step .ds-num { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--accent); line-height: 1; letter-spacing: .04em; flex: none; }
+  .decision-step .ds-t { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .decision-step .ds-d { font-family: var(--sans); font-size: 12px; color: var(--text-mid); line-height: 1.7; max-width: 820px; }
+  .decision-step .ds-d b { color: var(--text); font-weight: 600; }
+  @media (max-width: 640px) { .decision-step .ds-num { font-size: 16px; } .decision-step .ds-t { font-size: 16px; } }
+
+  /* ===== 클로징 ===== */
+  .closing { padding: 58px 0; }
+  .closing .ck { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 16px; }
+  .closing .cv { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.5; }
+  .closing .cv .hi { color: var(--accent); }
+
+  /* ===== 영상 모달 ===== */
+  .video-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; }
+  .video-modal.open { display: flex; }
+  .vm-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.88); }
+  .vm-inner { position: relative; z-index: 1; width: min(92vw,1080px); }
+  .vm-close { position: absolute; top: -42px; right: 0; background: none; border: 0; color: #fff; font-family: var(--mono); font-size: 20px; line-height: 1; cursor: pointer; padding: 6px; }
+  .vm-close:hover { color: var(--accent); }
+  .vm-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 1px solid var(--line-hi); }
+  .vm-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  @media (max-width: 760px) {
+    .compare2 { grid-template-columns: 1fr; }
+    .means { grid-template-columns: 1fr 1fr; }
+    .oneliners { grid-template-columns: 1fr; }
+    .thesis { grid-template-columns: 1fr 1fr; }
+    .thesis .tcell, .thesis .tcell:first-child, .thesis .tcell:last-child { clip-path: none; margin-right: 0; padding: 16px 18px; border-bottom: 1px solid var(--line); background: var(--bg-card); }
+    .thesis .tcell::before { display: none; }
+    .thesis .tcell.is-proved { background: var(--accent-soft); }
+    .closing .cv { font-size: 20px; }
+  }
+  /* 트라하 인피니티 — 문제 해결 케이스 */
+  .vchain { display:flex; flex-direction:column; max-width:760px; }
+  .vc { border:1px solid var(--line-hi); background:var(--bg-card); padding:14px 18px; }
+  .vc .vc-n { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-right:11px; }
+  .vc b { font-family:var(--serif); font-size:16px; color:var(--text); font-weight:700; }
+  .vc p { margin:6px 0 0; font-family:var(--sans); font-size:12px; color:var(--text-mid); line-height:1.6; }
+  .vc p b { color:var(--accent); font-size:inherit; font-family:var(--sans); }
+  .vc.bad { border-color:#b06a5a; background:rgba(176,106,90,.08); }
+  .vc.bad b { color:#c98576; }
+  .vc.good { border-color:#dfae68; background:rgba(223,174,104,.08); }
+  .vc.good b { color:#dfae68; }
+  .vc.good p b { color:#dfae68; }
+  .vc-arr { text-align:center; color:var(--accent); font-size:12px; padding:5px 0; }
+  .res3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .rz { border:1px solid var(--line-hi); background:var(--bg-card); padding:16px 18px; }
+  .rz b { display:block; font-family:var(--serif); font-size:16px; color:var(--accent-hi); font-weight:700; margin-bottom:8px; }
+  .rz p { margin:0; font-family:var(--sans); font-size:12px; color:var(--text-mid); line-height:1.65; }
+  .rz p b { display:inline; color:var(--text); font-size:inherit; margin:0; font-weight:600; }
+  @media(max-width:760px){ .res3 { grid-template-columns:1fr; } }
+  /* ===== As-Is/To-Be 상세 단계 도식 (인피니티) ===== */
+  .flow2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .fcol { border:1px solid var(--line-hi); background:var(--bg-card); padding:15px 15px 17px; }
+  .fcol.bad { border-color:#5a3a34; }
+  .fcol.good { border-color:var(--accent); }
+  .fcol-head { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:.05em; margin-bottom:14px; }
+  .fcol.bad .fcol-head { color:#c98576; }
+  .fcol.good .fcol-head { color:var(--accent); }
+  .fh-dot { width:7px; height:7px; border-radius:50%; flex:none; }
+  .fcol.bad .fh-dot { background:#b06a5a; }
+  .fcol.good .fh-dot { background:var(--accent); }
+  .fh-tag { margin-left:auto; font-size:10px; padding:3px 7px; border:1px solid; border-radius:2px; letter-spacing:.03em; white-space:nowrap; }
+  .fcol.bad .fh-tag { color:#c98576; border-color:#5a3a34; background:rgba(176,106,90,.08); }
+  .fcol.good .fh-tag { color:var(--accent); border-color:#5a3f2c; background:var(--accent-soft); }
+  .fcol.bad .fs-sub { color:#c98576; }
+  .fcol.good .fs-sub { color:var(--accent); }
+  @media(max-width:760px){ .flow2 { grid-template-columns:1fr; } }
+  /* ===== PVP 메타 — 상성 삼각 ===== */
+  .rps { display:grid; grid-template-columns:300px 1fr; gap:30px; align-items:center; }
+  .rps-canvas { border:1px solid var(--line-hi); background:var(--bg-card); padding:10px; }
+  .rps-canvas svg { display:block; width:100%; height:auto; }
+  .rps-legend { display:flex; flex-direction:column; gap:12px; }
+  .rleg { border-left:2px solid var(--accent); padding:2px 0 2px 14px; }
+  .rleg .rl-k { font-family:var(--mono); font-size:12px; letter-spacing:.04em; color:var(--accent); margin-bottom:4px; }
+  .rleg .rl-v { font-family:var(--sans); font-size:13px; color:var(--text-mid); line-height:1.6; }
+  .rleg .rl-v b { color:var(--text); font-weight:600; }
+  .rps-note { margin:2px 0 0; font-family:var(--sans); font-size:12px; color:var(--text-dim); line-height:1.6; }
+  .rps-note b { color:var(--text-mid); font-weight:600; }
+  @media(max-width:760px){ .rps { grid-template-columns:1fr; } }
+  /* ===== MMR 스펙 ===== */
+  .pspec-wide > div { grid-template-columns:120px 1fr; }
+  .pspec-wide dd b { color:var(--text); font-weight:600; }
+  .doclink { font-family:var(--mono); font-size:11px; letter-spacing:.03em; color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(168,107,72,.5); padding-bottom:1px; white-space:nowrap; }
+  .doclink:hover { border-bottom-color:var(--accent); }
+  /* ===== 통계 케이스 카드 ===== */
+  .cases { display:flex; flex-direction:column; gap:14px; }
+  .case { border:1px solid var(--line-hi); background:var(--bg-card); padding:18px 20px; }
+  .case-h { display:flex; align-items:baseline; gap:11px; flex-wrap:wrap; margin-bottom:13px; }
+  .case-n { font-family:var(--mono); font-size:13px; font-weight:600; color:var(--accent); letter-spacing:.08em; flex:none; }
+  .case-t { font-family:var(--serif); font-size:16px; font-weight:700; color:var(--text); line-height:1.3; }
+  .case-tag { margin-left:auto; font-family:var(--mono); font-size:10px; letter-spacing:.04em; color:#c98576; border:1px solid #5a3a34; background:rgba(176,106,90,.08); padding:3px 8px; border-radius:2px; white-space:nowrap; }
+  .case-body { margin:0; display:grid; grid-template-columns:56px 1fr; gap:9px 16px; }
+  .case-body dt { margin:0; font-family:var(--mono); font-size:10px; letter-spacing:.05em; padding-top:3px; }
+  .case-body dd { margin:0; font-family:var(--sans); font-size:13px; color:var(--text-mid); line-height:1.72; }
+  .case-body dd b { color:var(--text); font-weight:600; }
+  .case-body .k-case { color:var(--text-dim); }
+  .case-body .k-trap { color:#c98576; }
+  .case-body .d-trap b { color:#c98576; }
+  .case-body .k-fix { color:var(--accent); }
+  .case-body .d-fix b { color:var(--accent); }
+  @media(max-width:640px){ .case-body { grid-template-columns:1fr; gap:2px 0; } .case-body dt { padding-top:9px; } .case-tag { margin-left:0; } }
+  /* ===== DECISION — 갈림길 두 갈래 ===== */
+  .decide { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .dopt { border:1px solid var(--line-hi); background:var(--bg-card); padding:18px 20px; }
+  .dopt.no { border-color:#5a3a34; }
+  .dopt.yes { border-color:var(--accent); background:var(--accent-soft); }
+  .dopt-k { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; letter-spacing:.1em; margin-bottom:11px; }
+  .dopt.no .dopt-k { color:#c98576; }
+  .dopt.yes .dopt-k { color:var(--accent); }
+  .dopt .dmark { display:inline-flex; align-items:center; justify-content:center; width:17px; height:17px; border-radius:50%; font-size:10px; border:1px solid currentColor; }
+  .dopt { position:relative; overflow:hidden; }
+  .dopt-t { display:block; font-family:var(--serif); font-size:16px; font-weight:700; color:var(--text); margin-bottom:8px; }
+  /* 기각 도장 — 카드 우측에 비스듬히 찍힌다 */
+
+  .dopt p { margin:0; font-family:var(--sans); font-size:13px; color:var(--text-mid); line-height:1.7; }
+  .dopt p b { color:var(--text); font-weight:600; }
+  .dopt.no p b { color:#c98576; }
+  .dopt.yes p b { color:var(--accent); }
+  .dopt { position:relative; }
+  .dopt-stamp { position:absolute; right:16px; bottom:14px; transform:rotate(-13deg); pointer-events:none;
+    border:2px solid #a8564a; border-radius:3px; padding:3px 9px 2px; opacity:.6;
+    font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.16em; text-indent:.16em;
+    color:#a8564a; line-height:1.15; white-space:nowrap; }
+  .dopt-stamp.yes { border-color:var(--accent); color:var(--accent); opacity:.72; }
+  .dopt.no p, .dopt.yes p { padding-right:74px; }
+  @media(max-width:760px){ .decide { grid-template-columns:1fr; } }
+  /* ===== 호 이동 원리 도식 ===== */
+  .arc2 { display:grid; grid-template-columns:0.82fr 1.18fr; gap:16px; align-items:start; }
+  .arcpanel { border:1px solid var(--line-hi); background:var(--bg-card); padding:14px 15px 15px; }
+  .arcpanel.bad { border-color:#5a3a34; }
+  .arcpanel.good { border-color:var(--accent); }
+  .arc-head { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:.04em; margin-bottom:11px; }
+  .arcpanel.bad .arc-head { color:#c98576; }
+  .arcpanel.good .arc-head { color:var(--accent); }
+  .arc-dot { width:7px; height:7px; border-radius:50%; flex:none; }
+  .arcpanel.bad .arc-dot { background:#b06a5a; }
+  .arcpanel.good .arc-dot { background:var(--accent); }
+  .arc-tag { margin-left:auto; font-size:10px; padding:3px 7px; border:1px solid; border-radius:2px; letter-spacing:.03em; white-space:nowrap; }
+  .arcpanel.bad .arc-tag { color:#c98576; border-color:#5a3a34; background:rgba(176,106,90,.08); }
+  .arcpanel.good .arc-tag { color:var(--accent); border-color:#5a3f2c; background:var(--accent-soft); }
+  .arc-canvas { background:#0b0b0b; border:1px solid var(--line); }
+  .arc-canvas svg { display:block; width:100%; height:auto; }
+  .arc-cap { margin:11px 0 0; font-family:var(--sans); font-size:12px; color:var(--text-mid); line-height:1.65; }
+  .arc-cap b { color:var(--accent); font-weight:700; }
+  .arcpanel.bad .arc-cap b { color:#c98576; }
+  .arc-legend { display:flex; flex-wrap:wrap; gap:9px 20px; margin-top:14px; padding-top:13px; border-top:1px solid var(--line); }
+  .arc-leg { display:flex; align-items:center; gap:8px; font-family:var(--sans); font-size:12px; color:var(--text-dim); }
+  .arc-leg .sw { width:22px; height:12px; flex:none; display:inline-block; }
+  .arc-leg .sw-mob { width:12px; height:12px; border-radius:50%; background:#b06a5a; }
+  .arc-leg .sw-move { height:0; border-top:2px dashed var(--accent); }
+  .arc-leg .sw-cone { background:rgba(168,107,72,.18); border:1px solid var(--accent); }
+  .arc-leg .sw-dist { height:0; border-top:1px dashed #8a8078; }
+  @media(max-width:760px){ .arc2 { grid-template-columns:1fr; } }
+  .arc-leg .sw-nanow { width:12px; height:12px; border-radius:50%; background:transparent; border:2px solid var(--accent); }
+  .arc-leg .sw-naghost { width:12px; height:12px; border-radius:50%; background:transparent; border:1.5px dashed var(--accent); opacity:.6; }
+  .arc-leg .sw-mobpath { height:0; border-top:1.5px dashed #b06a5a; }
+  /* ===== OVERVIEW — 프로젝트별 4단계 요약 ===== */
+  .thesis .tcell:last-child .tv { color:var(--text); }
+  .thesis a.tcell { display:block; text-decoration:none; cursor:pointer; transition:background-color .2s ease, box-shadow .2s ease; }
+  .thesis a.tcell:hover { background:var(--accent); }
+  .thesis a.tcell:last-child:hover { background:var(--accent); }
+  .thesis a.tcell:hover .tv { color:var(--text); }
+  @media(max-width:760px) {
+    .thesis { grid-template-columns:1fr; }
+    .thesis .tcell { clip-path:none !important; margin-right:0; padding:18px 20px; background:var(--bg-card); border-bottom:1px solid var(--line); }
+    .thesis .tcell::before { display:none; }
+    .thesis .tcell:last-child { background:var(--accent-soft); }
+    .thesis a.tcell:hover { background:var(--bg-card-hi); }
+  }
+
+  /* ============================================================
+     크로노 오디세이 수준 인터랙티브 도식 — 2026-07 리뉴얼
+     ============================================================ */
+  /* ===== PROBLEM — 포위 형성 애니메이션 ===== */
+  .prob2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.94fr); gap:30px; align-items:center; }
+  .prob2 .vchain { max-width:none; }
+  /* 좌측 단계 카드 — 우측 애니메이션(13s)과 동기화되어 점등 */
+  .prob2 .vc { position:relative; animation:13s steps(1,end) infinite; }
+  .prob2 .vc.v1 { animation-name:vcLit1; }
+  .prob2 .vc.v2 { animation-name:vcLit2; }
+  .prob2 .vc.v3 { animation-name:vcLit3; }
+  .prob2 .vc.v4 { animation-name:vcLit4; }
+  @keyframes vcLit1 {
+    0%,18% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); }
+    18.1%,100% { border-color:var(--line-hi); background:var(--bg-card); }
+  }
+  @keyframes vcLit2 {
+    0%,17.9% { border-color:var(--line-hi); background:var(--bg-card); }
+    18%,38% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); }
+    38.1%,100% { border-color:var(--line-hi); background:var(--bg-card); }
+  }
+  @keyframes vcLit3 {
+    0%,37.9% { border-color:var(--line-hi); background:var(--bg-card); }
+    38%,52% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); }
+    52.1%,100% { border-color:var(--line-hi); background:var(--bg-card); }
+  }
+  @keyframes vcLit4 {
+    0%,51.9% { border-color:var(--line-hi); background:var(--bg-card); }
+    52%,99% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); }
+    99.1%,100% { border-color:var(--line-hi); background:var(--bg-card); }
+  }
+  @media (prefers-reduced-motion:reduce){ .prob2 .vc { animation:none; } }
+
+  .enc-col { min-width:0; }
+  .enc-wrap { border:1px solid var(--line-hi); background:#0b0b0b; padding:12px 12px 8px; }
+  .enc-wrap svg { display:block; width:100%; height:auto; }
+  /* ===== PROBLEM — 진단 2단(이전 대응 vs 나의 진단) ===== */
+  .dx { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch; }
+  .dx-col { position:relative; display:flex; flex-direction:column; border:1px solid var(--line-hi);
+    background:var(--bg-card); padding:18px 20px 20px; }
+  .dx-col.prev { border-color:#403834; }
+  .dx-col.mine { border-color:var(--accent); background:var(--accent-soft); }
+  .dx-col + .dx-col::before { content:"▸"; position:absolute; left:-12px; top:50%; transform:translateY(-50%);
+    font-size:12px; color:var(--accent); opacity:.8; line-height:1; }
+  .dx-head { display:flex; align-items:center; gap:10px; padding-bottom:11px; margin-bottom:14px;
+    border-bottom:1px solid var(--line); }
+  .dx-n { font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--text-dim); }
+  .dx-col.mine .dx-n { color:var(--accent); }
+  .dx-k { display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px; letter-spacing:.06em; }
+  .dx-col.prev .dx-k, .dx-col.prev .dx-mark { color:#8f827a; }
+  .dx-col.mine .dx-k, .dx-col.mine .dx-mark { color:var(--accent); }
+  .dx-mark { display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px;
+    border:1px solid currentColor; font-size:10px; flex:none; }
+  /* 좌: 시도 목록 */
+  .dx-t { font-family:var(--serif); font-size:16px; font-weight:700; color:#a09890; line-height:1.4; margin-bottom:13px; }
+  .dx-l { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0; }
+  .dx-l li { position:relative; padding:9px 74px 9px 0; border-top:1px solid var(--line); }
+  .dx-l li:first-child { border-top:0; padding-top:0; }
+  .dx-l li:last-child { padding-bottom:0; }
+  .dx-item { font-family:var(--sans); font-size:13px; font-weight:600; color:#b0a89f; line-height:1.6; }
+  .dx-q { margin-left:8px; font-family:var(--sans); font-size:12px; color:#7d726b;
+    font-style:italic; line-height:1.6; }
+  .dx-stamp { position:absolute; right:0; top:50%; transform:translateY(-50%) rotate(-13deg);
+    border:2px solid #a8564a; border-radius:3px; padding:3px 8px 2px; opacity:.62; pointer-events:none;
+    font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.16em; text-indent:.16em;
+    color:#a8564a; line-height:1.15; white-space:nowrap; }
+  /* 우: 결론 — 세로 가운데 정렬 */
+  .dx-concl { margin:auto 0; }
+  .dx-obs { margin:0 0 13px; padding-bottom:12px; border-bottom:1px solid rgba(168,107,72,.28);
+    font-family:var(--sans); font-size:13px; color:var(--text-mid); line-height:1.65; word-break:keep-all; }
+  .dx-obs b { color:var(--text); font-weight:600; }
+  .dx-lead { display:flex; align-items:center; margin:0; font-family:var(--serif); font-size:20px;
+    font-weight:700; color:var(--text-mid); line-height:1.5; word-break:keep-all; }
+  .dx-lead b { color:var(--accent-hi); font-weight:700; }
+  .dx-because { flex:none; margin-right:11px; font-family:var(--mono); font-size:18px; font-weight:600;
+    color:var(--accent); line-height:1; }
+  @media(max-width:760px){
+    .dx { grid-template-columns:1fr; gap:22px; }
+    .dx-col + .dx-col::before { content:"▾"; left:50%; top:-15px; transform:translateX(-50%); }
+    .dx-lead { font-size:18px; }
+  }
+  .enc-legend { list-style:none; margin:11px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:7px 20px; }
+  .enc-legend li { display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:10px;
+    letter-spacing:.02em; color:var(--text-dim); }
+  .lg-ic { width:11px; height:11px; flex:none; background:#b06a5a; }
+  .lg-ic.melee { border-radius:50%; }
+  .lg-ic.ranged { background:none; width:0; height:0; border-left:6px solid transparent;
+    border-right:6px solid transparent; border-bottom:10px solid #b06a5a; }
+  .lg-ic.link { width:16px; height:0; background:none; border-top:1.5px dashed #c98576; }
+  .lg-ic.target { background:none; border:1.5px dashed #dfae68; border-radius:50%; width:12px; height:12px; }
+  .enc-cap { margin:8px 2px 4px; font-family:var(--mono); font-size:10px; letter-spacing:.08em; color:var(--text-dim); text-align:center; }
+  @media(max-width:820px){ .prob2 { grid-template-columns:1fr; } }
+  /* ===== METHOD — 호 이동 루프 애니메이션 ===== */
+  /* 두 애니메이션이 공유하는 단계 표시 (13s 동기) */
+  .phbar { list-style:none; margin:0 0 14px; padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .phbar li { position:relative; padding:9px 11px 8px; border:1px solid var(--line); background:var(--bg-card);
+    font-family:var(--sans); font-size:12px; color:var(--text-dim); line-height:1.45; word-break:keep-all;
+    animation:13s steps(1,end) infinite; }
+  .phbar li b { display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--text-dim); margin-bottom:4px; }
+  .phbar li i { font-style:normal; color:var(--accent); margin:0 3px; }
+  .phbar .ph1 { animation-name:phLit1; } .phbar .ph2 { animation-name:phLit2; }
+  .phbar .ph3 { animation-name:phLit3; } .phbar .ph4 { animation-name:phLit4; }
+  @keyframes phLit1 { 0%,12% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); color:var(--text); }
+    12.1%,100% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); } }
+  @keyframes phLit2 { 0%,11.9% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); }
+    12%,31% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); color:var(--text); }
+    31.1%,100% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); } }
+  @keyframes phLit3 { 0%,30.9% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); }
+    31%,50% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); color:var(--text); }
+    50.1%,100% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); } }
+  @keyframes phLit4 { 0%,49.9% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); }
+    50%,99% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); color:var(--text); }
+    99.1%,100% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); } }
+    45%,99% { border-color:var(--accent-hi); background:rgba(223,174,104,.10); color:var(--text); }
+    99.1%,100% { border-color:var(--line); background:var(--bg-card); color:var(--text-dim); } }
+  @media(max-width:760px){ .phbar { grid-template-columns:1fr 1fr; } }
+  @media (prefers-reduced-motion:reduce){ .phbar li { animation:none; } }
+  .orbit-wrap { border:1px solid var(--line-hi); background:#0b0b0b; padding:12px 12px 8px 8px; }
+  .orbit-wrap svg { display:block; width:100%; max-width:640px; height:auto; margin:0 auto; }
+  .fcol .orbit-wrap { border:0; padding:0; background:transparent; }
+  /* ===== RESULT — 카드 아이콘 ===== */
+  .rz .rzi { width:24px; height:24px; display:block; margin-bottom:10px; fill:none; stroke:var(--accent); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ===== 아크 거너 클래스 문법 (2026-09) ===== */
+  .slotmap { margin-top: 24px; display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .slot { background: var(--bg-card); padding: 16px 14px; text-align: center; }
+  .slot .sn { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 8px; }
+  .slot .sv { font-family: var(--sans); font-size: 13px; color: var(--text); line-height: 1.5; word-break: keep-all; }
+  .slot .sd { margin-top: 5px; font-family: var(--sans); font-size: 11px; color: var(--text-dim); line-height: 1.5; word-break: keep-all; }
+  .branch { margin-top: 26px; border: 1px solid var(--line-hi); background: var(--bg-card); padding: 20px 22px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .branch .bx { flex: none; padding: 10px 14px; border: 1px solid var(--line-hi); background: var(--bg-base); font-family: var(--sans); font-size: 12px; color: var(--text-mid); }
+  .branch .bx b { color: var(--text); font-weight: 600; }
+  .branch .bx.q { border-style: dashed; }
+  .branch .bx.hi { border-color: var(--accent); color: var(--text); }
+  .branch .ba { flex: none; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+  @media (max-width: 900px) { .slotmap { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-head" id="top">
+  <a class="nav-home" href="index.html" aria-label="홈 (커버)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg></a>
+        <nav class="site-nav" aria-label="주요 메뉴">
+    <a class="nav-top" href="01_intro.html">ABOUT</a>
+    <div class="nav-item">
+      <span class="nav-top is-current" tabindex="0" role="button" aria-haspopup="true">PROJECTS <span class="caret">&#9662;</span></span>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">PROJECTS</div><div class="tm-t">참여 프로젝트에서 맡은 일과 결과</div><div class="tm-s">타이틀별 담당 역할 · 설계 내용 · 성과</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">CHRONO ODYSSEY <span class="n">2025 – 현재</span></div><div class="tl">
+            <a href="02_chrono_odyssey.html"><span class="nm">전투 구조 · 메타 설계<span class="en">COMBAT STRUCTURE</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">TRAHA INFINITY <span class="n">2023 – 2025</span></div><div class="tl">
+            <a href="04_traha_infinity.html" class="is-current" aria-current="page"><span class="nm">자동 사냥 안정성 개선<span class="en">CLASS REWORK</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">TRAHA <span class="n">2017 – 2023</span></div><div class="tl">
+            <a href="05_traha.html"><span class="nm">PvP 메타 밸런스 설계<span class="en">PVP BALANCE</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">ECHO OF SOUL <span class="n">2013 – 2017</span></div><div class="tl">
+            <a href="06_echo_of_soul.html"><span class="nm">클래스 · 전장 기획<span class="en">CLASS &amp; BATTLEFIELD</span></span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">WORK <span class="caret">&#9662;</span></span>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">WORK</div><div class="tm-t">전투 캐릭터팀 리드로서 일하는 기준</div><div class="tm-s">팀 공통 규칙 · 품질 규격 · 도구화</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">TEAM OPERATION <span class="n">크로노 오디세이 · 2025 – 현재</span></div><div class="tl">
+            <a href="07_work_simplification.html"><span class="nm">업무 단순화<span class="en">SIMPLIFICATION</span></span></a>
+            <a href="08_planning_direction.html"><span class="nm">연출 · 타격감 규격화<span class="en">STANDARDIZATION</span></span></a>
+            <a href="09_work_automation.html"><span class="nm">AI 전투 기획 자동화<span class="en">AUTOMATION</span></span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">CASE STUDY</div><div class="tm-t">출시작 분석과 개인 기획 과제</div><div class="tm-s">외부 타이틀 전투 분석 · 기획서 습작</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">STELLAR BLADE</div><div class="tl">
+            <a href="10_sb_analysis.html"><span class="nm">전투 분석<span class="en">COMBAT INSIGHTS</span></span></a>
+            <a href="11_sb_charge_boost.html"><span class="nm">차지 부스트 시스템 기획서<span class="en">DESIGN DOCUMENT</span></span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <a class="nav-contact" href="01_intro.html#contact" aria-label="연락처" title="CONTACT"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.8 6.6 8.2 6.3 8.2-6.3"/></svg></a>
+  </nav>
+</header>
+
+<section class="proj-hero">
+  <div class="ph-media" aria-hidden="true"><video autoplay muted loop playsinline poster="media/traha_infinity_hero_poster.jpg"><source src="media/traha_infinity_hero.mp4" type="video/mp4"></video></div>
+  <div class="ph-dim" aria-hidden="true"></div>
+  <div class="ph-caption">
+    <div class="hero-tag"><span class="hl">Analysis</span> &amp; <span class="hl">Improvement</span></div>
+    <div class="hero-portfolio"><span>T</span><span>R</span><span>A</span><span>H</span><span>A</span><span class="sp"></span><span>I</span><span>N</span><span>F</span><span>I</span><span>N</span><span>I</span><span>T</span><span>Y</span></div>
+    <div class="hero-divline"></div>
+    <h1 class="hero-name">자동 사냥 안정성 개선</h1>
+  </div>
+  <div class="ph-spec" aria-label="프로젝트 정보">
+    <div class="ehs-row"><span class="k">Role</span><span class="v"><span class="ko">전투팀장</span></span></div><div class="ehs-row"><span class="k">Scope</span><span class="v"><span class="ko">전투 · 클래스 리워크</span></span></div>
+    <div class="ehs-row"><span class="k">Tenure</span><span class="v">2023 – 2025</span></div>
+    <div class="ehs-row"><span class="k">Genre</span><span class="v"><span class="ko">방치형</span> RPG</span></div>
+    <div class="ehs-row"><span class="k">Platform</span><span class="v">Mobile</span></div>
+    <div class="ehs-row"><span class="k">Tool</span><span class="v">Unreal Engine 4</span></div>
+  </div>
+</section>
+
+<header class="page-header">
+  <div class="container">
+    <div class="section-label"><span class="badge"><span class="ko">개요</span></span> &nbsp;/&nbsp; <span class="ko">스킬 메커니즘 통찰을 통한 문제 해결</span></div>
+    <h2 class="ph-title">원거리 클래스의 자동 사냥 안정화</h2>
+    <p class="prove">불필요한 수치 조정을 배제한 스킬 이동 궤적 재설계</p>
+    <div class="thesis">
+      <a class="tcell" href="#infinity-problem"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.4 18.6 17.4H1.4z"/><path d="M10 8v4.3"/><path d="M10 14.9h.01"/></svg><span class="ko">문제</span></div><div class="tv">원거리 클래스 급사</div></a>
+      <a class="tcell" href="#infinity-decision"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.6"/><path d="M6.3 10.2 8.9 12.8 13.8 7.3"/></svg><span class="ko">결정</span></div><div class="tv">메커니즘 허점 제거</div></a>
+      <a class="tcell" href="#infinity-method"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="5.6"/><circle cx="10" cy="10" r="2.2"/><path d="M10 4.4V2.2M10 15.6v2.2M15.6 10h2.2M4.4 10H2.2M13.96 6.04l1.56-1.56M6.04 13.96l-1.56 1.56M13.96 13.96l1.56 1.56M6.04 6.04 4.48 4.48"/></svg><span class="ko">방법</span></div><div class="tv">아크 궤적 이동 설계</div></a>
+      <a class="tcell is-proved" href="#infinity-proved"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 2.2 9.6 6.7M12.6 2.2 10.4 6.7"/><circle cx="10" cy="12.6" r="5.4"/><circle cx="10" cy="12.6" r="2"/></svg><span class="ko">결과</span></div><div class="tv">자동 사냥 안정화 달성</div></a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<!-- CHAPTER 01 — TRAHA INFINITY / Problem Solving -->
+<!-- ============================================================ -->
+<section class="sec" id="infinity-problem"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">문제</span></span> &nbsp;/&nbsp; <span class="ko">원거리 자동 사냥의 구조적 결함</span></div>
+  <h2>방치형 게임에서 자동 사냥이 불가능한 클래스</h2>
+  <p class="why"><b>장르의 핵심 플레이가 성립하지 않는</b> 상태. 클래스 선택이 곧 페널티가 되는 치명적 결함</p>
+  <div class="blk">
+    <div class="blk-label"><span class="ko">잘못된 진단</span> &rarr; <span class="ko">잘못된 대처</span></div>
+    <div class="dx">
+      <div class="dx-col prev">
+        <div class="dx-head"><span class="dx-mark">✕</span><span class="dx-n">LEGACY APPROACH</span><span class="dx-k"><span class="ko">전임자의 대응</span></span></div>
+        <div class="dx-t">스펙 상향</div>
+        <ul class="dx-l">
+          <li>
+            <span class="dx-item">공격력 상향</span>
+            <span class="dx-q">&ldquo;빨리 처치하면 그만큼 피해를 덜 받겠지&rdquo;</span>
+            <span class="dx-stamp" aria-label="실패"><span class="ko">실패</span></span>
+          </li>
+          <li>
+            <span class="dx-item">방어력 상향</span>
+            <span class="dx-q">&ldquo;더 단단하면 버텨내겠지&rdquo;</span>
+            <span class="dx-stamp" aria-label="실패"><span class="ko">실패</span></span>
+          </li>
+          <li>
+            <span class="dx-item">회복량 상향</span>
+            <span class="dx-q">&ldquo;깎이는 만큼 채워주면 살아남겠지&rdquo;</span>
+            <span class="dx-stamp" aria-label="실패"><span class="ko">실패</span></span>
+          </li>
+        </ul>
+      </div>
+      <div class="dx-col mine">
+        <div class="dx-head"><span class="dx-mark">✓</span><span class="dx-n">MY APPROACH</span><span class="dx-k"><span class="ko">나의 진단</span></span></div>
+        <div class="dx-concl">
+          <p class="dx-obs">결국 <b>몬스터가 너무 많이 붙는다</b>는 것</p>
+          <p class="dx-lead"><span class="dx-because" aria-hidden="true">&rarr;</span><span class="dx-subtext">원인은 스펙 부족보다 <b>메커니즘</b></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="blk-label"><span class="ko">진짜 원인</span>: <span class="ko">사각에 몬스터가 누적되는 스킬 메커니즘</span></div>
+    <div class="prob2">
+    <div class="vchain">
+      <div class="vc v1"><span class="vc-n">01</span><b>부채꼴 타격</b><p>범위는 좁지만 <b>멀리 있는 몬스터까지 타격</b></p></div>
+      <div class="vc-arr">▾</div>
+      <div class="vc v2"><span class="vc-n">02</span><b>접근 · 포위</b><p>근접은 <b>주변으로 바짝 밀착</b>, 원거리는 <b>사거리까지만 접근해 사격</b></p></div>
+      <div class="vc-arr">▾</div>
+      <div class="vc v3"><span class="vc-n">03</span><b>타겟 교체 · 사각 누적</b><p>타겟 사망 후 타겟 전환 시, <b>새로운 방향의 무리가 추가 유입</b></p></div>
+      <div class="vc-arr">▾</div>
+      <div class="vc v4"><span class="vc-n">04</span><b>사각 누적 · 급사</b><p>각을 틀 때마다 <b>사각에 남는 적이 늘어</b> 반격 없이 맞기만 하다 사망</p></div>
+    </div>
+    <div class="enc-col"><div class="enc-wrap">
+      <svg viewBox="0 0 340 256" role="img" aria-label="가장 가까운 적을 타겟으로 부채꼴 공격을 하면 범위 안 무리만 어그로되어 근접은 캐릭터를 둘러싸고 원거리는 사거리까지만 접근한다. 타겟을 처치할 때마다 각이 바뀌어 새 무리가 더해지고, 마지막 공격 뒤에는 사방에서 뻗어 온 어그로 선이 캐릭터에 닿아 사망에 이르는 애니메이션">
+        <g stroke="#1e1a17" stroke-width="0.5" stroke-dasharray="2 2"><line x1="0" y1="128" x2="340" y2="128"/><line x1="170" y1="10" x2="170" y2="248"/></g>
+        <path d="M170 128 L243.6 85.5 A85 85 0 0 1 243.6 170.5 Z" fill="rgba(168,107,72,.34)" stroke="#a86b48" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.02;0.045;0.38;0.4;1" dur="13s" repeatCount="indefinite"/></path>
+        <path d="M170 128 L204.6 50.3 A85 85 0 0 1 254.5 119.1 Z" fill="rgba(201,133,118,.30)" stroke="#c4825a" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.53;0.55;0.645;0.665;1" dur="13s" repeatCount="indefinite"/></path>
+        <path d="M170 128 L94.9 88.1 A85 85 0 0 1 167.0 43.1 Z" fill="rgba(201,133,118,.28)" stroke="#c98576" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.74;0.76;0.855;0.875;1" dur="13s" repeatCount="indefinite"/></path>
+        <g fill="#b06a5a" opacity="0.42"><circle cx="146" cy="172" r="6"/><circle cx="262" cy="58" r="6"/><circle cx="250" cy="196" r="6"/><path d="M300 163.8 L294.3 174.5 L305.7 174.5 Z"/><path d="M240 189.8 L234.3 200.5 L245.7 200.5 Z"/><path d="M166 213.8 L160.3 224.5 L171.7 224.5 Z"/><path d="M300 103.8 L294.3 114.5 L305.7 114.5 Z"/><path d="M62 63.8 L56.3 74.5 L67.7 74.5 Z"/></g>
+        <line x1="195.8" y1="131.1" x2="182.9" y2="129.6" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.3;0.305;0.415;0.435;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="195.8;195.8;182.9;182.9;195.8" keyTimes="0;0.3;0.36;0.415;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="131.1;131.1;129.6;129.6;131.1" keyTimes="0;0.3;0.36;0.415;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="191" y1="112.7" x2="180.5" y2="120.4" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.3;0.305;0.675;0.695;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="191;191;180.5;180.5;191" keyTimes="0;0.3;0.36;0.675;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="112.7;112.7;120.4;120.4;112.7" keyTimes="0;0.3;0.36;0.675;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="186.7" y1="147.9" x2="178.4" y2="137.9" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.3;0.305;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="186.7;186.7;178.4;178.4;186.7" keyTimes="0;0.3;0.36;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="147.9;147.9;137.9;137.9;147.9" keyTimes="0;0.3;0.36;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="228.2" y1="142.6" x2="182.6" y2="131.2" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.29;0.295;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="228.2;228.2;182.6;182.6;228.2" keyTimes="0;0.29;0.35;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="142.6;142.6;131.2;131.2;142.6" keyTimes="0;0.29;0.35;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="230.1" y1="113" x2="182.6" y2="124.9" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.29;0.295;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="230.1;230.1;182.6;182.6;230.1" keyTimes="0;0.29;0.35;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="113;113;124.9;124.9;113" keyTimes="0;0.29;0.35;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="175" y1="102.5" x2="172.5" y2="115.2" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.6;0.605;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="175;175;172.5;172.5;175" keyTimes="0;0.6;0.64;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="102.5;102.5;115.2;115.2;102.5" keyTimes="0;0.6;0.64;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="156.2" y1="106" x2="163.1" y2="117" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.6;0.605;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="156.2;156.2;163.1;163.1;156.2" keyTimes="0;0.6;0.64;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="106;106;117;117;106" keyTimes="0;0.6;0.64;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="204.7" y1="108" x2="181.3" y2="121.5" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.59;0.595;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="204.7;204.7;181.3;181.3;204.7" keyTimes="0;0.59;0.63;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="108;108;121.5;121.5;108" keyTimes="0;0.59;0.63;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="147.1" y1="140.2" x2="158.5" y2="134.1" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.875;0.88;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="147.1;147.1;158.5;158.5;147.1" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="140.2;140.2;134.1;134.1;140.2" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="144.1" y1="126.2" x2="157" y2="127.1" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.875;0.88;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="144.1;144.1;157;157;144.1" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="126.2;126.2;127.1;127.1;126.2" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="159.6" y1="68.9" x2="167.7" y2="115.2" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.875;0.88;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="159.6;159.6;167.7;167.7;159.6" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="68.9;68.9;115.2;115.2;68.9" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="114" y1="93" x2="159" y2="121.1" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.875;0.88;0.97;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="114;114;159;159;114" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="93;93;121.1;121.1;93" keyTimes="0;0.875;0.925;0.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <g fill="#b06a5a"><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;0;0;.42" keyTimes="0;0.025;0.045;0.415;0.42;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="218;218;203.7;203.7;218" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="128;128;132.1;132.1;128" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/></circle><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;0;0;.42" keyTimes="0;0.025;0.045;0.675;0.68;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="221.2;221.2;197.5;197.5;221.2" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="100.8;100.8;108;108;100.8" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/></circle><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.025;0.045;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="231.8;231.8;191.9;191.9;231.8" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="160.9;160.9;154;154;160.9" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/></circle><path opacity="0.42" d="M249.6 141.6 L243.9 152.3 L255.3 152.3 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.025;0.045;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="d" values="M249.6 141.6 L243.9 152.3 L255.3 152.3 Z;M249.6 141.6 L243.9 152.3 L255.3 152.3 Z;M236 138.3 L230.3 149 L241.7 149 Z;M236 138.3 L230.3 149 L241.7 149 Z;M249.6 141.6 L243.9 152.3 L255.3 152.3 Z" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/></path><path opacity="0.42" d="M251.5 101.5 L245.8 112.2 L257.2 112.2 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.025;0.045;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="d" values="M251.5 101.5 L245.8 112.2 L257.2 112.2 Z;M251.5 101.5 L245.8 112.2 L257.2 112.2 Z;M237.9 104.9 L232.2 115.6 L243.6 115.6 Z;M237.9 104.9 L232.2 115.6 L243.6 115.6 Z;M251.5 101.5 L245.8 112.2 L257.2 112.2 Z" keyTimes="0;0.19;0.32;0.985;1" dur="13s" repeatCount="indefinite"/></path></g>
+        <g fill="none" stroke="#a86b48" stroke-width="1.1" opacity="0"><circle cx="218" cy="128" r="10"/><circle cx="221.2" cy="100.8" r="10"/><circle cx="231.8" cy="160.9" r="10"/><circle cx="249.6" cy="147.8" r="10"/><circle cx="251.5" cy="107.7" r="10"/><animate attributeName="opacity" values="0;0;.95;0;0" keyTimes="0;0.02;0.045;0.1;1" dur="13s" repeatCount="indefinite"/></g>
+        <g fill="#b06a5a"><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.53;0.55;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="203.4;203.4;176.5;176.5;203.4" keyTimes="0;0.56;0.63;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="88.2;88.2;94.6;94.6;88.2" keyTimes="0;0.56;0.63;0.985;1" dur="13s" repeatCount="indefinite"/></circle><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.53;0.55;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="205;205;152;152;205" keyTimes="0;0.56;0.63;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="67.4;67.4;99.2;99.2;67.4" keyTimes="0;0.56;0.63;0.985;1" dur="13s" repeatCount="indefinite"/></circle><path opacity="0.42" d="M223.7 90.8 L218 101.5 L229.4 101.5 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.53;0.55;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="d" values="M223.7 90.8 L218 101.5 L229.4 101.5 Z;M223.7 90.8 L218 101.5 L229.4 101.5 Z;M211.6 97.8 L205.9 108.5 L217.3 108.5 Z;M211.6 97.8 L205.9 108.5 L217.3 108.5 Z;M223.7 90.8 L218 101.5 L229.4 101.5 Z" keyTimes="0;0.56;0.63;0.985;1" dur="13s" repeatCount="indefinite"/></path></g>
+        <g fill="none" stroke="#c4825a" stroke-width="1.1" opacity="0"><circle cx="203.4" cy="88.2" r="10"/><circle cx="205" cy="67.4" r="10"/><circle cx="223.7" cy="97" r="10"/><animate attributeName="opacity" values="0;0;.95;0;0" keyTimes="0;0.53;0.55;0.605;1" dur="13s" repeatCount="indefinite"/></g>
+        <g fill="#b06a5a"><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.74;0.76;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="112.5;112.5;140;140;112.5" keyTimes="0;0.77;0.84;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="79.8;79.8;144;144;79.8" keyTimes="0;0.77;0.84;0.985;1" dur="13s" repeatCount="indefinite"/></circle><circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.74;0.76;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="134.2;134.2;136.1;136.1;134.2" keyTimes="0;0.77;0.84;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="74.9;74.9;125.6;125.6;74.9" keyTimes="0;0.77;0.84;0.985;1" dur="13s" repeatCount="indefinite"/></circle><path opacity="0.42" d="M155.8 41 L150.1 51.7 L161.5 51.7 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.74;0.76;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="d" values="M155.8 41 L150.1 51.7 L161.5 51.7 Z;M155.8 41 L150.1 51.7 L161.5 51.7 Z;M158.2 54.8 L152.5 65.5 L163.9 65.5 Z;M158.2 54.8 L152.5 65.5 L163.9 65.5 Z;M155.8 41 L150.1 51.7 L161.5 51.7 Z" keyTimes="0;0.77;0.84;0.985;1" dur="13s" repeatCount="indefinite"/></path><path opacity="0.42" d="M95.4 75.2 L89.7 85.9 L101.1 85.9 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.74;0.76;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="d" values="M95.4 75.2 L89.7 85.9 L101.1 85.9 Z;M95.4 75.2 L89.7 85.9 L101.1 85.9 Z;M107.2 82.6 L101.5 93.3 L112.9 93.3 Z;M107.2 82.6 L101.5 93.3 L112.9 93.3 Z;M95.4 75.2 L89.7 85.9 L101.1 85.9 Z" keyTimes="0;0.77;0.84;0.985;1" dur="13s" repeatCount="indefinite"/></path></g>
+        <g fill="none" stroke="#c98576" stroke-width="1.1" opacity="0"><circle cx="112.5" cy="79.8" r="10"/><circle cx="134.2" cy="74.9" r="10"/><circle cx="155.8" cy="47.2" r="10"/><circle cx="95.4" cy="81.4" r="10"/><animate attributeName="opacity" values="0;0;.95;0;0" keyTimes="0;0.74;0.76;0.815;1" dur="13s" repeatCount="indefinite"/></g>
+        <g stroke="#c98576" stroke-width="1.6" opacity="0"><line x1="197.7" y1="126.1" x2="209.7" y2="138.1"/><line x1="209.7" y1="126.1" x2="197.7" y2="138.1"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.4;0.42;0.48;0.5;1" dur="13s" repeatCount="indefinite"/></g>
+        <g stroke="#c98576" stroke-width="1.6" opacity="0"><line x1="191.5" y1="102" x2="203.5" y2="114"/><line x1="203.5" y1="102" x2="191.5" y2="114"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.665;0.685;0.72;0.74;1" dur="13s" repeatCount="indefinite"/></g>
+        <circle r="10.5" fill="none" stroke="#dfae68" stroke-width="1.4" stroke-dasharray="2.5 2.5" opacity=".92"><animate attributeName="cx" values="218.0;218.0;203.7;203.7;197.5;197.5;152.0;152.0;218.0" keyTimes="0;0.19;0.32;0.49;0.491;0.71;0.711;0.985;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="128.0;128.0;132.1;132.1;108.0;108.0;99.2;99.2;128.0" keyTimes="0;0.19;0.32;0.49;0.491;0.71;0.711;0.985;1" dur="13s" repeatCount="indefinite"/></circle>
+        <circle cx="170" cy="128" r="12" fill="#161616" stroke="#c98576" stroke-width="2.3"/><text x="170" y="131.5" text-anchor="middle" fill="#e8e8e8" font-size="9" font-family="monospace">나</text>
+        <circle cx="170" cy="128" r="12" fill="none" stroke="#e0563f" stroke-width="2.6" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.94;0.955;0.985;1" dur="13s" repeatCount="indefinite"/></circle>
+        <g stroke="#e0563f" stroke-width="2.2" stroke-linecap="round" opacity="0"><line x1="161" y1="119" x2="179" y2="137"/><line x1="179" y1="119" x2="161" y2="137"/><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.94;0.955;0.985;1" dur="13s" repeatCount="indefinite"/></g>
+      </svg>
+    </div>
+      <ul class="enc-legend" aria-label="도식 범례">
+        <li><span class="lg-ic melee" aria-hidden="true"></span>근접 몬스터: 캐릭터 주위로 밀착</li>
+        <li><span class="lg-ic ranged" aria-hidden="true"></span>원거리 몬스터: 사거리까지만 접근해 사격</li>
+        <li><span class="lg-ic link" aria-hidden="true"></span>점선: 어그로 상태, 캐릭터를 공격 중</li>
+        <li><span class="lg-ic target" aria-hidden="true"></span>현재 타겟: 가장 가까운 적, 처치 시 어그로된 무리 중에서 전환</li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="infinity-decision"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">결정</span></span> &nbsp;/&nbsp; <span class="ko">정체성을 지키는 메커니즘 개선</span></div>
+  <h2>사각을 없애는 포지셔닝 메커니즘 설계</h2>
+  <p class="why">밸런스 붕괴를 부르는 스펙 상향 중지, <b>포위를 피하는 이동 메커니즘</b>을 설계</p>
+  <div class="blk">
+    <div class="blk-label"><span class="ko">해결책 비교</span>: <span class="ko">범위 변경</span> vs <span class="ko">동선 유도</span></div>
+    <div class="decide">
+      <div class="dopt no">
+        <div class="dopt-k"><span class="dmark">✕</span><span class="ko">버린 설계</span></div>
+        <b class="dopt-t">전방위 원형 공격</b>
+        <p>사각은 사라지지만, <b>거리를 두고 한 방향을 노린다</b>는 원거리 고유의 정체성이 함께 상실. 근접의 하위 호환</p>
+        <span class="dopt-stamp" aria-label="기각"><span class="ko">기각</span></span>
+      </div>
+      <div class="dopt yes">
+        <div class="dopt-k"><span class="dmark">✓</span><span class="ko">택한 설계</span></div>
+        <b class="dopt-t">타겟을 전방에 두는 포지셔닝</b>
+        <p>부채꼴 공격 범위는 유지하되, <b>몬스터가 항상 전방에 정렬되도록</b> 동선을 유도. 밸런스는 그대로</p>
+        <span class="dopt-stamp yes" aria-label="채택"><span class="ko">채택</span></span>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="infinity-method"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">방법</span></span> &nbsp;/&nbsp; <span class="ko">아크 궤적 이동 스킬</span></div>
+  <h2>무리를 항상 전방에 모으는 동선 유도</h2>
+  <p class="why">별도 조작 없이 <b>공격 모션에 이동을 얹어</b>, 자동 사냥에서도 그대로 작동</p>
+  <div class="blk">
+    <div class="blk-label"><span class="ko">작동 원리</span>: <span class="ko">대상 선택 시 이동 유무 차이</span></div>
+    <ol class="phbar">
+      <li class="ph1"><b>01</b>타격: 부채꼴 안 무리만 어그로</li>
+      <li class="ph2"><b>02</b>접근: 근접 밀착 · 원거리 사거리</li>
+      <li class="ph3"><b>03</b>타겟 처치</li>
+      <li class="ph4"><b>04</b>사각 누적 <i>vs</i> 전방 정렬</li>
+    </ol>
+    <div class="flow2">
+      <div class="fcol bad">
+        <div class="fcol-head"><span class="fh-dot"></span>AS-IS · <span class="ko">제자리 공격</span><span class="fh-tag"><span class="ko">사각 누적</span> → <span class="ko">급사</span></span></div>
+        <div class="orbit-wrap"><svg viewBox="35 40 340 165" role="img" aria-label="제자리에서 타겟만 바꾸면 공격 각이 회전해 이전에 붙은 무리가 사각으로 밀려나고, 새 무리까지 어그로되어 사각에 쌓인 채 맞기만 하다 사망하는 애니메이션">
+        <g stroke="#1e1a17" stroke-width="0.5" stroke-dasharray="2 2"><line x1="0" y1="128" x2="340" y2="128"/><line x1="170" y1="10" x2="170" y2="248"/></g>
+        <path d="M170.0 128.0 L243.6 85.5 A85 85 0 0 1 243.6 170.5 Z" fill="rgba(168,107,72,.34)" stroke="#a86b48" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.02;0.045;0.31;0.33;1" dur="13s" repeatCount="indefinite"/></path>
+        <path d="M170.0 128.0 L204.6 50.3 A85 85 0 0 1 254.5 119.1 Z" fill="rgba(201,133,118,.30)" stroke="#c4825a" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.5;0.52;0.62;0.64;1" dur="13s" repeatCount="indefinite"/></path>
+        <path d="M170.0 128.0 L204.6 50.3 A85 85 0 0 1 254.5 119.1 Z" fill="rgba(201,133,118,.20)" stroke="#c98576" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.64;0.66;.97;1" dur="13s" repeatCount="indefinite"/></path>
+        <g fill="#b06a5a">
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;0;0;.42" keyTimes="0;0.03;0.05;0.315;0.33;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="218.0;218.0;203.7;203.7;218.0" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="128.0;128.0;132.1;132.1;128.0" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="221.2;221.2;197.5;197.5;221.2" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="100.8;100.8;108.0;108.0;100.8" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+          <path opacity="0.42" d="M249.6 141.6 L243.9 152.3 L255.3 152.3 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/></path>
+          <path opacity="0.42" d="M251.5 101.5 L245.8 112.2 L257.2 112.2 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/></path>
+        </g>
+        <g fill="none" stroke="#a86b48" stroke-width="1.1" opacity="0"><circle cx="218.0" cy="128.0" r="10"/><circle cx="221.2" cy="100.8" r="10"/><circle cx="231.8" cy="160.9" r="10"/><circle cx="249.6" cy="147.8" r="10"/><circle cx="251.5" cy="107.7" r="10"/><animate attributeName="opacity" values="0;0;.95;0;0" keyTimes="0;0.03;0.05;0.12;1" dur="13s" repeatCount="indefinite"/></g>
+        <g fill="#b06a5a">
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="231.8;231.8;191.9;191.9;231.8" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="160.9;160.9;154.0;154.0;160.9" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+        </g>
+        <g fill="#b06a5a">
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.52;0.54;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="196.3;196.3;176.5;176.5;196.3" keyTimes="0;0.62;0.76;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="78.6;78.6;94.6;94.6;78.6" keyTimes="0;0.62;0.76;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.52;0.54;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="200.1;200.1;152.0;152.0;200.1" keyTimes="0;0.62;0.76;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="60.4;60.4;99.2;99.2;60.4" keyTimes="0;0.62;0.76;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+          <path opacity="0.42" d="M213.1 66.6 L207.4 77.3 L218.8 77.3 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.52;0.54;.97;1" dur="13s" repeatCount="indefinite"/></path>
+        </g>
+        <g fill="none" stroke="#c98576" stroke-width="1.1" opacity="0"><circle cx="196.3" cy="78.6" r="10"/><circle cx="200.1" cy="60.4" r="10"/><circle cx="213.1" cy="72.8" r="10"/><animate attributeName="opacity" values="0;0;.95;0;0" keyTimes="0;0.52;0.54;0.61;1" dur="13s" repeatCount="indefinite"/></g>
+        <line x1="191.0" y1="112.7" x2="191.0" y2="112.7" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.28;0.285;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="191.0;191.0;180.5;180.5;191.0" keyTimes="0;0.28;0.31;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="112.7;112.7;120.4;120.4;112.7" keyTimes="0;0.28;0.31;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="186.7" y1="147.9" x2="186.7" y2="147.9" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.28;0.285;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="186.7;186.7;178.4;178.4;186.7" keyTimes="0;0.28;0.31;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="147.9;147.9;137.9;137.9;147.9" keyTimes="0;0.28;0.31;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="241.8" y1="145.9" x2="241.8" y2="145.9" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.26;0.265;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="241.8;241.8;182.6;182.6;241.8" keyTimes="0;0.26;0.29;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="145.9;145.9;131.1;131.1;145.9" keyTimes="0;0.26;0.29;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="243.7" y1="109.6" x2="243.7" y2="109.6" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.26;0.265;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="243.7;243.7;182.6;182.6;243.7" keyTimes="0;0.26;0.29;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="109.6;109.6;124.9;124.9;109.6" keyTimes="0;0.26;0.29;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="195.8" y1="131.1" x2="195.8" y2="131.1" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.28;0.285;0.33;0.35;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="195.8;195.8;182.9;182.9;195.8" keyTimes="0;0.28;0.31;0.33;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="131.1;131.1;129.6;129.6;131.1" keyTimes="0;0.28;0.31;0.33;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="175.0" y1="102.5" x2="175.0" y2="102.5" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.78;0.785;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="175.0;175.0;172.5;172.5;175.0" keyTimes="0;0.78;0.81;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="102.5;102.5;115.2;115.2;102.5" keyTimes="0;0.78;0.81;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="156.2" y1="106.0" x2="156.2" y2="106.0" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.78;0.785;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="156.2;156.2;163.1;163.1;156.2" keyTimes="0;0.78;0.81;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="106.0;106.0;117.0;117.0;106.0" keyTimes="0;0.78;0.81;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="208.2" y1="79.1" x2="208.2" y2="79.1" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.56;0.565;0.99;1;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="208.2;208.2;178.0;178.0;208.2" keyTimes="0;0.56;0.59;0.99;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="79.1;79.1;117.8;117.8;79.1" keyTimes="0;0.56;0.59;0.99;1" dur="13s" repeatCount="indefinite"/></line>
+        <g stroke="#c98576" stroke-width="1.8" opacity="0"><line x1="197.7" y1="126.1" x2="209.7" y2="138.1"/><line x1="209.7" y1="126.1" x2="197.7" y2="138.1"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.33;0.345;0.47;0.49;1" dur="13s" repeatCount="indefinite"/></g>
+        <circle r="10.5" fill="none" stroke="#dfae68" stroke-width="1.4" stroke-dasharray="2.5 2.5" opacity=".92"><animate attributeName="cx" values="218.0;218.0;203.7;203.7;197.5;197.5;218.0" keyTimes="0;0.12;0.26;0.47;0.48;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="128.0;128.0;132.1;132.1;108.0;108.0;128.0" keyTimes="0;0.12;0.26;0.47;0.48;0.97;1" dur="13s" repeatCount="indefinite"/></circle>
+        <circle cx="170" cy="128" r="12" fill="#161616" stroke="#c98576" stroke-width="2.3"/><text x="170" y="131.5" text-anchor="middle" fill="#e8e8e8" font-size="9" font-family="monospace">나</text>
+        <g stroke="#e06a58" stroke-width="1.8" opacity="0"><line x1="161" y1="119" x2="179" y2="137"/><line x1="179" y1="119" x2="161" y2="137"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.88;0.895;0.99;1.01;1" dur="13s" repeatCount="indefinite"/></g>
+      </svg></div>
+      </div>
+      <div class="fcol good">
+        <div class="fcol-head"><span class="fh-dot"></span>TO-BE · <span class="ko">아크 궤적 이동</span><span class="fh-tag"><span class="ko">전방 정렬</span></span></div>
+        <div class="orbit-wrap"><svg viewBox="35 40 340 165" role="img" aria-label="타겟을 처치한 뒤 다음 타겟을 축으로 호를 조금 이동하면 이미 붙어 있던 무리 전부가 새 공격 범위에 들어오고, 대기 중인 무리는 어그로되지 않는 애니메이션">
+        <g stroke="#1e1a17" stroke-width="0.5" stroke-dasharray="2 2"><line x1="0" y1="128" x2="340" y2="128"/><line x1="170" y1="10" x2="170" y2="248"/></g>
+        <path d="M170.0 128.0 L243.6 85.5 A85 85 0 0 1 243.6 170.5 Z" fill="rgba(168,107,72,.34)" stroke="#a86b48" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.02;0.045;0.31;0.33;1" dur="13s" repeatCount="indefinite"/></path>
+        <g fill="#b06a5a" opacity="0.42"><circle cx="196.3" cy="78.6" r="6"/><circle cx="200.1" cy="60.4" r="6"/><path d="M213.1 66.6 L207.4 77.3 L218.8 77.3 Z"/></g>
+        <path d="M163.9 102.7 L263.9 102.7 A100 100 0 0 1 207.7 192.6 Z" fill="rgba(223,174,104,.26)" stroke="#dfae68" stroke-width="0.9" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.6;0.62;.97;1" dur="13s" repeatCount="indefinite"/></path>
+        <g fill="#b06a5a">
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;0;0;.42" keyTimes="0;0.03;0.05;0.315;0.33;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="218.0;218.0;203.7;203.7;218.0" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="128.0;128.0;132.1;132.1;128.0" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="221.2;221.2;197.5;197.5;221.2" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="100.8;100.8;108.0;108.0;100.8" keyTimes="0;0.12;0.26;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+          <path opacity="0.42" d="M249.6 141.6 L243.9 152.3 L255.3 152.3 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/></path>
+          <path opacity="0.42" d="M251.5 101.5 L245.8 112.2 L257.2 112.2 Z"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/></path>
+        </g>
+        <g fill="none" stroke="#a86b48" stroke-width="1.1" opacity="0"><circle cx="218.0" cy="128.0" r="10"/><circle cx="221.2" cy="100.8" r="10"/><circle cx="231.8" cy="160.9" r="10"/><circle cx="249.6" cy="147.8" r="10"/><circle cx="251.5" cy="107.7" r="10"/><animate attributeName="opacity" values="0;0;.95;0;0" keyTimes="0;0.03;0.05;0.12;1" dur="13s" repeatCount="indefinite"/></g>
+        <g fill="#b06a5a">
+          <circle r="6" opacity="0.42"><animate attributeName="opacity" values=".42;.42;1;1;.42" keyTimes="0;0.03;0.05;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cx" values="231.8;231.8;191.9;191.9;180.2;180.2;231.8" keyTimes="0;.12;.26;.62;.76;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="160.9;160.9;154.0;154.0;132.5;132.5;160.9" keyTimes="0;.12;.26;.62;.76;.97;1" dur="13s" repeatCount="indefinite"/></circle>
+        </g>
+        <line x1="191.0" y1="112.7" x2="191.0" y2="112.7" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0" keyTimes="0;0.28;0.3;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="191.0;191.0;180.5;180.5;176.7;176.7;191.0" keyTimes="0;0.28;0.31;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="112.7;112.7;120.4;120.4;104.7;104.7;112.7" keyTimes="0;0.28;0.31;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="186.7" y1="147.9" x2="186.7" y2="147.9" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0" keyTimes="0;0.28;0.3;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x1" values="186.7;186.7;176.4;176.4;186.7" keyTimes="0;0.62;0.76;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y1" values="147.9;147.9;125.5;125.5;147.9" keyTimes="0;0.62;0.76;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="186.7;186.7;178.4;178.4;170.1;170.1;186.7" keyTimes="0;0.28;0.31;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="147.9;147.9;137.9;137.9;114.1;114.1;147.9" keyTimes="0;0.28;0.31;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="241.8" y1="145.9" x2="241.8" y2="145.9" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0" keyTimes="0;0.26;0.28;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="241.8;241.8;182.6;182.6;175.4;175.4;241.8" keyTimes="0;0.26;0.29;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="145.9;145.9;131.1;131.1;108.8;108.8;145.9" keyTimes="0;0.26;0.29;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="243.7" y1="109.6" x2="243.7" y2="109.6" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0" keyTimes="0;0.26;0.28;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="243.7;243.7;182.6;182.6;176.9;176.9;243.7" keyTimes="0;0.26;0.29;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="109.6;109.6;124.9;124.9;103.4;103.4;109.6" keyTimes="0;0.26;0.29;0.5;0.6;.97;1" dur="13s" repeatCount="indefinite"/></line>
+        <line x1="195.8" y1="131.1" x2="195.8" y2="131.1" stroke="#c98576" stroke-width="1" stroke-dasharray="2.5 3" opacity="0"><animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;0.28;0.285;0.33;0.35;1" dur="13s" repeatCount="indefinite"/><animate attributeName="x2" values="195.8;195.8;182.9;182.9;195.8" keyTimes="0;0.28;0.31;0.33;1" dur="13s" repeatCount="indefinite"/><animate attributeName="y2" values="131.1;131.1;129.6;129.6;131.1" keyTimes="0;0.28;0.31;0.33;1" dur="13s" repeatCount="indefinite"/></line>
+        <g stroke="#c98576" stroke-width="1.8" opacity="0"><line x1="197.7" y1="126.1" x2="209.7" y2="138.1"/><line x1="209.7" y1="126.1" x2="197.7" y2="138.1"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.33;0.345;0.47;0.49;1" dur="13s" repeatCount="indefinite"/></g>
+        <circle r="10.5" fill="none" stroke="#dfae68" stroke-width="1.4" stroke-dasharray="2.5 2.5" opacity=".92"><animate attributeName="cx" values="218.0;218.0;203.7;203.7;197.5;197.5;218.0" keyTimes="0;0.12;0.26;0.47;0.48;0.97;1" dur="13s" repeatCount="indefinite"/><animate attributeName="cy" values="128.0;128.0;132.1;132.1;108.0;108.0;128.0" keyTimes="0;0.12;0.26;0.47;0.48;0.97;1" dur="13s" repeatCount="indefinite"/></circle>
+        <g><animateMotion path="M0 0 A34 34 0 0 1 -6.1 -25.3" keyPoints="0;0;1;1;0" keyTimes="0;.50;.60;.97;1" calcMode="linear" dur="13s" repeatCount="indefinite"/><circle cx="170" cy="128" r="12" fill="#161616" stroke="#dfae68" stroke-width="2.3"/><text x="170" y="131.5" text-anchor="middle" fill="#e8e8e8" font-size="9" font-family="monospace">나</text></g>
+      </svg></div>
+      </div>
+    </div>
+      <ul class="enc-legend" aria-label="도식 범례">
+        <li><span class="lg-ic melee" aria-hidden="true"></span>근접: 캐릭터 주위로 밀착</li>
+        <li><span class="lg-ic ranged" aria-hidden="true"></span>원거리: 사거리에서 사격</li>
+        <li><span class="lg-ic link" aria-hidden="true"></span>점선: 어그로 · 공격 중</li>
+        <li><span class="lg-ic target" aria-hidden="true"></span>점선 원: 현재 타겟</li>
+      </ul>
+  </div>
+</div></section>
+
+<section class="sec" id="infinity-class"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">클래스 설계</span></span> &nbsp;/&nbsp; <span class="ko">아크 거너</span>: <span class="ko">자동 전투 클래스의 기본 문법</span></div>
+  <h2>사용자가 이해할 규칙은 슬롯 하나</h2>
+  <p class="why">자동 전투는 복잡한 사이클 학습이 어려운 구조. 스킬 역할을 <b>슬롯 위치에 고정</b>해 어떤 스킬을 장착해도 같은 규칙으로 동작하도록 설계</p>
+  <div class="slotmap">
+    <div class="slot"><div class="sn">SLOT 1</div><div class="sv">이동 + 버프</div><div class="sd">이동과 공격을 동시에</div></div>
+    <div class="slot"><div class="sn">SLOT 2</div><div class="sv">저쿨 공격</div><div class="sd">짧은 쿨타임, 잦은 반복</div></div>
+    <div class="slot"><div class="sn">SLOT 3</div><div class="sv">CP 회복 이동기</div><div class="sd">자원과 위치를 함께 해결</div></div>
+    <div class="slot"><div class="sn">SLOT 4</div><div class="sv">고화력</div><div class="sd">긴 쿨타임, 강한 한 방</div></div>
+    <div class="slot"><div class="sn">SLOT 5</div><div class="sv">궁극기</div><div class="sd">가장 강력한 공격기</div></div>
+  </div>
+
+  <div class="branch">
+    <span class="bx"><b>스킬 사용</b></span><span class="ba">→</span>
+    <span class="bx q">패시브 발동?</span><span class="ba">NO →</span>
+    <span class="bx">기본 공격 <b>A</b> / 강화 공격 <b>B</b></span><span class="ba">YES →</span>
+    <span class="bx hi">탄환 전환 <b>C</b></span>
+  </div>
+  <p class="cap">스킬 사용 시 기본 공격이 잠시 강해지고, 고유 패시브가 발동하면 한 번 더 전환. <b>평타 세 단계가 스킬 사용의 보상</b>이 되는 구조. 내부 명칭은 A / B / C로만 표기</p>
+</div></section>
+
+<section class="sec" id="infinity-proved"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">결과</span></span> &nbsp;/&nbsp; <span class="ko">리스크 없는 클래스 정상화</span></div>
+  <h2>동선 제어만으로 해결한 시스템 결함</h2>
+  <p class="why">스킬 하나의 <b>이동 궤적 추가</b>를 통한 자동 사냥 안정화</p>
+  <div class="blk">
+    <div class="res3">
+      <div class="rz"><svg class="rzi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 L20 6 V11 C20 16 16.5 19.3 12 21 C7.5 19.3 4 16 4 11 V6 Z"/><path d="M8.8 11.8 11 14 15.2 9.8"/></svg><b>자동 사냥 안정성 확보</b><p>사각 누적과 무차별 애드(Add)가 사라져, 자동 사냥 중 <b>급사 문제 완전 해소</b></p></div>
+      <div class="rz"><svg class="rzi" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12 L19 4.8 A17.5 17.5 0 0 1 19 19.2 Z"/><circle cx="3.5" cy="12" r="1.5"/></svg><b>클래스 정체성 보존</b><p>부채꼴 사거리 · 교전 거리를 그대로 둔 채 해결. <b>원거리 고유의 플레이 스타일 유지</b></p></div>
+      <div class="rz"><svg class="rzi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 a6 6 0 0 1 3.3 11 c-.8.6-1.3 1.2-1.3 2 H10 c0-.8-.5-1.4-1.3-2 A6 6 0 0 1 12 3 Z"/><path d="M9.6 19 h4.8 M10.4 21.4 h3.2"/></svg><b>최소 비용의 개선</b><p><b>수치 재설정 없이</b> 라이브 서비스의 결함을 해결</p></div>
+    </div>
+  </div>
+  <div class="blk">
+  </div>
+</div></section>
+
+<a class="next-card" href="05_traha.html" aria-label="다음: TRAHA">
+  <div class="container"><span class="nc-kicker">NEXT PAGE</span><span class="nc-title">TRAHA</span><span class="nc-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div>
+</a>
+<!-- PAGE LIST -->
+<nav class="page-list" id="pages" aria-label="전체 페이지 목록">
+  <div class="container">
+    <div class="pl-dots" aria-label="전체 페이지 바로가기">
+      <a class="pl-dot" href="index.html#pages" data-title="COVER"><span class="pl-num">00</span></a>
+      <a class="pl-dot" href="01_intro.html#pages" data-title="ABOUT"><span class="pl-num">01</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="02_chrono_odyssey.html#pages" data-title="CHRONO ODYSSEY"><span class="pl-num">02</span></a>
+      <a class="pl-dot is-current" href="04_traha_infinity.html#pages" data-title="TRAHA INFINITY" aria-current="page"><span class="pl-num">03</span><span class="pl-current-label">TRAHA INFINITY</span></a>
+      <a class="pl-dot pl-dot-next" href="05_traha.html#pages" data-title="TRAHA"><span class="pl-num">04</span></a>
+      <a class="pl-dot" href="06_echo_of_soul.html#pages" data-title="ECHO OF SOUL"><span class="pl-num">05</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="07_work_simplification.html#pages" data-title="SIMPLIFICATION"><span class="pl-num">06</span></a>
+      <a class="pl-dot" href="08_planning_direction.html#pages" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
+      <a class="pl-dot" href="09_work_automation.html#pages" data-title="AUTOMATION"><span class="pl-num">08</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="10_sb_analysis.html#pages" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
+      <a class="pl-dot" href="11_sb_charge_boost.html#pages" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="18_closing.html#pages" data-title="CLOSING"><span class="pl-num">11</span></a>
+    </div>
+  </div>
+</nav>
+<!-- /PAGER -->
+<footer class="site-foot">
+  <div class="sf-copy">© 2026 <span class="ko">박종혁</span> · Combat Designer · Optimized for Desktop · 1920 × 1080</div>
+</footer>
+
+<div class="video-modal" id="videoModal" aria-hidden="true">
+  <div class="vm-backdrop"></div>
+  <div class="vm-inner">
+    <button class="vm-close" aria-label="닫기">✕</button>
+    <div class="vm-frame"><iframe id="vmIframe" src="" title="프로젝트 영상" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  var modal=document.getElementById('videoModal');
+  var frame=document.getElementById('vmIframe');
+  function openV(id){ frame.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0'; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
+  function closeV(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); frame.src=''; }
+  document.querySelectorAll('.pj-video').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); openV(b.getAttribute('data-yt')); }); });
+  modal.querySelector('.vm-close').addEventListener('click',closeV);
+  modal.querySelector('.vm-backdrop').addEventListener('click',closeV);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeV(); });
+})();
+</script>
+
+<div class="backtab" id="backTab"><span class="bt-label">BACK TO TOP</span><a class="bt-body" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="18" y2="4"/><g class="bt-arr"><line x1="12" y1="8.5" x2="12" y2="20"/><path d="M7 13 L12 8 L17 13"/></g></svg></a></div>
+<script>(function(){var t=document.getElementById("backTab");if(!t)return;function u(){if(window.scrollY>400)t.classList.add("show");else t.classList.remove("show");}window.addEventListener("scroll",u,{passive:true});u();})();</script>
+<script id="scrollTopOnLoad">(function(){var d=document,w=window,de=d.documentElement;try{if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}function top0(){var sb=de.style.scrollBehavior;de.style.scrollBehavior="auto";try{w.scrollTo(0,0);de.scrollTop=0;if(d.body)d.body.scrollTop=0;}catch(e){}de.style.scrollBehavior=sb;}function internal(a){if(!a||a.target==="_blank"||a.hasAttribute("download"))return false;var h=a.getAttribute("href")||"";if(!h||h.charAt(0)==="#"||/^[a-z]+:/i.test(h)&&h.indexOf(location.origin)!==0)return false;return /\.html?(\?|$)/i.test(h.split("#")[0]);}d.addEventListener("click",function(ev){if(ev.defaultPrevented||ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;var a=ev.target.closest&&ev.target.closest("a[href]");if(!internal(a))return;var h=a.getAttribute("href");if(h.indexOf("#")>-1)return;if(d.body){d.body.style.transition="none";d.body.style.opacity="0";setTimeout(function(){d.body.style.opacity="";},1500);}top0();},true);w.addEventListener("pageshow",function(){if(d.body)d.body.style.opacity="";});if(location.hash==="#pages"){var st2=false;["wheel","touchstart","keydown","mousedown"].forEach(function(t){w.addEventListener(t,function(){st2=true;},{passive:true,once:true});});var bot=function(){if(st2)return;var sb=de.style.scrollBehavior;de.style.scrollBehavior="auto";w.scrollTo(0,Math.max(de.scrollHeight,d.body?d.body.scrollHeight:0));de.style.scrollBehavior=sb;};bot();d.addEventListener("DOMContentLoaded",bot);w.addEventListener("load",bot);w.addEventListener("pageshow",bot);[60,250,700,1500].forEach(function(t){setTimeout(bot,t);});return;}if(location.hash)return;var stop=false;function halt(){stop=true;}["wheel","touchstart","keydown","mousedown"].forEach(function(t){w.addEventListener(t,halt,{passive:true,once:true});});function go(){if(!stop)top0();}go();d.addEventListener("DOMContentLoaded",go);w.addEventListener("load",go);w.addEventListener("pageshow",go);[60,250,700,1500].forEach(function(t){setTimeout(go,t);});})();</script>
+</body>
+</html>

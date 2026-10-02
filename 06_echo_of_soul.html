@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>ECHO OF SOUL — Class Design · 박종혁 Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system.css?v=20261002a">
+<style>
+  /* ============================================================
+     ECHO OF SOUL — page styles
+     크로노 오디세이(chrono_odyssey.html)와 토큰 정렬 완료
+     ============================================================ */
+
+  /* ===== 공통 섹션 토큰 (크로노와 동일) ===== */
+  .page-header { padding: 74px 0 74px; border-bottom: 1px solid var(--line); }
+  .page-header .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .page-header .section-label .badge { color: var(--accent); font-weight: 600; }
+  .page-header .ph-title { margin-top: 0; font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.4; letter-spacing: -0.005em; }
+  .page-header .prove { margin: 6px 0 0; padding-left: 16px; border-left: 2px solid var(--accent); font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; }
+  .page-header .prove b { color: var(--accent); font-weight: 600; }
+
+  .sec { padding: 74px 0; border-bottom: 1px solid var(--line); }
+  .sec .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); margin-bottom: 8px; }
+  .sec .section-label .badge { color: var(--accent); }
+  .sec h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
+  .sec .cap { font-family: var(--sans); font-size: 12px; color: var(--text-dim); margin: 14px 0 0; }
+  .sec .cap b { color: var(--text-mid); font-weight: 600; }
+  /* why 문단: 고정폭(760px) 해제 — 창 크기에 따라 줄수 유동 */
+  .sec .why { max-width: none; }
+  .blk { margin-top: 44px; }
+  .blk-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 14px; }
+
+  /* ===== THESIS — 4칸 요약 바 ===== */
+  .thesis { display: grid; grid-template-columns: repeat(4,1fr); align-items: stretch; border: 1px solid var(--line-hi); background: var(--bg-card); margin-top: 44px; overflow: hidden; }
+  .thesis .tcell { position: relative; padding: 20px 30px 20px 46px; background: var(--line-hi); clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); margin-right: -14px; }
+  .thesis .tcell:first-child { padding-left: 32px; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); }
+  .thesis .tcell:last-child { margin-right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+  .thesis .tcell::before { content: ""; position: absolute; inset: 1.5px; background: var(--bg-card); clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%, 15px 50%); pointer-events: none; z-index: 0; }
+  .thesis .tcell:first-child::before { clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%); }
+  .thesis .tcell:last-child::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 15px 50%); background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--bg-card); }
+  .thesis .tcell > * { position: relative; z-index: 1; }
+  .thesis .tk { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--accent); margin-bottom: 10px; }
+  .thesis .ti { width: 15px; height: 15px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .thesis .tv { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.7; word-break: keep-all; text-wrap: balance; }
+  .thesis .tcell:last-child .tv { color: var(--text); }
+  .thesis a.tcell { display: block; text-decoration: none; cursor: pointer; transition: background-color .2s ease; }
+  .thesis a.tcell:hover { background: var(--accent); }
+  .thesis a.tcell:hover .tv { color: var(--text); }
+  /* 중간 폭: 노치(>)를 같이 줄이고 좌측 여백을 노치에 맞춰 유지 */
+  @media (min-width: 761px) and (max-width: 980px) {
+    .thesis .tcell { padding: 16px 18px 16px 30px; margin-right: -9px;
+      clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 0 100%, 11px 50%); }
+    .thesis .tcell:first-child { padding-left: 18px;
+      clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 0 100%); }
+    .thesis .tcell:last-child { margin-right: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 11px 50%); }
+    .thesis .tcell::before { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%); }
+    .thesis .tcell:first-child::before { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%); }
+    .thesis .tcell:last-child::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 10px 50%); }
+    .thesis .tv { font-size: 12px; line-height: 1.6; }
+    .thesis .tk { font-size: 10px; gap: 5px; }
+    .thesis .ti { width: 13px; height: 13px; }
+  }
+
+  /* ===== RESULT — 성과 카드 ===== */
+  .means { display: grid; gap: 14px; }
+  .rz { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 16px 18px; }
+  .rz b { display: block; font-family: var(--serif); font-size: 16px; color: var(--accent-hi); font-weight: 700; margin-bottom: 8px; }
+  .rz p { margin: 0; font-family: var(--sans); font-size: 12px; color: var(--text-mid); line-height: 1.65; word-break: keep-all; }
+  .rz p b { display: inline; color: var(--text); font-size: inherit; margin: 0; font-weight: 600; }
+  @media (max-width: 760px) { .means { grid-template-columns: 1fr !important; } }
+  /* ===== 설계 철학 pull-quote ===== */
+  .principle { border-left: 3px solid var(--accent); padding: 4px 0 4px 22px; }
+  .principle .pl-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 11px; }
+  .principle .pl-q { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.5; }
+  .principle .pl-q .hi { color: var(--accent); }
+
+  /* ===== 번호 붙은 판단 스텝 ===== */
+  .decision-step { padding-top: 30px; border-top: 1px solid var(--line-hi); margin-bottom: 34px; }
+  .decision-step .ds-head { display: flex; align-items: baseline; gap: 11px; flex-wrap: wrap; margin-bottom: 8px; }
+  .decision-step .ds-num { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--accent); line-height: 1; letter-spacing: .04em; flex: none; }
+  .decision-step .ds-t { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .decision-step .ds-d { font-family: var(--sans); font-size: 12px; color: var(--text-mid); line-height: 1.7; max-width: 820px; }
+  .decision-step .ds-d b { color: var(--text); font-weight: 600; }
+  @media (max-width: 640px) { .decision-step .ds-num { font-size: 16px; } .decision-step .ds-t { font-size: 16px; } }
+
+  /* ===== 영상 + 리듬 구조 2단 ===== */
+  .clip { aspect-ratio: 16/9; border: 1px solid var(--line-hi); background: #0a0a0a; overflow: hidden; }
+  .clip video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* 영상과 리듬 구조를 같은 높이로 — 좌: 영상 / 우: 세로 3단 */
+  .rhythm-split { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; align-items: stretch; }
+  .rhythm-split .clip { aspect-ratio: auto; height: 100%; }
+  .rhythm-split .clip video { height: 100%; object-fit: cover; }
+  .rflow-v { display: flex; flex-direction: column; }
+  .rflow-v .rfv-node { flex: 1; display: flex; flex-direction: column; justify-content: center;
+    border: 1px solid var(--line-hi); background: var(--bg-card); padding: 12px 16px; }
+  .rflow-v .rfv-node.is-peak { border-color: var(--accent); background: var(--accent-soft); }
+  .rflow-v .rfv-t { display: block; font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--text); }
+  .rflow-v .rfv-d { display: block; margin-top: 3px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+  .rflow-v .rfv-arr { flex: none; color: var(--accent); text-align: center; font-size: 14px; line-height: 1; padding: 5px 0; }
+  @media (max-width: 760px) { .rhythm-split { grid-template-columns: 1fr; } .rhythm-split .clip { aspect-ratio: 16/9; } }
+
+  /* ===== 스텝 체인 ===== */
+  .cyc { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 0; }
+  .cyc .cnode { flex: 1 1 0; min-width: 0; border: 1px solid var(--line-hi); background: var(--bg-card); padding: 16px 15px; }
+  .cyc .cnode .cn { display:flex; align-items:baseline; gap:7px; font-family:var(--mono); font-size:11px; color:var(--accent); }
+  .cyc .cnode .cn i { font-style:normal; font-size:10px; letter-spacing:.1em; color:var(--text-dim); }
+  .cyc .cnode .ct { font-family:var(--serif); font-size:16px; font-weight:700; color:var(--text); margin:8px 0 9px; line-height:1.35; }
+  .cyc .cnode .cd { position:relative; padding-left:34px; font-family:var(--sans); font-size:12px;
+    color:var(--text-dim); line-height:1.6; word-break:keep-all; }
+  .cyc .cnode .cd + .cd { margin-top:7px; padding-top:7px; border-top:1px solid var(--line); }
+  .cyc .cnode .cd b { position:absolute; left:0; top:0; font-family:var(--mono); font-size:10px; font-weight:500;
+    letter-spacing:.06em; color:var(--text-dim); opacity:.85; }
+  .cyc .cnode .cd.plain { padding-left: 0; }
+  .cyc .cnode .cd.int { color:var(--text-mid); }
+  .cyc .cnode .cd.int b { color:var(--accent); opacity:1; }
+  .cyc .carrow { display: flex; align-items: center; padding: 0 9px; color: var(--accent); flex: none; }
+  @media (max-width: 900px) { .cyc { flex-direction: column; } .cyc .carrow { transform: rotate(90deg); padding: 8px 0; align-self: center; } }
+
+  /* ===== 딜사이클 간트 ===== */
+  .gantt { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 18px 20px 20px; }
+  .gantt .g-axis { display: grid; grid-template-columns: 118px 1fr; gap: 14px; margin-bottom: 6px; }
+  .gantt .g-ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .gantt .g-row { display: grid; grid-template-columns: 118px 1fr; gap: 14px; align-items: center; padding: 3px 0; }
+  .gantt .g-lab { font-family: var(--sans); font-size: 12px; color: var(--text); text-align: right; letter-spacing: -.01em; }
+  .gantt .g-track { position: relative; overflow: hidden; height: 24px; background: var(--bg-base); border: 1px solid var(--line);
+    background-image:
+      repeating-linear-gradient(to right, rgba(70,60,48,.55) 0 1px, transparent 1px calc(100% / 12)),
+      repeating-linear-gradient(to right, rgba(90,78,62,.9) 0 1px, transparent 1px 25%); }
+
+  .gantt .g-bar { position: absolute; top: 2px; bottom: 2px; display: flex; align-items: center; padding: 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .02em; white-space: nowrap; overflow: hidden; overflow: hidden; }
+  .gantt .g-bar.dot { background: #121212; border: 1px solid var(--line-hi); color: var(--text-dim); }
+  .gantt .g-bar.ult { background: rgba(168,107,72,.22); border: 1px solid var(--accent-hi); color: var(--accent-hi); }
+  .gantt .g-bar.chan { background: #2b2620; border: 1px solid #6a5a48; color: #cbbba6; }
+  .gantt .g-bar.inst { background: var(--accent); border: 1px solid var(--accent-hi); color: var(--bg-base); padding: 0 6px; }
+  .gantt .g-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+  .gantt .g-legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -2px; border: 1px solid; }
+  .gantt .g-legend .lg-dot::before { width: 26px; background: linear-gradient(to right, rgba(168,107,72,.14), rgba(168,107,72,.62)); border-color: var(--accent-hi); }
+  .gantt .g-legend .lg-chan::before { background: repeating-linear-gradient(90deg, #2b2620 0 4px, #362f26 4px 8px); border-color: #6a5a48; }
+  .gantt .g-legend .lg-inst::before { background: var(--accent); border-color: var(--accent-hi); }
+  @media (max-width: 640px) { .gantt .g-axis, .gantt .g-row { grid-template-columns: 84px 1fr; gap: 8px; } .gantt .g-lab { font-size: 11px; } }
+
+  /* ===== 트리 비교 카드 ===== */
+  .casebox { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+  .cc { border: 1px solid var(--line-hi); background: var(--bg-card); padding: 20px 22px; }
+  .cc.after { border-color: var(--accent); }
+  .cc .ccl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 12px; }
+  .cc.after .ccl { color: var(--accent); }
+  .cc .ccs { font-family: var(--serif); font-size: 16px; color: var(--text); margin-bottom: 10px; line-height: 1.45; }
+  .cc .ccb { font-family: var(--sans); font-size: 13px; color: var(--text-mid); line-height: 1.8; margin: 0; }
+  .cc .ccb b { color: var(--text); font-weight: 500; }
+
+  /* ===== 클로징 ===== */
+  .closing { padding: 58px 0; }
+  .closing .ck { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 16px; }
+  .closing .cv { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.5; }
+  .closing .cv .hi { color: var(--accent); }
+
+  @media (max-width: 760px) {
+    .casebox { grid-template-columns: 1fr; }
+    .thesis { grid-template-columns: 1fr 1fr; }
+    .thesis .tcell, .thesis .tcell:first-child, .thesis .tcell:last-child { clip-path: none; margin-right: 0; padding: 16px 18px; border-bottom: 1px solid var(--line); background: var(--bg-card); }
+    .thesis .tcell::before { display: none; }
+    .thesis .tcell:last-child { background: var(--accent-soft); }
+    .closing .cv { font-size: 20px; }
+  }
+
+  /* ============================================================
+     크로노 오디세이 수준 인터랙티브 도식 — 2026-07 리뉴얼
+     ============================================================ */
+  /* ===== DECISION — 리듬 파형 (움직이는 도식) ===== */
+  .wave-wrap { border:1px solid var(--line-hi); background:#0b0b0b; padding:14px 14px 6px; margin-top:26px; }
+  .wave-wrap svg { display:block; width:100%; height:auto; }
+  .wv-path { fill:none; stroke:var(--accent); stroke-width:2; opacity:.85; }
+  .wv-band { fill:rgba(168,107,72,.10); stroke:rgba(168,107,72,.35); stroke-width:1; stroke-dasharray:4 4; }
+  .wv-lab { font-family:var(--mono); font-size:10px; fill:#8a8078; letter-spacing:.08em; }
+  .wv-lab.hi { fill:var(--accent-hi); }
+  .wv-dot { fill:var(--accent-hi); filter:drop-shadow(0 0 5px rgba(196,130,90,.9)); }
+  .wv-dot2 { fill:var(--accent); opacity:.45; }
+  /* ===== METHOD — 간트 12s 사이클 재생선 ===== */
+  @keyframes ghead { from { left:0; } to { left:calc(100% - 2px); } }
+  /* 재생 위치 — 모든 행을 관통하는 단일 세로선 */
+  .gantt .g-rows { position: relative; }
+  .gantt .g-head { position: absolute; top: 0; bottom: 0; width: 2px; z-index: 3; pointer-events: none;
+    background: #d9463a; box-shadow: 0 0 7px rgba(217,70,58,.8); }
+  /* 시전 전 = 검정 / 세로선이 닿으면 점등 */
+  .gantt .g-bar { filter: saturate(.2) brightness(.5); transition: filter .1s linear, background .1s linear, border-color .1s linear, color .1s linear; }
+  .gantt .g-bar.is-live { filter: none; }
+  .gantt .g-bar.dot.ext { border-left: none; }
+  .gantt .g-bar.is-hidden { display: none; }
+  .gantt .g-bar.dot.has-next { border-right: none; }
+  /* 멸망의 저주 증폭 — 사이클 후반으로 갈수록 진해지는 그라데이션 (트랙 전체 기준) */
+  .gantt .g-bar.dot.is-live { background-image: linear-gradient(to right, rgba(168,107,72,.14), rgba(168,107,72,.62));
+    background-attachment: local; background-color: transparent;
+    background-repeat: no-repeat; background-size: 100% 100%;
+    border-color: var(--accent-hi); color: var(--accent-hi); }
+  .gantt .g-proc-tag { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--accent-hi); white-space: nowrap;
+    opacity: 0; transition: opacity .12s linear; }
+  .gantt .g-proc-tag.is-live { opacity: 1; }
+  /* DOT 틱 — 기본은 없음, 영혼 파열 구간(--tick 활성)에만 촘촘한 눈금 */
+  .gantt .g-bar.dot .tickzone { position: absolute; top: 0; bottom: 0; pointer-events: none;
+    background-image: repeating-linear-gradient(to right, rgba(247,236,221,.32) 0 1px, transparent 1px 100%);
+    background-size: var(--tickgap, 16px) 100%;
+    opacity: 0; transition: opacity .15s linear; }
+  .gantt .g-bar.dot .tickzone.is-on { opacity: 1; }
+  .gantt .g-bar.cut { background: rgba(255,255,255,.02); border: 1px dashed #7a6852; color: var(--text-dim); }
+  .gantt .g-legend .lg-cut::before { background: rgba(255,255,255,.02); border: 1px dashed #7a6852; }
+  .gantt .g-bar { z-index:1; }
+  /* 재생선이 도달한 바만 점등 — --at(초) 지연 후 켜지고, 사이클이 끝나면 함께 리셋 */
+  .gantt .g-bar.chan { background:repeating-linear-gradient(90deg, #2b2620 0 6px, #362f26 6px 12px); animation:chanFlow 1.1s linear infinite; }
+  @keyframes chanFlow { to { background-position:12px 0; } }
+  .gantt .g-legend .lg-head::before { background:#d9463a; border-color:#d9463a; width:2px; }
+  /* ===== 사이클 화살표 펄스 ===== */
+  .cyc .carrow .ca { display:inline-block; animation:caPulse 1.8s ease-in-out infinite; }
+  .cyc .carrow:nth-child(4) .ca { animation-delay:.22s; }
+  .cyc .carrow:nth-child(6) .ca { animation-delay:.44s; }
+  .cyc .carrow:nth-child(8) .ca { animation-delay:.66s; }
+  @keyframes caPulse { 0%,100% { opacity:.45; transform:translateX(0); } 50% { opacity:1; transform:translateX(3px); } }
+  /* ===== 트리별 리듬 미니 파형 ===== */
+  .ccwave { margin-top:12px; border:1px solid var(--line); background:var(--bg-base); }
+  .ccwave svg { display:block; width:100%; height:auto; }
+  @media(prefers-reduced-motion:reduce){ .gantt .g-track::after, .cyc .carrow .ca, .gantt .g-bar.chan { animation:none; } }
+  .flatwave { border:1px solid var(--line-hi); background:var(--bg-card); padding:10px 6px 4px; }
+  .flatwave svg { display:block; width:100%; height:auto; }
+  .flatwave .fw-line path { fill:none; stroke:var(--accent); stroke-width:1.6; opacity:.8; }
+  .flatwave .fw-base { stroke:#3a3128; stroke-width:1; }
+  .flatwave .fw-tick line { stroke:#3a3128; stroke-width:1; }
+  .flatwave .fw-k, .flatwave .fw-t { font-family:var(--mono); font-size:10px; fill:var(--text-dim); }
+  .flatwave .fw-cap { font-family:var(--mono); font-size:11px; fill:var(--text-mid); }
+  .gantt .g-bar.proc { background: var(--accent-hi); border: 1px solid var(--accent-hi); color: var(--bg-base); padding: 0 5px; }
+  .gantt .g-legend .lg-proc::before { background: var(--accent-hi); border-color: var(--accent-hi); }
+  .gantt .g-legend .lg-tick::before { width: 26px; background-color: rgba(168,107,72,.38);
+    background-image: repeating-linear-gradient(to right, rgba(247,236,221,.32) 0 1px, transparent 1px 5px);
+    border-color: var(--accent-hi); }
+  .gantt.burst { border-color: var(--accent); }
+  .blk-label .gl-note { font-family: var(--sans); font-size: 11px; letter-spacing: 0; font-weight: 400; color: var(--text-dim); margin-left: 10px; }
+  .gantt .g-bar.cast { background-image: repeating-linear-gradient(135deg, rgba(168,107,72,.55) 0 3px, transparent 3px 6px);
+    background-repeat: no-repeat; background-size: var(--fill, 0%) 100%;
+    border: 1px solid var(--line-hi); padding: 0; filter: none; }
+  .gantt .g-bar.cast.is-live { border-color: var(--accent); }
+  .gantt .g-legend .lg-cast::before { width: 20px; background-image: repeating-linear-gradient(135deg, rgba(168,107,72,.55) 0 3px, transparent 3px 6px); background-repeat: no-repeat; background-size: 60% 100%; border-color: var(--accent); }
+  .cyccmp { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .cyccmp .cc-fig { margin:0; border:1px solid var(--line-hi); background:var(--bg-card); padding:14px 16px 16px; }
+  .cyccmp figcaption { display:flex; align-items:baseline; gap:9px; margin-bottom:8px; }
+  .cyccmp figcaption b { font-family:var(--serif); font-size:16px; color:var(--text); }
+  .cyccmp figcaption i { font-family:var(--mono); font-size:10px; font-style:normal; color:var(--text-dim); }
+  .cyccmp svg { display:block; width:100%; height:auto; }
+  .cyccmp .cc-ax { font-family:var(--mono); font-size:10px; fill:var(--text-dim); }
+  .cyccmp p { margin:8px 0 0; font-family:var(--sans); font-size:12px; line-height:1.65; color:var(--text-mid); word-break:keep-all; }
+  .cyccmp p b { color:var(--text); font-weight:600; }
+  @media(max-width:760px){ .cyccmp { grid-template-columns:1fr; } }
+
+  /* ===== 생존의 시험장 (2026-09) ===== */
+  .ffa { margin-top: 22px; border: 1px solid var(--line-hi); background: var(--bg-card); padding: 20px 22px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .ffa .fk { flex: none; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--accent); margin-right: 4px; }
+  .ffa .fx { flex: none; padding: 9px 13px; border: 1px solid var(--line-hi); background: var(--bg-base); font-family: var(--sans); font-size: 12px; color: var(--text-mid); }
+  .ffa .fx b { color: var(--text); font-weight: 600; }
+  .ffa .fa { flex: none; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+</style>
+<style id="sx-style">
+/* 시스템 기획 이관 블록 (sx- 접두) */
+.sx-sec { margin-top: 8px; }
+.sx-sec h3 { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--text); margin: 44px 0 4px; line-height: 1.45; word-break: keep-all; }
+.sx-sec p { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.85; max-width: 820px; word-break: keep-all; margin: 10px 0 0; }
+.sx-sec p b { color: var(--text); font-weight: 600; }
+.sx-cap { font-family: var(--sans); font-size: 12px; color: var(--text-dim); margin-top: 12px; line-height: 1.7; word-break: keep-all; }
+.sx-cap b { color: var(--text-mid); font-weight: 600; }
+.sx-brief { margin-top: 22px; border-top: 1px solid var(--line); }
+.sx-brief-r { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.sx-brief-k { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); }
+.sx-brief-v { font-family: var(--sans); font-size: 13px; line-height: 1.7; color: var(--text-mid); word-break: keep-all; }
+.sx-cards { margin-top: 18px; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.sx-cards.sx-c2 { grid-template-columns: repeat(2,1fr); }
+.sx-cards.sx-c3 { grid-template-columns: repeat(3,1fr); }
+.sx-cards.sx-c4 { grid-template-columns: repeat(4,1fr); }
+.sx-card { background: var(--bg-card); padding: 18px 20px 20px; }
+.sx-card-k { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+.sx-card-t { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; word-break: keep-all; }
+.sx-card-v { font-family: var(--sans); font-size: 13px; line-height: 1.75; color: var(--text-mid); word-break: keep-all; }
+.sx-card-v b { color: var(--text); font-weight: 600; }
+.sx-card-v .sx-m { font-family: var(--mono); color: var(--accent-hi); }
+.sx-card.sx-hi { background: rgba(168,107,72,.07); }
+.sx-card-r { display: grid; grid-template-columns: 40px 1fr; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); }
+.sx-card-r span:first-child { font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+.sx-card-r span:last-child { font-family: var(--sans); font-size: 13px; line-height: 1.7; color: var(--text-mid); word-break: keep-all; }
+.sx-card-r b { color: var(--text); font-weight: 600; }
+.sx-cards.sx-flow .sx-card { position: relative; }
+.sx-cards.sx-flow .sx-card + .sx-card::before { content: "▸"; position: absolute; left: -7px; top: 20px; font-size: 12px; color: var(--accent); background: var(--bg-base); line-height: 1; }
+.sx-duo { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.sx-fig { border: 1px solid var(--line); background: var(--bg-card); padding: 18px 18px 14px; }
+.sx-fig-k { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+.sx-fig-k span { font-family: var(--mono); font-weight: 400; font-size: 12px; color: var(--text-dim); margin-left: 8px; }
+.sx-fig svg { display: block; width: 100%; height: auto; }
+.sx-fig .sx-fc { margin-top: 10px; font-family: var(--sans); font-size: 12px; line-height: 1.7; color: var(--text-mid); word-break: keep-all; }
+svg .sx-ax { stroke: var(--line-hi); stroke-width: 1; fill: none; }
+svg .sx-gd { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+svg .sx-ln { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+svg .sx-ln2 { stroke: var(--text-dim); stroke-width: 1; fill: none; stroke-dasharray: 2 3; }
+svg .sx-pt { fill: var(--accent); }
+svg .sx-pt2 { fill: var(--bg-card); stroke: var(--text-mid); stroke-width: 1.2; }
+svg .sx-tl { font-family: var(--sans); font-size: 12px; fill: var(--text-dim); }
+svg .sx-tn { font-family: var(--mono); font-size: 10px; fill: var(--text-dim); }
+svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); }
+.sx-std { margin-top: 18px; border: 1px solid var(--line); overflow-x: auto; }
+.sx-std table { width: 100%; border-collapse: collapse; min-width: 640px; }
+.sx-std th, .sx-std td { padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--bg-card); text-align: left; vertical-align: top; }
+.sx-std tr:last-child td { border-bottom: 0; }
+.sx-std th { font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--text-dim); background: var(--bg-card-hi); }
+.sx-std td { font-family: var(--sans); font-size: 13px; line-height: 1.7; color: var(--text-mid); word-break: keep-all; }
+.sx-std td.sx-k { color: var(--text); font-weight: 600; width: 170px; }
+.sx-std td b { color: var(--text); font-weight: 600; }
+.sx-std td .sx-m { font-family: var(--mono); color: var(--accent-hi); }
+.sx-shot-hero { margin: 24px 0 0; border: 1px solid var(--line); background: var(--bg-card); }
+.sx-shot-hero img { display: block; width: 100%; height: auto; max-height: 460px; object-fit: cover; }
+.sx-shot-hero figcaption, .sx-shots figcaption, .sx-tools figcaption { padding: 10px 14px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); line-height: 1.6; border-top: 1px solid var(--line); word-break: keep-all; }
+.sx-shots { margin-top: 18px; display: grid; gap: 12px; }
+.sx-shots.sx-c3 { grid-template-columns: 1fr 1.25fr 1fr; }
+.sx-shots.sx-c2 { grid-template-columns: 1fr 1fr; }
+.sx-shots figure { margin: 0; border: 1px solid var(--line); background: var(--bg-card); display: flex; flex-direction: column; }
+.sx-shots .sx-im { flex: 1; display: flex; align-items: center; justify-content: center; background: var(--bg-base); height: 230px; overflow: hidden; }
+.sx-shots .sx-im img { display: block; max-width: 100%; max-height: 230px; height: auto; }
+.sx-shots .sx-im.sx-pair { gap: 10px; padding: 10px; }
+.sx-shots .sx-im.sx-pair img { max-height: 200px; }
+.sx-shots .sx-im.sx-fill img { width: 100%; height: 100%; max-height: none; object-fit: cover; }
+.sx-shots .sx-im.sx-fit img { max-height: 214px; }
+.sx-tools { margin-top: 18px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.sx-tools figure { margin: 0; border: 1px solid var(--line); background: var(--bg-card); }
+.sx-tools img { display: block; width: 100%; height: 190px; object-fit: cover; object-position: top left; background: var(--bg-base); }
+.sx-flowbox { margin-top: 20px; display: grid; grid-template-columns: 1fr 250px 1fr; border: 1px solid var(--line); background: var(--bg-card); }
+.sx-fb-col { padding: 20px 20px 22px; }
+.sx-fb-col + .sx-fb-col { border-left: 1px solid var(--line); }
+.sx-fb-h { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
+.sx-fb-h span { font-weight: 400; color: var(--text-dim); margin-left: 6px; }
+.sx-fb-i { padding: 10px 0; border-top: 1px solid var(--line); }
+.sx-fb-i:first-of-type { border-top: 0; padding-top: 0; }
+.sx-fb-t { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; gap: 10px; }
+.sx-fb-t .sx-m { font-weight: 500; font-size: 12px; color: var(--accent-hi); white-space: nowrap; }
+.sx-fb-v { margin-top: 3px; font-family: var(--sans); font-size: 12px; line-height: 1.65; color: var(--text-mid); word-break: keep-all; }
+.sx-bar { margin-top: 6px; height: 4px; background: var(--line); }
+.sx-bar i { display: block; height: 4px; background: var(--accent); }
+.sx-tank { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: var(--bg-base); }
+.sx-tank-box { width: 120px; height: 150px; border: 1px solid var(--line-hi); position: relative; margin: 6px 0 14px; background: var(--bg-card); }
+.sx-tank-box i { position: absolute; left: 0; right: 0; bottom: 0; height: 70%; background: rgba(168,107,72,.22); border-top: 1px solid var(--accent); }
+.sx-tank-t { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--text); }
+.sx-tank-v { margin-top: 6px; font-family: var(--sans); font-size: 12px; line-height: 1.65; color: var(--text-mid); word-break: keep-all; max-width: 210px; }
+.sx-tank-a { font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+.sx-chainline { border: 1px solid var(--line); border-top: 0; background: var(--bg-card); padding: 14px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.sx-chainline .sx-ck { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--accent); margin-right: 4px; }
+.sx-chainline .sx-cx { font-family: var(--sans); font-size: 12px; color: var(--text-mid); padding: 6px 11px; border: 1px solid var(--line-hi); }
+.sx-chainline .sx-cx.sx-hi { color: var(--text); border-color: var(--accent); }
+.sx-chainline .sx-ca { font-size: 11px; color: var(--text-dim); }
+.sx-shrink { margin-top: 18px; border: 1px solid var(--line); overflow-x: auto; }
+.sx-shrink-g { display: grid; grid-template-columns: 210px repeat(4, 1fr); min-width: 720px; }
+.sx-shrink-g > div { border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); padding: 12px 14px; background: var(--bg-card); font-family: var(--sans); }
+.sx-shrink-g > div:nth-child(5n+1) { border-left: 0; }
+.sx-shrink-g > div:nth-last-child(-n+5) { border-bottom: 0; }
+.sx-sh-h { font-size: 12px; color: var(--text-dim); background: var(--bg-card-hi) !important; }
+.sx-sh-f { font-size: 13px; color: var(--text); font-weight: 600; }
+.sx-sh-f em { display: block; font-style: normal; font-size: 11px; font-weight: 400; color: var(--text-dim); margin-top: 4px; }
+.sx-sh-f .sx-w { display: block; height: 3px; background: var(--line-hi); margin-top: 7px; }
+.sx-sh-c { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; }
+.sx-sh-c.sx-fog { background: rgba(168,107,72,.14) !important; color: var(--accent-hi); }
+.sx-sh-c.sx-warn { background: rgba(168,107,72,.28) !important; color: var(--text); }
+.sx-more { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 13px; color: var(--text-mid); text-decoration: none; border-bottom: 1px solid var(--line-hi); padding-bottom: 3px; }
+.sx-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
+@media (max-width: 1000px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr 1fr; } .sx-cards.sx-c2, .sx-duo, .sx-tools, .sx-shots.sx-c3, .sx-shots.sx-c2 { grid-template-columns: 1fr; } .sx-flowbox { grid-template-columns: 1fr; } .sx-fb-col + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-brief-r { grid-template-columns: 1fr; gap: 4px; } }
+@media (max-width: 640px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr; } .sx-cards.sx-flow .sx-card + .sx-card::before { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="site-head" id="top">
+  <a class="nav-home" href="index.html" aria-label="홈 (커버)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg></a>
+        <nav class="site-nav" aria-label="주요 메뉴">
+    <a class="nav-top" href="01_intro.html">ABOUT</a>
+    <div class="nav-item">
+      <span class="nav-top is-current" tabindex="0" role="button" aria-haspopup="true">PROJECTS <span class="caret">&#9662;</span></span>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">PROJECTS</div><div class="tm-t">참여 프로젝트에서 맡은 일과 결과</div><div class="tm-s">타이틀별 담당 역할 · 설계 내용 · 성과</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">CHRONO ODYSSEY <span class="n">2025 – 현재</span></div><div class="tl">
+            <a href="02_chrono_odyssey.html"><span class="nm">전투 구조 · 메타 설계<span class="en">COMBAT STRUCTURE</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">TRAHA INFINITY <span class="n">2023 – 2025</span></div><div class="tl">
+            <a href="04_traha_infinity.html"><span class="nm">자동 사냥 안정성 개선<span class="en">CLASS REWORK</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">TRAHA <span class="n">2017 – 2023</span></div><div class="tl">
+            <a href="05_traha.html"><span class="nm">PvP 메타 밸런스 설계<span class="en">PVP BALANCE</span></span></a>
+          </div></div>
+          <div class="tg"><div class="tg-h">ECHO OF SOUL <span class="n">2013 – 2017</span></div><div class="tl">
+            <a href="06_echo_of_soul.html" class="is-current" aria-current="page"><span class="nm">클래스 · 전장 기획<span class="en">CLASS &amp; BATTLEFIELD</span></span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">WORK <span class="caret">&#9662;</span></span>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">WORK</div><div class="tm-t">전투 캐릭터팀 리드로서 일하는 기준</div><div class="tm-s">팀 공통 규칙 · 품질 규격 · 도구화</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">TEAM OPERATION <span class="n">크로노 오디세이 · 2025 – 현재</span></div><div class="tl">
+            <a href="07_work_simplification.html"><span class="nm">업무 단순화<span class="en">SIMPLIFICATION</span></span></a>
+            <a href="08_planning_direction.html"><span class="nm">연출 · 타격감 규격화<span class="en">STANDARDIZATION</span></span></a>
+            <a href="09_work_automation.html"><span class="nm">AI 전투 기획 자동화<span class="en">AUTOMATION</span></span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-top" tabindex="0" role="button" aria-haspopup="true">CASE STUDY <span class="caret">&#9662;</span></span>
+      <div class="dropdown tm">
+        <div class="tm-desc"><div class="tm-k">CASE STUDY</div><div class="tm-t">출시작 분석과 개인 기획 과제</div><div class="tm-s">외부 타이틀 전투 분석 · 기획서 습작</div></div>
+        <div class="tm-body">
+          <div class="tg"><div class="tg-h">STELLAR BLADE</div><div class="tl">
+            <a href="10_sb_analysis.html"><span class="nm">전투 분석<span class="en">COMBAT INSIGHTS</span></span></a>
+            <a href="11_sb_charge_boost.html"><span class="nm">차지 부스트 시스템 기획서<span class="en">DESIGN DOCUMENT</span></span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <a class="nav-contact" href="01_intro.html#contact" aria-label="연락처" title="CONTACT"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.8 6.6 8.2 6.3 8.2-6.3"/></svg></a>
+  </nav>
+</header>
+
+<section class="proj-hero">
+  <div class="ph-media" aria-hidden="true"><video autoplay muted loop playsinline poster="media/eos_trailer_poster.jpg"><source src="media/eos_trailer.mp4" type="video/mp4"></video></div>
+  <div class="ph-dim" aria-hidden="true"></div>
+  <div class="ph-caption">
+    <div class="hero-tag"><span class="hl">Class Design</span></div>
+    <div class="hero-portfolio"><span>E</span><span>C</span><span>H</span><span>O</span><span class="sp"></span><span>O</span><span>F</span><span class="sp"></span><span>S</span><span>O</span><span>U</span><span>L</span></div>
+    <div class="hero-divline"></div>
+    <h1 class="hero-name">클래스 기획</h1>
+  </div>
+  <div class="ph-spec" aria-label="프로젝트 정보">
+    <div class="ehs-row"><span class="k">Role</span><span class="v"><span class="ko">전투 디자이너</span></span></div><div class="ehs-row"><span class="k">Scope</span><span class="v"><span class="ko">클래스 · 전장 콘텐츠</span></span></div>
+    <div class="ehs-row"><span class="k">Tenure</span><span class="v">2013 – 2017</span></div>
+    <div class="ehs-row"><span class="k">Genre</span><span class="v">MMORPG</span></div>
+    <div class="ehs-row"><span class="k">Platform</span><span class="v">PC</span></div>
+    <div class="ehs-row"><span class="k">Tool</span><span class="v">Unreal Engine 2.5</span></div>
+  </div>
+</section>
+
+<header class="page-header">
+  <div class="container">
+    <div class="section-label"><span class="badge"><span class="ko">개요</span></span> &nbsp;/&nbsp; <span class="ko">반복을 리듬으로 바꾼 사이클 설계</span></div>
+    <h2 class="ph-title">안정적인 루프 위의 폭발적 변주</h2>
+    <p class="prove">스킬 이름 · 효과보다 반복으로 손에 익는 <b>전투 리듬</b>에 설계 초점</p>
+    <div class="thesis">
+      <a class="tcell" href="#problem"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.4 18.6 17.4H1.4z"/><path d="M10 8v4.3"/><path d="M10 14.9h.01"/></svg><span class="ko">문제</span></div><div class="tv">단조로워지는 지속딜</div></a>
+      <a class="tcell" href="#decision"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.6"/><path d="M6.3 10.2 8.9 12.8 13.8 7.3"/></svg><span class="ko">결정</span></div><div class="tv">폭발적인 변주 추가</div></a>
+      <a class="tcell" href="#method"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="5.6"/><circle cx="10" cy="10" r="2.2"/><path d="M10 4.4V2.2M10 15.6v2.2M15.6 10h2.2M4.4 10H2.2M13.96 6.04l1.56-1.56M6.04 13.96l-1.56 1.56M13.96 13.96l1.56 1.56M6.04 6.04 4.48 4.48"/></svg><span class="ko">방법</span></div><div class="tv">사이클과 손맛의 변주 설계</div></a>
+      <a class="tcell" href="#proved"><div class="tk"><svg class="ti" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 2.2 9.6 6.7M12.6 2.2 10.4 6.7"/><circle cx="10" cy="12.6" r="5.4"/><circle cx="10" cy="12.6" r="2"/></svg><span class="ko">결과</span></div><div class="tv">유기적 사이클 설계</div></a>
+    </div>
+  </div>
+</header>
+
+<section class="sec" id="problem"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">문제</span></span> &nbsp;/&nbsp; <span class="ko">단조로워지는 지속딜</span></div>
+  <h2>안정적인 운영이 만든 지루함</h2>
+  <p class="why">지속딜 클래스는 운영이 안정적인 대신, <b>긴장감도 함께 사라짐</b></p>
+  <div class="blk">
+    <div class="flatwave"><svg viewBox="0 0 840 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 12초 사이클이 파고 없이 반복되는 파형">
+      <g class="fw-line"><path d="M40 74 C 70 70 100 66 130 64 C 160 62 190 66 205 70 C 218 74 224 72 230 74"/><path d="M230 74 C 260 70 290 66 320 64 C 350 62 380 66 395 70 C 408 74 414 72 420 74"/><path d="M420 74 C 450 70 480 66 510 64 C 540 62 570 66 585 70 C 598 74 604 72 610 74"/><path d="M610 74 C 640 70 670 66 700 64 C 730 62 760 66 775 70 C 788 74 794 72 800 74"/></g>
+      <g class="fw-tick"><line x1="40" y1="86" x2="40" y2="94"/><line x1="230" y1="86" x2="230" y2="94"/><line x1="420" y1="86" x2="420" y2="94"/><line x1="610" y1="86" x2="610" y2="94"/><line x1="800" y1="86" x2="800" y2="94"/></g>
+      <line class="fw-base" x1="40" y1="90" x2="800" y2="90"/>
+      <text class="fw-k" x="40" y="30">긴장감</text>
+      <text class="fw-cap" x="800" y="30" text-anchor="end">12초 간 같은 입력 · 같은 파고의 반복</text>
+      <text class="fw-t" x="135" y="108" text-anchor="middle">CYCLE 1</text>
+      <text class="fw-t" x="325" y="108" text-anchor="middle">CYCLE 2</text>
+      <text class="fw-t" x="515" y="108" text-anchor="middle">CYCLE 3</text>
+      <text class="fw-t" x="705" y="108" text-anchor="middle">CYCLE 4</text>
+    </svg></div>
+  </div>
+</div></section>
+
+<section class="sec" id="decision"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">결정</span></span> &nbsp;/&nbsp; <span class="ko">폭발적인 변주 추가</span></div>
+  <h2>루프 위에 변주를 얹는 설계</h2>
+  <p class="why">DOT 딜러의 정체성을 지키면서, <b>손맛이 뒤바뀌는 구간</b>을 추가</p>
+  <div class="blk">
+    <div class="rhythm-split">
+      <div class="clip"><video autoplay muted loop playsinline poster="media/eos_warlock_poster.jpg"><source src="media/eos_warlock.mp4" type="video/mp4"></video></div>
+      <div class="rflow-v">
+        <div class="blk-label" style="margin:0 0 10px">RHYTHM STRUCTURE</div>
+        <div class="rfv-node"><span class="rfv-t">Normal Loop</span><span class="rfv-d">지속딜 · 강화 단계 상승</span></div>
+        <div class="rfv-arr">↓</div>
+        <div class="rfv-node is-peak"><span class="rfv-t">Burst Window</span><span class="rfv-d">폭발적인 변주 · 강화 5중첩</span></div>
+        <div class="rfv-arr">↓</div>
+        <div class="rfv-node"><span class="rfv-t">Return to Loop</span><span class="rfv-d">안정적인 루프로 회귀</span></div>
+      </div>
+    </div>
+    
+  </div>
+</div></section>
+
+<section class="sec" id="method"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">방법</span></span> &nbsp;/&nbsp; <span class="ko">사이클과 손맛의 변주 설계</span></div>
+  <h2>중첩 · 버프 · 채널링을 한 점에 모으는 사이클 설계</h2>
+  <p class="why">플레이의 변주는 우연이 아닌, <b>스킬 구조의 유기적 맞물림</b>으로 발생하도록 정밀 설계</p>
+
+  <div class="blk">
+    <div class="blk-label"><span class="ko">의도된 카타르시스</span></div>
+    <div class="cyc">
+      <div class="cnode"><div class="cn">01<i>STACKING</i></div><div class="ct">사전 빌드업</div><div class="cd"><b>설계</b>&lsquo;불행의 징조&rsquo; 5중첩 누적</div><div class="cd int"><b>의도</b>폭발적 딜링의 사전 조건 충족 · 긴장감 조성</div></div>
+      <div class="carrow"><span class="ca">&rarr;</span></div>
+      <div class="cnode"><div class="cn">02<i>TRIGGER</i></div><div class="ct">트리거 시전</div><div class="cd"><b>설계</b>&lsquo;제물 서약&rsquo; 투사체 비행 시간 중 후속 스킬 캐스팅</div><div class="cd int"><b>의도</b>투사체 비행 시간을 활용한 딜레이 최소화 · 유기적 연계</div></div>
+      <div class="carrow"><span class="ca">&rarr;</span></div>
+      <div class="cnode"><div class="cn">03<i>SYNERGY</i></div><div class="ct">시너지 발동</div><div class="cd"><b>설계</b>공격속도 상승 버프 획득</div><div class="cd int"><b>의도</b>버프와 중첩의 정점을 일치시켜 효율을 극대화</div></div>
+      <div class="carrow"><span class="ca">&rarr;</span></div>
+      <div class="cnode"><div class="cn">04<i>BURST</i></div><div class="ct">피크 타임</div><div class="cd"><b>설계</b>쉴 새 없는 연속 시전(연사) 전개</div><div class="cd int"><b>의도</b>자원과 쿨타임이 맞물려 끊김 없이 쏟아지는 최고조 구간</div></div>
+      <div class="carrow"><span class="ca">&rarr;</span></div>
+      <div class="cnode"><div class="cn">05<i>FEEDBACK</i></div><div class="ct">체감 피드백</div><div class="cd"><b>설계</b>평소 사이클과 차별화된 타격감 · 조작감</div><div class="cd int"><b>의도</b>정밀 설계가 확실한 손맛으로 이어지는 경험</div></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label"><span class="ko">저주 워록 딜사이클</span>: DOT <span class="ko">중첩 후 증폭과 회복 두 가지 채널링 스킬 사용</span></div>
+    <div class="gantt">
+      <div class="g-axis"><div></div><div class="g-ticks"><span>0s</span><span>3s</span><span>6s</span><span>9s</span><span>12s</span></div></div>
+      <div class="g-rows">
+      <div class="g-row"><div class="g-lab">멸망의 저주</div><div class="g-track"><span class="g-bar dot" style="--at:0.0;left:0.0%;width:100.0%">12s · <span class="ko">궁극기</span> · <span class="ko">모든</span> DOT <span class="ko">피해를 점차 증폭</span></span></div></div>
+      <div class="g-row"><div class="g-lab">영혼의 피로</div><div class="g-track"><span class="g-bar dot" style="--at:0;left:0.0%;width:50.0%" data-nextat="1">6s · DOT<span class="ko">마다 갱신</span></span><span class="g-bar dot ext" style="--at:1;left:50.0%;width:8.3%" data-nextat="3"></span><span class="g-bar dot ext" style="--at:3;left:58.3%;width:16.7%" data-nextat="6"></span><span class="g-bar dot ext" style="--at:6;left:75.0%;width:25.0%"></span></div></div>
+      <div class="g-row"><div class="g-lab">깊은 악몽</div><div class="g-track"><span class="g-bar dot" style="--at:1;left:8.3%;width:91.7%">6s (<span class="ko">강화 시</span> 12s) · <span class="ko">틱 피해 점증</span></span></div></div>
+      <div class="g-row"><div class="g-lab">불행의 징조</div><div class="g-track"><span class="g-bar cast" style="--at:2;left:16.7%;width:8.3%" title="캐스팅 1s"></span><span class="g-bar dot" style="--at:3;left:25.0%;width:75.0%">10s · <span class="ko">타격마다</span> 1<span class="ko">중첩</span></span></div></div>
+      <div class="g-row"><div class="g-lab">황폐화 저주</div><div class="g-track"><span class="g-bar dot" style="--at:3;left:25.0%;width:75.0%">9s</span></div></div>
+      <div class="g-row"><div class="g-lab">부패의 저주</div><div class="g-track"><span class="g-bar dot" style="--at:3;left:25.0%;width:75.0%">9s · <span class="ko">황폐화 연동 자동 추가</span></span></div></div>
+      <div class="g-row"><div class="g-lab">제물 서약</div><div class="g-track"><span class="g-bar cast" style="--at:3.5;left:29.2%;width:16.7%" title="캐스팅 2s"></span><span class="g-bar dot" style="--at:5.5;left:45.8%;width:41.7%">5s · <span class="ko">속도</span> +50%</span></div></div>
+      <div class="g-row"><div class="g-lab">파멸의 사슬</div><div class="g-track"><span class="g-bar chan" style="--at:5.5;left:45.8%;width:50.0%" data-until="5.5"><span class="ko">시전 시간</span> 6s</span><span class="g-bar chan" style="--at:5.5;left:45.8%;width:25.0%" data-from="5.5"><span class="ko">시전 시간</span> 6s → 3s</span><span class="g-bar cut" style="--at:5.5;left:70.8%;width:25.0%" data-from="5.5"></span></div></div>
+      <div class="g-row"><div class="g-lab">영혼 파열</div><div class="g-track"><span class="g-proc-tag" style="--at:7.7;left:63.8%">PROC</span><span class="g-bar proc" style="--at:8.5;left:70.8%;width:25.0%">3s · DOT <span class="ko">틱 간격 축소</span></span></div></div>
+      <div class="g-row"><div class="g-lab">쇠약의 사슬</div><div class="g-track"><span class="g-bar chan" style="--at:9;left:75.0%;width:25.0%"><span class="ko">마나 회복</span></span></div></div>
+      </div>
+      <div class="g-legend"><span class="lg-head"><span class="ko">재생 위치</span></span><span class="lg-dot">DOT</span><span class="lg-cast"><span class="ko">캐스팅</span></span><span class="lg-chan"><span class="ko">채널링</span></span><span class="lg-inst"><span class="ko">즉시 시전</span></span><span class="lg-tick"><span class="ko">틱 간격 축소 구간</span></span><span class="lg-cut"><span class="ko">가속으로 단축된 구간</span></span></div>
+    </div>
+
+    <div class="blk-label" style="margin-top:26px"><span class="ko">폭발 사이클</span>: 5<span class="ko">중첩 후 연사 스킬로 바뀌는 불행의 징조</span></div>
+    <div class="gantt burst">
+      <div class="g-axis"><div></div><div class="g-ticks"><span>0s</span><span>1.5s</span><span>3s</span><span>4.5s</span><span>6s</span></div></div>
+      <div class="g-rows">
+      <div class="g-row"><div class="g-lab">DOT 5종</div><div class="g-track"><span class="g-bar dot" style="--at:0;left:0.0%;width:100.0%"><span class="ko">증폭 최대치로 유지</span></span></div></div>
+      <div class="g-row"><div class="g-lab">제물 서약</div><div class="g-track"><span class="g-bar dot" style="--at:0;left:0.0%;width:83.3%">5s · <span class="ko">속도</span> +50%</span></div></div>
+      <div class="g-row"><div class="g-lab">불행의 징조</div><div class="g-track"><span class="g-bar inst" style="--at:0.0;left:0.0%;width:6.7%"></span><span class="g-bar inst" style="--at:0.62;left:10.3%;width:6.7%"></span><span class="g-bar inst" style="--at:1.24;left:20.7%;width:6.7%"></span><span class="g-bar inst" style="--at:1.8599999999999999;left:31.0%;width:6.7%"></span><span class="g-bar inst" style="--at:2.48;left:41.3%;width:6.7%"></span><span class="g-bar inst" style="--at:3.1;left:51.7%;width:6.7%"></span><span class="g-bar inst" style="--at:3.7199999999999998;left:62.0%;width:6.7%"></span><span class="g-bar inst" style="--at:4.34;left:72.3%;width:6.7%"></span><span class="g-bar inst" style="--at:4.96;left:82.7%;width:6.7%"></span></div></div>
+      </div>
+      <div class="g-legend"><span class="lg-head"><span class="ko">재생 위치</span></span><span class="lg-dot">DOT</span><span class="lg-inst"><span class="ko">즉시 시전</span></span></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label"><span class="ko">손맛을 만드는</span> 3<span class="ko">가지</span>. <span class="ko">진입</span> · <span class="ko">의외성</span> · <span class="ko">정점</span></div>
+    <div class="cyc">
+      <div class="cnode"><div class="cn">EASY ENTRY</div><div class="ct">차례대로 누르기만 하면 완성</div><div class="cd plain">채널링이 딜·회복 구간으로 나뉘어 사이클이 한눈에</div></div>
+      <div class="carrow"><span class="ca">→</span></div>
+      <div class="cnode"><div class="cn">SURPRISE</div><div class="ct">프록의 폭발력</div><div class="cd plain">채널링 중 영혼 파열 발동 시 모든 DOT 틱 주기 절반 단축</div></div>
+      <div class="carrow"><span class="ca">→</span></div>
+      <div class="cnode"><div class="cn">PEAK</div><div class="ct">연사가 만드는 전환</div><div class="cd plain">모든 스킬의 타이밍이 겹치는 한 순간, 뒤바뀌는 조작감</div></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label"><span class="ko">두 사이클의</span> DPS <span class="ko">곡선</span>. <span class="ko">안정적인 루프가 폭발 구간의 임팩트를 더욱 강화</span></div>
+    <div class="cyccmp">
+      <figure class="cc-fig">
+        <figcaption><b>일반 사이클</b><i>12s · 쌓고 회수</i></figcaption>
+        <svg viewBox="0 0 460 170" role="img" aria-label="일반 사이클: 도트를 쌓으며 계단식으로 오르다 후반에 정점을 찍고 회수 구간에 내려오는 곡선">
+          <line x1="20" y1="150" x2="440" y2="150" stroke="#1e1e1e" stroke-width="1"/>
+          <path d="M20 150 L70 150 L70 132 L120 132 L120 118 L180 118 L180 104 L250 104 L300 92 L360 64 L400 58 L430 120 L440 150" fill="none" stroke="var(--accent)" stroke-width="1.8"/>
+          <text class="cc-ax" x="20" y="26">DPS</text>
+          <text class="cc-ax" x="440" y="166" text-anchor="end">12s</text>
+        </svg>
+      </figure>
+      <figure class="cc-fig">
+        <figcaption><b>폭발 사이클</b><i>6s · 연사</i></figcaption>
+        <svg viewBox="0 0 460 170" role="img" aria-label="폭발 사이클: 시작부터 높은 수준에서 스파이크가 연속으로 터지는 곡선">
+          <line x1="20" y1="150" x2="440" y2="150" stroke="#1e1e1e" stroke-width="1"/>
+          <path d="M20 120 L40 120 L52 44 L64 120 L85 120 L97 44 L109 120 L130 120 L142 44 L154 120 L175 120 L187 44 L199 120 L220 120 L232 44 L244 120 L265 120 L277 44 L289 120 L310 120 L322 44 L334 120 L355 120 L367 44 L379 120 L400 120 L412 44 L424 120 L440 150" fill="none" stroke="var(--accent-hi)" stroke-width="1.8"/>
+          <text class="cc-ax" x="20" y="26">DPS</text>
+          <text class="cc-ax" x="440" y="166" text-anchor="end">6s</text>
+        </svg>
+      </figure>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="proved"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">결과</span></span> &nbsp;/&nbsp; <span class="ko">유기적 사이클 설계</span></div>
+  <h2>안정성 위에 계산된 의외성과 폭발적 변주가 있는 전투 리듬</h2>
+  <p class="why">스킬의 타입 · 효과 · 쿨타임 · 지속시간을 모두 고려한 <b>사이클 설계</b></p>
+  <div class="blk">
+    <div class="means" style="grid-template-columns:repeat(2,1fr)">
+      <div class="rz"><b>명확한 숙련 구간</b><p>플레이어가 <b>폭발 타이밍을 예측하고 조절</b>. 확실한 보상감 제공</p></div>
+      <div class="rz"><b>체감의 대비</b><p>같은 트리 안에서도 <b>극단적으로 달라지는 손맛</b>. 타격감 극대화</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="ffa"><div class="container">
+  <div class="section-label"><span class="badge"><span class="ko">콘텐츠 설계</span></span> &nbsp;/&nbsp; <span class="ko">생존의 시험장</span></div>
+  <h2>배틀로얄 출시 이전에 설계한 FFA 전장</h2>
+  <p class="why">팀 없는 개인전. 오염된 공기가 차오르는 폐쇄 공간에서 <b>다른 캐릭터를 처치해 신선한 공기를 확보</b>하는 구조. 전장 규칙 · 재화 · 어뷰징 방지 · UI 요구사항 기획서 작성</p>
+  <div class="sx-sec"><div class="sx-brief">
+    <div class="sx-brief-r"><div class="sx-brief-k">형태</div><div class="sx-brief-v">팀 없는 개인전(FFA), 22 ~ 30인, 부활 5회, 플레이 시간 10분 내외</div></div>
+  </div>
+
+  <figure class="sx-shot-hero"><img src="media/sys/ffa_map.jpg" alt="생존의 시험장 4층 구조 맵" loading="lazy"><figcaption>4층 구조 폐기물 처리장 맵. 상층일수록 면적과 보급품 리액터 수 감소</figcaption></figure>
+
+  <h3>기획 의도</h3>
+  <div class="sx-cards sx-c3">
+    <div class="sx-card"><div class="sx-card-t">교전 유도</div><div class="sx-card-v">부활이 있는 개인전은 교전 회피로 시간이 늘어질 우려. 계속 소모되는 재화 <b>'신선한 공기'</b>로 이동과 교전 유도</div></div>
+    <div class="sx-card"><div class="sx-card-t">플레이 시간 10분 고정</div><div class="sx-card-v">부활을 모두 소진한 유저의 중간 퇴장 기능 부재. 조기 탈락자의 대기 시간 최소화 목적</div></div>
+    <div class="sx-card"><div class="sx-card-t">담합 방지</div><div class="sx-card-v">파티 단위 입장 허용. 팀이 없는 전장에서 임의 팀플레이 차단 필요</div></div>
+  </div>
+
+  <h3>재화 수급 구조 (유입 3종 · 소모 5종)</h3>
+  <p>신선한 공기는 환경 피해만 막는 보호막. 다른 캐릭터의 공격은 막지 못하며, 소진 시 최대 생명력 비례 피해 적용</p>
+  <div class="sx-flowbox">
+    <div class="sx-fb-col">
+      <div class="sx-fb-h">유입</div>
+      <div class="sx-fb-i"><div class="sx-fb-t">입장 · 부활 시 충전<span class="sx-m"><span class="ko">최대치의</span> 70%</span></div><div class="sx-fb-v">최대치 미만 충전으로 보충 동기 부여</div></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">보급품 리액터<span class="sx-m">1<span class="ko">분마다 재활성화</span></span></div><div class="sx-fb-v">층별 고정 배치, 누구나 사용 가능, 조작 3초</div></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">시체 리액터<span class="sx-m">1<span class="ko">회용</span></span></div><div class="sx-fb-v">사망 위치에 생성. 사용 시 공기 보충 + 약육강식 1중첩</div></div>
+    </div>
+    <div class="sx-fb-col sx-tank">
+      <div class="sx-tank-a">유입 ▸</div>
+      <div class="sx-tank-box"><i></i></div>
+      <div class="sx-tank-t">신선한 공기</div>
+      <div class="sx-tank-v">환경 피해 전용 보호막. 소진 시 생명력 차감</div>
+      <div class="sx-tank-a" style="margin-top:12px">▸ 소모</div>
+    </div>
+    <div class="sx-fb-col">
+      <div class="sx-fb-h">소모<span>오염된 공기 대비 속도</span></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">오염된 공기<span class="sx-m">×1</span></div><div class="sx-fb-v">전 층 상시 적용</div><div class="sx-bar"><i style="width:14%"></i></div></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">끈적이는 폐수<span class="sx-m">×2</span></div><div class="sx-fb-v">오염 지역 외곽, 이동 속도 감소</div><div class="sx-bar"><i style="width:28%"></i></div></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">독 안개<span class="sx-m">×5</span></div><div class="sx-fb-v">무작위 위치, 7초 지속, 2초 전 분출 예고</div><div class="sx-bar"><i style="width:71%"></i></div></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">맹독 안개<span class="sx-m">×7</span></div><div class="sx-fb-v">2분마다 발생, 종료 시까지 유지</div><div class="sx-bar"><i style="width:100%"></i></div></div>
+      <div class="sx-fb-i"><div class="sx-fb-t">호흡 곤란<span class="sx-m"><span class="ko">누적</span></span></div><div class="sx-fb-v">맹독 안개 발생마다 기본 소모량 증가</div></div>
+    </div>
+  </div>
+  <div class="sx-chainline">
+    <span class="sx-ck">처치 보상 누적</span>
+    <span class="sx-cx">시체 리액터 사용</span><span class="sx-ca">▸</span>
+    <span class="sx-cx sx-hi">약육강식 1중첩 (대인 관통력 · 생명력 증가)</span><span class="sx-ca">▸</span>
+    <span class="sx-cx">사망 시 유지, 최대 20중첩</span><span class="sx-ca">▸</span>
+    <span class="sx-cx">부활 횟수 소진 시 삭제</span>
+  </div>
+  <p class="sx-cap">처치 보상은 누적하되 최대 중첩과 삭제 조건으로 격차 확대 제한. 보급품 리액터에는 약육강식 미적용, 처치와 채집의 보상 구분. 소모 속도는 실제 수치 대신 오염된 공기 기준 배수로 표기</p>
+
+  <h3>전투 구역 축소 (3 · 5 · 7분)</h3>
+  <p>3 · 5 · 7분마다 하층부터 층 전체가 맹독 안개로 전환. 상층일수록 면적과 리액터 수가 적어 생존 공간과 재화 공급이 함께 감소</p>
+  <div class="sx-shrink">
+    <div class="sx-shrink-g">
+      <div class="sx-sh-h">층 · 면적 · 보급품 리액터</div><div class="sx-sh-h">0 ~ 3분</div><div class="sx-sh-h">3 ~ 5분</div><div class="sx-sh-h">5 ~ 7분</div><div class="sx-sh-h">7 ~ 10분</div>
+      <div class="sx-sh-f">4층<em>24 × 24m · 리액터 1</em><span class="sx-w" style="width:21%"></span></div><div class="sx-sh-c">안전</div><div class="sx-sh-c">안전</div><div class="sx-sh-c">안전</div><div class="sx-sh-c">최종 구역 (종료까지 안전)</div>
+      <div class="sx-sh-f">3층<em>48 × 48m · 리액터 2</em><span class="sx-w" style="width:43%"></span></div><div class="sx-sh-c">안전</div><div class="sx-sh-c">안전</div><div class="sx-sh-c">안전</div><div class="sx-sh-c sx-warn">7분 전환</div>
+      <div class="sx-sh-f">2층<em>80 × 80m · 리액터 8</em><span class="sx-w" style="width:71%"></span></div><div class="sx-sh-c">안전</div><div class="sx-sh-c">안전</div><div class="sx-sh-c sx-warn">5분 전환</div><div class="sx-sh-c sx-fog">맹독</div>
+      <div class="sx-sh-f">1층<em>112 × 112m · 리액터 12</em><span class="sx-w" style="width:100%"></span></div><div class="sx-sh-c">안전</div><div class="sx-sh-c sx-warn">3분 전환</div><div class="sx-sh-c sx-fog">맹독</div><div class="sx-sh-c sx-fog">맹독</div>
+    </div>
+  </div>
+  <p class="sx-cap">전환 10초 전 시스템 메시지 · 사운드 경고. 상층 이동은 계단으로만 가능하고 하층 이동은 어디서나 가능해, 계단 주변으로 교전 집중</p>
+
+  <div class="sx-shots sx-c3">
+    <figure><div class="sx-im sx-fit"><img src="media/sys/ffa_topdown.jpg" alt="월드맵" loading="lazy"></div><figcaption>월드맵. 폐수 · 계단 · 시체 위치 표시</figcaption></figure>
+    <figure><div class="sx-im sx-fill"><img src="media/sys/ffa_corpse_reactor.jpg" alt="시체 리액터 사용" loading="lazy"></div><figcaption>시체 리액터 사용. 피격 시에도 조작 유지</figcaption></figure>
+    <figure><div class="sx-im sx-pair"><img src="media/sys/ffa_supply_on.jpg" alt="보급품 리액터 충전 상태" loading="lazy"><img src="media/sys/ffa_supply_off.jpg" alt="보급품 리액터 소진 상태" loading="lazy"></div><figcaption>보급품 리액터 충전 · 소진 상태 (1분 후 재활성화)</figcaption></figure>
+  </div>
+  <div class="sx-shots sx-c2">
+    <figure><div class="sx-im sx-fill"><img src="media/sys/ffa_deadly_fog.jpg" alt="맹독 안개로 전환된 층" loading="lazy"></div><figcaption>맹독 안개로 전환된 층. 종료 시까지 유지</figcaption></figure>
+    <figure><div class="sx-im"><img src="media/sys/ffa_blessing.jpg" alt="보호의 축복 상태" loading="lazy"></div><figcaption>보호의 축복. 입장 대기 중 공기 소모 없음, 생명력 회복</figcaption></figure>
+  </div>
+
+  <h3>어뷰징 방지</h3>
+  <div class="sx-std">
+    <table>
+      <thead><tr><th>악용 사례</th><th>방지 규칙</th><th>목적</th></tr></thead>
+      <tbody>
+        <tr><td class="sx-k">부활 지연</td><td>사망 <span class="sx-m">5<span class="ko">초</span></span> 후 자동 부활. 지연 시 축복 효과 삭제 · 공헌도 패널티 · 보상 미지급</td><td>유령 상태를 이용한 목숨 소모 없는 회피 방지</td></tr>
+        <tr><td class="sx-k">부활 직후 기습</td><td>부활 후 5초 면역. <b>스킬 사용 · 리액터 조작 시 즉시 해제</b></td><td>면역 효과를 재정비 용도로 한정</td></tr>
+        <tr><td class="sx-k">방치 · 잠수</td><td>2분간 공격 · 적 대상 스킬 · 리액터 조작이 없으면 경고, <span class="sx-m">3<span class="ko">회</span></span> 누적 시 AFK 판정</td><td>세 행동 중 하나라도 있으면 참여로 인정</td></tr>
+        <tr><td class="sx-k">이탈 후 재입장</td><td>이탈 <span class="sx-m">30<span class="ko">초</span></span>당 목숨 1개 차감. 순위 계산에서 이탈 시간 제외</td><td>접속 종료를 이용한 위험 구간 회피 방지</td></tr>
+        <tr><td class="sx-k">파티 담합</td><td>입장 시 파티 자동 해산, 종료 후 재결성. 대상 레벨 · 이름 비공개. 채팅은 유령 상태에서만 허용</td><td>아군 식별 수단 제거</td></tr>
+        <tr><td class="sx-k">리액터 독점</td><td>조작 3초, <b>피격으로는 취소 불가</b>. 넉백 · 스턴 등 군중제어로만 방해 가능</td><td>군중제어 스킬의 전장 활용 가치 부여</td></tr>
+        <tr><td class="sx-k">회복 아이템 사용</td><td>물약 · 붕대 등 회복 아이템 사용 불가. 제자리 부활 불가</td><td>생존 수단을 신선한 공기로 일원화</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>순위 · 보상</h3>
+  <div class="sx-cards sx-c2">
+    <div class="sx-card"><div class="sx-card-t">순위 산정</div><div class="sx-card-v">생존 시간 순으로 정렬, 전체 인원의 상위 절반까지 승리 처리. 승패는 보상 아이템에만 반영, 나머지 보상은 전용 공식으로 차등 지급</div></div>
+    <div class="sx-card"><div class="sx-card-t">휘장</div><div class="sx-card-v">최장 생존자 1위 휘장, 최다 처치자 MVP 휘장. <b>생존형 · 교전형 플레이 모두 보상</b></div></div>
+  </div>
+  <div class="sx-shots sx-c2">
+    <figure><div class="sx-im sx-fit"><img src="media/sys/ffa_ui_info.jpg" alt="전장 정보 UI" loading="lazy"></div><figcaption>전장 정보 UI. 다음 분출까지 남은 시간 · 남은 부활 횟수 · 공기 잔량</figcaption></figure>
+    <figure><div class="sx-im sx-fit"><img src="media/sys/ffa_ui_result.jpg" alt="결과창 UI" loading="lazy"></div><figcaption>결과창. 생존 시간 순위 · 1위 휘장 · MVP 휘장 (UI 목업 수치)</figcaption></figure>
+  </div>
+  </div>
+</div></section>
+
+
+<a class="next-card" href="07_work_simplification.html" aria-label="다음: SIMPLIFICATION">
+  <div class="container"><span class="nc-kicker">NEXT PAGE</span><span class="nc-title">SIMPLIFICATION</span><span class="nc-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div>
+</a>
+<!-- PAGE LIST -->
+<nav class="page-list" id="pages" aria-label="전체 페이지 목록">
+  <div class="container">
+    <div class="pl-dots" aria-label="전체 페이지 바로가기">
+      <a class="pl-dot" href="index.html#pages" data-title="COVER"><span class="pl-num">00</span></a>
+      <a class="pl-dot" href="01_intro.html#pages" data-title="ABOUT"><span class="pl-num">01</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="02_chrono_odyssey.html#pages" data-title="CHRONO ODYSSEY"><span class="pl-num">02</span></a>
+      <a class="pl-dot" href="04_traha_infinity.html#pages" data-title="TRAHA INFINITY"><span class="pl-num">03</span></a>
+      <a class="pl-dot" href="05_traha.html#pages" data-title="TRAHA"><span class="pl-num">04</span></a>
+      <a class="pl-dot is-current" href="06_echo_of_soul.html#pages" data-title="ECHO OF SOUL" aria-current="page"><span class="pl-num">05</span><span class="pl-current-label">ECHO OF SOUL</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot pl-dot-next" href="07_work_simplification.html#pages" data-title="SIMPLIFICATION"><span class="pl-num">06</span></a>
+      <a class="pl-dot" href="08_planning_direction.html#pages" data-title="STANDARDIZATION"><span class="pl-num">07</span></a>
+      <a class="pl-dot" href="09_work_automation.html#pages" data-title="AUTOMATION"><span class="pl-num">08</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="10_sb_analysis.html#pages" data-title="COMBAT INSIGHTS"><span class="pl-num">09</span></a>
+      <a class="pl-dot" href="11_sb_charge_boost.html#pages" data-title="DESIGN DOCUMENTS"><span class="pl-num">10</span></a>
+      <span class="pl-sep" aria-hidden="true"></span>
+      <a class="pl-dot" href="18_closing.html#pages" data-title="CLOSING"><span class="pl-num">11</span></a>
+    </div>
+  </div>
+</nav>
+<!-- /PAGER -->
+<footer class="site-foot">
+  <div class="sf-copy">© 2026 <span class="ko">박종혁</span> · Combat Designer · Optimized for Desktop · 1920 × 1080</div>
+</footer>
+
+
+<script>
+(function(){
+  document.querySelectorAll('.gantt').forEach(function(g){
+    var rows=g.querySelector('.g-rows'), track=g.querySelector('.g-track');
+    if(!rows||!track) return;
+    var dur=g.classList.contains('burst')?6:12;
+    var head=document.createElement('div'); head.className='g-head'; rows.appendChild(head);
+    var TICK_FROM=8.5, TICK_TO=11.5;
+    if(!g.classList.contains('burst')){
+      g.querySelectorAll('.g-bar.dot').forEach(function(b){
+        var l=parseFloat(b.style.left)||0, w=parseFloat(b.style.width)||0;
+        var st=l/100*dur, en=(l+w)/100*dur;
+        if(en<=TICK_FROM||st>=TICK_TO) return;
+        var z=document.createElement('span'); z.className='tickzone';
+        var a=Math.max(st,TICK_FROM);
+        z.style.left=((a-st)/(en-st)*100)+'%';
+        z.style.width=((en-a)/(en-st)*100)+'%';
+        z.dataset.at=TICK_FROM; z.dataset.off=TICK_TO;
+        b.appendChild(z);
+      });
+    }
+    var zones=Array.prototype.slice.call(g.querySelectorAll('.tickzone'));
+    var bars=Array.prototype.slice.call(g.querySelectorAll('.g-bar, .g-proc-tag')).map(function(b){
+      var st=b.getAttribute('data-steps');
+      var wpct=parseFloat(b.style.width)||0;
+      var lpct=parseFloat(b.style.left)||0;
+      return { el:b, at:parseFloat(b.style.getPropertyValue('--at'))||0, span:wpct, left:lpct,
+        steps: st ? st.split(',').map(function(x){ var p=x.split(':'); return [parseFloat(p[0]), parseFloat(p[1])]; }) : null };
+    });
+    function frame(now){
+      var t=(now/1000)%dur;
+      var r0=rows.getBoundingClientRect(), rt=track.getBoundingClientRect();
+      head.style.left=((rt.left-r0.left)+(t/dur)*rt.width)+'px';
+      zones.forEach(function(z){
+        z.classList.toggle('is-on', t>=parseFloat(z.dataset.at) && t<parseFloat(z.dataset.off));
+        z.style.setProperty('--tickgap', (rt.width/dur*0.5)+'px');
+      });
+      bars.forEach(function(o){
+        var u=o.el.getAttribute('data-until'), f=o.el.getAttribute('data-from'), nx=o.el.getAttribute('data-nextat');
+        if(nx!==null) o.el.classList.toggle('has-next', t>=parseFloat(nx));
+        if(u!==null||f!==null){
+          var hide=(u!==null && t>=parseFloat(u)) || (f!==null && t<parseFloat(f));
+          o.el.classList.toggle('is-hidden', hide);
+        }
+        o.el.classList.toggle('is-live', t>=o.at);
+        if(o.el.classList.contains('cast')){
+          var len=o.span/100*dur;
+          var p=len>0 ? (t-o.at)/len : 1;
+          p=p<0?0:(p>1?1:p);
+          o.el.style.setProperty('--fill',(p*100)+'%');
+        }
+        if(o.el.classList.contains('dot')){
+          if(g.classList.contains('burst')){
+            o.el.style.backgroundImage='linear-gradient(rgba(168,107,72,.38), rgba(168,107,72,.38))';
+            o.el.style.backgroundSize='100% 100%';
+            o.el.style.backgroundPosition='0 0';
+          } else {
+            o.el.style.backgroundSize=rt.width+'px 100%';
+            o.el.style.backgroundPosition=(-(o.left/100*rt.width))+'px 0';
+          }
+        }
+        if(o.steps){
+          var end=o.steps[0][1];
+          o.steps.forEach(function(sp){ if(t>=sp[0]) end=sp[1]; });
+          o.el.style.width=(end/dur*100)+'%';
+        }
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+})();
+</script>
+<div class="backtab" id="backTab"><span class="bt-label">BACK TO TOP</span><a class="bt-body" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="18" y2="4"/><g class="bt-arr"><line x1="12" y1="8.5" x2="12" y2="20"/><path d="M7 13 L12 8 L17 13"/></g></svg></a></div>
+<script>(function(){var t=document.getElementById("backTab");if(!t)return;function u(){if(window.scrollY>400)t.classList.add("show");else t.classList.remove("show");}window.addEventListener("scroll",u,{passive:true});u();})();</script>
+<script id="scrollTopOnLoad">(function(){var d=document,w=window,de=d.documentElement;try{if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}function top0(){var sb=de.style.scrollBehavior;de.style.scrollBehavior="auto";try{w.scrollTo(0,0);de.scrollTop=0;if(d.body)d.body.scrollTop=0;}catch(e){}de.style.scrollBehavior=sb;}function internal(a){if(!a||a.target==="_blank"||a.hasAttribute("download"))return false;var h=a.getAttribute("href")||"";if(!h||h.charAt(0)==="#"||/^[a-z]+:/i.test(h)&&h.indexOf(location.origin)!==0)return false;return /\.html?(\?|$)/i.test(h.split("#")[0]);}d.addEventListener("click",function(ev){if(ev.defaultPrevented||ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;var a=ev.target.closest&&ev.target.closest("a[href]");if(!internal(a))return;var h=a.getAttribute("href");if(h.indexOf("#")>-1)return;if(d.body){d.body.style.transition="none";d.body.style.opacity="0";setTimeout(function(){d.body.style.opacity="";},1500);}top0();},true);w.addEventListener("pageshow",function(){if(d.body)d.body.style.opacity="";});if(location.hash==="#pages"){var st2=false;["wheel","touchstart","keydown","mousedown"].forEach(function(t){w.addEventListener(t,function(){st2=true;},{passive:true,once:true});});var bot=function(){if(st2)return;var sb=de.style.scrollBehavior;de.style.scrollBehavior="auto";w.scrollTo(0,Math.max(de.scrollHeight,d.body?d.body.scrollHeight:0));de.style.scrollBehavior=sb;};bot();d.addEventListener("DOMContentLoaded",bot);w.addEventListener("load",bot);w.addEventListener("pageshow",bot);[60,250,700,1500].forEach(function(t){setTimeout(bot,t);});return;}if(location.hash)return;var stop=false;function halt(){stop=true;}["wheel","touchstart","keydown","mousedown"].forEach(function(t){w.addEventListener(t,halt,{passive:true,once:true});});function go(){if(!stop)top0();}go();d.addEventListener("DOMContentLoaded",go);w.addEventListener("load",go);w.addEventListener("pageshow",go);[60,250,700,1500].forEach(function(t){setTimeout(go,t);});})();</script>
+</body>
+</html>

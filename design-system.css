@@ -71,7 +71,7 @@
   --serif:    'NotoSerifKR', serif;
   --sans:     'NotoSansKR', sans-serif;
   --display:  'NotoSansKR', sans-serif;
-  --mono:     'JetBrains Mono', monospace;
+  --mono:     'JetBrains Mono', 'NotoSansKR', monospace;
 }
 
 /* ============================================================
@@ -593,7 +593,7 @@ em {
 .site-nav .nav-item { position: relative; display: inline-flex; align-items: center; }
 .site-nav .nav-item::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 18px; }
 .site-nav .dropdown { position: absolute; top: calc(100% + 12px); right: 0; min-width: 190px; background: var(--bg-card); border: 1px solid var(--line-hi); padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity .15s, transform .15s; z-index: 60; }
-.site-nav .nav-item:hover .dropdown, .site-nav .nav-item:focus-within .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.site-nav .nav-item:hover .dropdown, .site-nav .nav-item:has(:focus-visible) .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 .site-nav .dropdown .dd-head { padding: 9px 20px 8px; margin-bottom: 5px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-align: right; color: var(--text-dim); white-space: nowrap; }
 .site-nav .dropdown a { display: block; padding: 11px 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-align: right; color: var(--text-mid); text-decoration: none; white-space: nowrap; }
 .site-nav .dropdown a:hover { background: var(--bg-card-hi); color: var(--accent); }
@@ -785,3 +785,38 @@ section[id], .blk[id], [id].sec { scroll-margin-top: 74px; }
 .backtab .bt-body .bt-arr { transform-box: fill-box; transform-origin: center; }
 .backtab:hover .bt-body .bt-arr { animation: btBounce .6s ease-in-out infinite; }
 @media (max-width: 720px) { .backtab { display: none; } }
+
+/* 한글 mono 방지 — mono 라벨 안의 한글은 sans · 자간 0 (2026-09-28) */
+.ko { font-family: var(--sans); letter-spacing: 0; }
+
+/* ===== 상단 메뉴 · 트리 드롭다운 (2026-09-29) ===== */
+.site-nav .dropdown.tm { top: calc(100% + 13px); right: -14px; width: 380px; min-width: 0; padding: 0; background: #161616; border: 1px solid var(--line-hi); box-shadow: 0 18px 40px rgba(0,0,0,.55); opacity: 0; visibility: hidden; transform: translateY(-6px); clip-path: inset(0 -60px 100% -60px); transition: clip-path .26s cubic-bezier(.2,.7,.2,1), transform .26s cubic-bezier(.2,.7,.2,1), opacity .18s ease, visibility 0s linear .26s; }
+.site-nav .nav-item:hover .dropdown.tm, .site-nav .nav-item:has(:focus-visible) .dropdown.tm { opacity: 1; visibility: visible; transform: translateY(0); clip-path: inset(0 -60px -80px -60px); transition-delay: .06s, .06s, .06s, 0s; }
+.site-nav .dropdown.tm .tm-desc { padding: 18px 22px 16px; border-bottom: 1px solid var(--line); background: rgba(168,107,72,.06); text-align: left; }
+.site-nav .dropdown.tm .tm-k { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--accent); margin-bottom: 6px; }
+.site-nav .dropdown.tm .tm-t { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; word-break: keep-all; }
+.site-nav .dropdown.tm .tm-s { font-family: var(--sans); font-size: 12px; color: var(--text-dim); margin-top: 3px; line-height: 1.5; word-break: keep-all; }
+.site-nav .dropdown.tm .tm-body { padding: 10px 0 12px; }
+.site-nav .dropdown.tm .tg { padding: 8px 22px 2px; }
+.site-nav .dropdown.tm .tg-h { display: flex; align-items: baseline; gap: 8px; padding: 4px 0 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--text-dim); text-align: left; cursor: default; }
+.site-nav .dropdown.tm .tg-h .n { font-family: var(--sans); font-size: 11px; letter-spacing: 0; color: #6d6d6d; }
+.site-nav .dropdown.tm .tl { position: relative; margin-left: 5px; border-left: 1px solid var(--line-hi); }
+.site-nav .dropdown.tm .tl a { position: relative; display: grid; grid-template-columns: 1fr; align-items: baseline; gap: 6px; padding: 8px 10px 8px 18px; text-align: left; white-space: normal; text-decoration: none; font-family: var(--sans); letter-spacing: 0; transition: background .15s ease; }
+.site-nav .dropdown.tm .tl a::before { content: ""; position: absolute; left: 0; top: 50%; width: 11px; border-top: 1px solid var(--line-hi); }
+.site-nav .dropdown.tm .tl a:last-child::after { content: ""; position: absolute; left: -1px; top: calc(50% + 1px); bottom: 0; border-left: 1px solid #161616; }
+.site-nav .dropdown.tm .tl .no { font-family: var(--mono); font-size: 10.5px; color: #6d6d6d; }
+.site-nav .dropdown.tm .tl .nm { font-family: var(--sans); font-size: 14px; color: var(--text-mid); line-height: 1.4; word-break: keep-all; }
+.site-nav .dropdown.tm .tl .en { display: block; margin-top: 2px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; color: #6d6d6d; }
+.site-nav .dropdown.tm .tl a:hover { background: var(--bg-card-hi); }
+.site-nav .dropdown.tm .tl a:hover .nm { color: var(--accent); }
+.site-nav .dropdown.tm .tl a.is-current .nm { color: #fff; font-weight: 600; }
+.site-nav .dropdown.tm .tl a.is-current .no { color: var(--accent); }
+.site-nav .dropdown.tm .tl a.is-current:hover .nm { color: var(--accent); }
+@media (max-width: 720px) {
+  .site-nav .dropdown.tm { position: fixed; top: 50px; left: 12px; right: 12px; width: auto; max-height: calc(100vh - 70px); overflow-y: auto; }
+}
+
+/* 상단바 연락처 아이콘 (2026-09-29) */
+.site-nav .nav-contact { display: inline-flex; align-items: center; color: var(--text-mid); text-decoration: none; transition: color .15s ease; }
+.site-nav .nav-contact svg { display: block; }
+.site-nav .nav-contact:hover { color: var(--accent); }
