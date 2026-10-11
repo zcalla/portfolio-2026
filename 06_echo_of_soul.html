@@ -331,7 +331,7 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
 .sx-tools { margin-top: 18px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .sx-tools figure { margin: 0; border: 1px solid var(--line); background: var(--bg-card); }
 .sx-tools img { display: block; width: 100%; height: 190px; object-fit: cover; object-position: top left; background: var(--bg-base); }
-.sx-flowbox { margin-top: 20px; display: grid; grid-template-columns: 1fr 250px 1fr; border: 1px solid var(--line); background: var(--bg-card); }
+.sx-flowbox { margin-top: 20px; display: grid; grid-template-columns: 1fr 64px 230px 64px 1fr; border: 1px solid var(--line); background: var(--bg-card); }
 .sx-fb-col { padding: 20px 20px 22px; }
 .sx-fb-col + .sx-fb-col { border-left: 1px solid var(--line); }
 .sx-fb-h { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
@@ -349,6 +349,12 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
 .sx-tank-t { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--text); }
 .sx-tank-v { margin-top: 6px; font-family: var(--sans); font-size: 12px; line-height: 1.65; color: var(--text-mid); word-break: keep-all; max-width: 210px; }
 .sx-tank-a { font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+.sx-fx { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-left: 1px solid var(--line); background: var(--bg-base); }
+.sx-fx b { font-family: var(--sans); font-size: 20px; font-weight: 400; color: var(--accent); line-height: 1; }
+.sx-fx span { font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+.sx-tank-m { margin-top: 10px; font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+.sx-flowbox .sx-tank { border-left: 1px solid var(--line); }
+.sx-flowbox .sx-fx + .sx-fb-col { border-left: 1px solid var(--line); }
 .sx-chainline { border: 1px solid var(--line); border-top: 0; background: var(--bg-card); padding: 14px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .sx-chainline .sx-ck { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--accent); margin-right: 4px; }
 .sx-chainline .sx-cx { font-family: var(--sans); font-size: 12px; color: var(--text-mid); padding: 6px 11px; border: 1px solid var(--line-hi); }
@@ -368,7 +374,7 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
 .sx-sh-c.sx-warn { background: rgba(168,107,72,.28) !important; color: var(--text); }
 .sx-more { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 13px; color: var(--text-mid); text-decoration: none; border-bottom: 1px solid var(--line-hi); padding-bottom: 3px; }
 .sx-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
-@media (max-width: 1000px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr 1fr; } .sx-cards.sx-c2, .sx-duo, .sx-tools, .sx-shots.sx-c3, .sx-shots.sx-c2 { grid-template-columns: 1fr; } .sx-flowbox { grid-template-columns: 1fr; } .sx-fb-col + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-brief-r { grid-template-columns: 1fr; gap: 4px; } }
+@media (max-width: 1000px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr 1fr; } .sx-cards.sx-c2, .sx-duo, .sx-tools, .sx-shots.sx-c3, .sx-shots.sx-c2 { grid-template-columns: 1fr; } .sx-flowbox { grid-template-columns: 1fr; } .sx-fx { flex-direction: row; padding: 10px 0; border-left: 0; border-top: 1px solid var(--line); } .sx-fx b { transform: rotate(90deg); } .sx-flowbox .sx-tank, .sx-flowbox .sx-fx + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-fb-col + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-brief-r { grid-template-columns: 1fr; gap: 4px; } }
 @media (max-width: 640px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr; } .sx-cards.sx-flow .sx-card + .sx-card::before { display: none; } }
 </style>
 </head>
@@ -599,7 +605,7 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
 
 <section class="sec" id="ffa"><div class="container">
   <div class="section-label"><span class="badge"><span class="ko">콘텐츠 설계</span></span> &nbsp;/&nbsp; <span class="ko">생존의 시험장</span></div>
-  <h2>배틀로얄 출시 이전에 설계한 FFA 전장</h2>
+  <h2>배틀로얄 형식의 FFA 생존 게임</h2>
   <p class="why">팀 없는 개인전. 오염된 공기가 차오르는 폐쇄 공간에서 <b>다른 캐릭터를 처치해 신선한 공기를 확보</b>하는 구조. 전장 규칙 · 재화 · 어뷰징 방지 · UI 요구사항 기획서 작성</p>
   <div class="sx-sec"><div class="sx-brief">
     <div class="sx-brief-r"><div class="sx-brief-k">형태</div><div class="sx-brief-v">팀 없는 개인전(FFA), 22 ~ 30인, 부활 5회, 플레이 시간 10분 내외</div></div>
@@ -623,13 +629,14 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
       <div class="sx-fb-i"><div class="sx-fb-t">보급품 리액터<span class="sx-m">1<span class="ko">분마다 재활성화</span></span></div><div class="sx-fb-v">층별 고정 배치, 누구나 사용 가능, 조작 3초</div></div>
       <div class="sx-fb-i"><div class="sx-fb-t">시체 리액터<span class="sx-m">1<span class="ko">회용</span></span></div><div class="sx-fb-v">사망 위치에 생성. 사용 시 공기 보충 + 약육강식 1중첩</div></div>
     </div>
+    <div class="sx-fx" aria-hidden="true"><b>&rarr;</b><span>채움</span></div>
     <div class="sx-fb-col sx-tank">
-      <div class="sx-tank-a">유입 ▸</div>
       <div class="sx-tank-box"><i></i></div>
       <div class="sx-tank-t">신선한 공기</div>
       <div class="sx-tank-v">환경 피해 전용 보호막. 소진 시 생명력 차감</div>
-      <div class="sx-tank-a" style="margin-top:12px">▸ 소모</div>
+      <div class="sx-tank-m">입장 · 부활 시 70%에서 시작</div>
     </div>
+    <div class="sx-fx" aria-hidden="true"><b>&rarr;</b><span>빠짐</span></div>
     <div class="sx-fb-col">
       <div class="sx-fb-h">소모<span>오염된 공기 대비 속도</span></div>
       <div class="sx-fb-i"><div class="sx-fb-t">오염된 공기<span class="sx-m">×1</span></div><div class="sx-fb-v">전 층 상시 적용</div><div class="sx-bar"><i style="width:14%"></i></div></div>
