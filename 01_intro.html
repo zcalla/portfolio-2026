@@ -32,6 +32,7 @@
   .cover .cover-tags span { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--accent); text-align: center; line-height: 1.7; }
   .cover .cover-tags .tag-num { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--accent-hi); letter-spacing: 0.02em; display: inline-block; line-height: 1.1; }
   .cover .cover-tags .tag-emoji { font-family: inherit; font-size: 24px; line-height: 1.2; margin-bottom: 2px; }
+  @media (max-width: 720px) { .cover .cover-tags { display: grid; grid-template-columns: repeat(2, max-content); gap: 24px 40px; } }
   .cover .cover-desc .desc-lead { display: block; margin-bottom: 7px; color: var(--text); font-weight: 600; }
   .cover .cover-photo { position: absolute; top: auto; right: -20px; bottom: 0; width: min(893px, 96vw); height: min(535px, 57vw); z-index: 1; display: flex; align-items: flex-end; justify-content: flex-end; transform: translate(min(160px, 11vw), 0); }
   .cover .cover-photo img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; display: block; border: none; background: transparent; will-change: filter; filter: grayscale(0) contrast(1.05) saturate(0.85) brightness(1.12) drop-shadow(0 10px 26px rgba(0,0,0,0.4)); animation: coverGlow 3.5s ease-out 0.3s backwards; }
@@ -340,11 +341,12 @@
         <div class="tags-block">
           <div class="cover-tags">
             <span><span class="tag-num tag-emoji">⚡</span><br>FAST<br>PROTOTYPING</span>
+            <span><span class="tag-num tag-emoji">🤖</span><br>AI<br>PIPELINE</span>
             <span><span class="tag-num tag-emoji">🧩</span><br>SYSTEM<br>INTEGRATION</span>
             <span><span class="tag-num tag-emoji">🎮</span><br>PLAYER<br>EXPERIENCE</span>
           </div>
         </div>
-        <p class="cover-desc"><span class="lead-num">13년</span> 전투 기획 경험을 바탕으로 <span class="em">“눈으로 익히고 손끝으로 느끼는 전투”</span>를 만듭니다. 아이디어는 빠른 프로토타입으로 먼저 확인합니다. 타격감은 감각이 아니라 피드백과 연출의 배분으로 설계합니다. 흩어진 시스템을 엮어 하나의 플레이 경험으로 완성하는 것, 그리고 팀의 반복 작업을 AI로 직접 만든 도구로 자동화하는 것이 강점입니다.</p>
+        <p class="cover-desc"><span class="lead-num">13년</span> 전투 기획 경험을 바탕으로 <span class="em">“눈으로 익히고 손끝으로 느끼는 전투”</span>를 만듭니다. 아이디어는 빠른 프로토타입으로 먼저 확인합니다. 타격감은 감각이 아니라 피드백과 연출의 배분으로 설계합니다. AI 활용에 능숙하고, 흩어진 시스템을 엮어 하나의 플레이 경험으로 완성하는 데 강점이 있습니다.</p>
       </div>
       <div class="cover-photo">
         <div class="halo-circle" aria-hidden="true"><span class="smoke"></span><span class="smoke s2"></span></div>
