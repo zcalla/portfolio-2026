@@ -374,7 +374,7 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
 .sx-sh-c.sx-warn { background: rgba(168,107,72,.28) !important; color: var(--text); }
 .sx-more { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 13px; color: var(--text-mid); text-decoration: none; border-bottom: 1px solid var(--line-hi); padding-bottom: 3px; }
 .sx-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
-@media (max-width: 1000px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr 1fr; } .sx-cards.sx-c2, .sx-duo, .sx-tools, .sx-shots.sx-c3, .sx-shots.sx-c2 { grid-template-columns: 1fr; } .sx-flowbox { grid-template-columns: 1fr; } .sx-fx { flex-direction: row; padding: 10px 0; border-left: 0; border-top: 1px solid var(--line); } .sx-fx b { transform: rotate(90deg); } .sx-flowbox .sx-tank, .sx-flowbox .sx-fx + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-fb-col + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-brief-r { grid-template-columns: 1fr; gap: 4px; } }
+@media (max-width: 1000px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr 1fr; } .sx-cards.sx-c2, .sx-duo, .sx-tools, .sx-shots.sx-c3, .sx-shots.sx-c2 { grid-template-columns: 1fr; } .sx-flowbox { grid-template-columns: 1fr; } .sx-fx { flex-direction: row; padding: 10px 0; border-left: 0; border-top: 1px solid var(--line); } .sx-flowbox .sx-tank, .sx-flowbox .sx-fx + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-fb-col + .sx-fb-col { border-left: 0; border-top: 1px solid var(--line); } .sx-brief-r { grid-template-columns: 1fr; gap: 4px; } }
 @media (max-width: 640px) { .sx-cards.sx-c3, .sx-cards.sx-c4 { grid-template-columns: 1fr; } .sx-cards.sx-flow .sx-card + .sx-card::before { display: none; } }
 </style>
 </head>
@@ -629,14 +629,14 @@ svg .sx-ta { font-family: var(--sans); font-size: 12px; fill: var(--accent-hi); 
       <div class="sx-fb-i"><div class="sx-fb-t">보급품 리액터<span class="sx-m">1<span class="ko">분마다 재활성화</span></span></div><div class="sx-fb-v">층별 고정 배치, 누구나 사용 가능, 조작 3초</div></div>
       <div class="sx-fb-i"><div class="sx-fb-t">시체 리액터<span class="sx-m">1<span class="ko">회용</span></span></div><div class="sx-fb-v">사망 위치에 생성. 사용 시 공기 보충 + 약육강식 1중첩</div></div>
     </div>
-    <div class="sx-fx" aria-hidden="true"><b>&rarr;</b><span>채움</span></div>
+    <div class="sx-fx" aria-hidden="true"><b>&uarr;</b><span>충전</span></div>
     <div class="sx-fb-col sx-tank">
       <div class="sx-tank-box"><i></i></div>
       <div class="sx-tank-t">신선한 공기</div>
       <div class="sx-tank-v">환경 피해 전용 보호막. 소진 시 생명력 차감</div>
       <div class="sx-tank-m">입장 · 부활 시 70%에서 시작</div>
     </div>
-    <div class="sx-fx" aria-hidden="true"><b>&rarr;</b><span>빠짐</span></div>
+    <div class="sx-fx" aria-hidden="true"><b>&darr;</b><span>소모</span></div>
     <div class="sx-fb-col">
       <div class="sx-fb-h">소모<span>오염된 공기 대비 속도</span></div>
       <div class="sx-fb-i"><div class="sx-fb-t">오염된 공기<span class="sx-m">×1</span></div><div class="sx-fb-v">전 층 상시 적용</div><div class="sx-bar"><i style="width:14%"></i></div></div>
